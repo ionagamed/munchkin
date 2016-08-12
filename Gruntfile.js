@@ -6,6 +6,7 @@ var path = require('path');
 
 module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-webpack');
+	grunt.loadNpmTasks('grunt-babel');
     
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -25,14 +26,26 @@ module.exports = function (grunt) {
                             include: './munchkin',
                             loader: 'babel-loader',
                             query: {
-                                presets: ['es2016']
+                                presets: ['es2015']
                             }
                         }
                     ]
                 }
             }
-        }
+		},
+		babel: {
+			options: {
+				presets: ['es2015'],
+			},
+			server: {
+				files: [{
+					expand: true,
+                	cwd: 'server/',
+					src: ['*.js'],
+					dest: 'dist/'
+				}]
+			 }
+		}
     });
-
-    grunt.registerTask('default', ['webpack']);
+	grunt.registerTask('default', ['webpack', 'babel']);
 };
