@@ -68,7 +68,9 @@
 	        update: update
 	    });
 
-	    function preload() {}
+	    function preload() {
+	        game.load();
+	    }
 
 	    function create() {}
 

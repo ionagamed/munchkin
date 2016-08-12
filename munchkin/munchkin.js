@@ -13,7 +13,7 @@ $(function () {
     });
 
     function preload() {
-
+        game.load()
     }
 
     function create() {
