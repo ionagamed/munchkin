@@ -2,8 +2,6 @@
  * Created by ionagamed on 8/12/16.
  */
 
-var path = require('path');
-
 module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-webpack');
     
@@ -25,7 +23,7 @@ module.exports = function (grunt) {
                             include: './munchkin',
                             loader: 'babel-loader',
                             query: {
-                                presets: ['es2016']
+                                presets: ['es2015']
                             }
                         }
                     ]
