@@ -11,7 +11,7 @@ export class Player {
          *
          * @type [string]
          */
-        var hand = [];
+        this.hand = [];
 
         /**
          * An array of cards which are currently wielded (on the table)
@@ -20,13 +20,13 @@ export class Player {
          *
          * @type [string]
          */
-        var wielded = [];
+        this.wielded = [];
 
         /**
          * Array of cards which are placed on table, but not wielded
          * @type [string]
          */
-        var belt = [];
+        this.belt = [];
 
         /**
          * Player name
@@ -34,14 +34,14 @@ export class Player {
          *
          * @type {string}
          */
-        var name = '';
+        this.name = '';
 
         /**
          * Player level
          *
          * @type {number}
          */
-        var level = 1;
+        this.level = 1;
     }
     
     /**
