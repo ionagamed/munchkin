@@ -3,9 +3,8 @@
  */
 
 import { Card } from './Card';    
-import { Creature } from './Creature';
     
-export class Player extends Creature {
+export class Player {
     constructor() {
         /**
          * An array of cards which are in player's hand (not on the table)
