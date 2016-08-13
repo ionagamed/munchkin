@@ -7,26 +7,7 @@
  */
 export class Card {
     constructor() {
-        /**
-         * Determines if the card is wieldable (could be placed on table)
-         *
-         * @type {boolean}
-         */
-        var wieldable = false;
-
-        /**
-         * Determines if the card is usable (could be cast without target)
-         *
-         * @type {boolean}
-         */
-        var usable = false;
-
-        /**
-         * Determines if the card is castable (could be casted on another player)
-         *
-         * @type {boolean}
-         */
-        var castable = false;
+        
     }
     
     
@@ -94,7 +75,19 @@ export class Card {
     }
 }
 
+/**
+ * Array of cards by id
+ * 
+ * @type {{string: Card}}
+ */
 Card.cards = {};
+
+/**
+ * Get a card by its string id
+ * 
+ * @param id
+ * @returns {Card}
+ */
 Card.byId = function(id) {
     return Card.cards[id];
 };

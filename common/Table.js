@@ -10,51 +10,63 @@ export class Table {
 		 * 
 		 * @type [player] 
 		 */
-		var players = [];
+		this.players = [];
 
 		/**
 		 * An array of currently active cards (in the middle of table)
 		 *
 		 * @type [string]
 		 */
-		var active_cards = [];
+		this.activeCards = [];
 
 		/**
-		 * An array of discarded cards
+		 * An array of discarded doors
 		 *
 		 * @type [string]
 		 */
-		var discarded_cards = [];
+		this.discardedDoors = [];
 
-		/**
+        /**
+         * An array of discarded treasure cards
+         * 
+         * @type [string]
+         */
+        this.discardedTreasure = [];
+
+        /**
 		 * Determines if there is an active game playing
 		 *
 		 * @type {bool}
 		 */
 
-		var playing = false;
+		this.playing = false;
 
 		/**
 		 * Determines which player have a turn
 		 *
 		 * @type {string}
 		 */
-		 var turn = 0;
+		 this.turn = 0;
 	}
 
 	/**
 	 * Get attack of currently active cards
+     * 
+     * @returns {number}
 	 */
 	getAttack() {
 		var ret = 0;
-		this.active_cards.map(x => {
+		this.activeCards.map(x => {
 			ret += Card.byId(x).getBaseAttack();
 		});
+		return ret;
 	}
 
+    /**
+     * Modifies the turn member so it points to the next player
+     */
 	nextTurn() {
-		turn = (turn + 1)%player.length;
+		this.turn = (this.turn + 1) % this.players.length;
 	}
-
 }
 
