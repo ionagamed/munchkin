@@ -33,7 +33,7 @@ module.exports = function (grunt) {
 		},
 		babel: {
 			options: {
-				presets: ['es2015'],
+				presets: ['es2015']
 			},
 			server: {
 				files: [{
@@ -51,10 +51,5 @@ module.exports = function (grunt) {
 			 }
 		}
     });
-<<<<<<< HEAD
 	grunt.registerTask('default', ['webpack', 'babel']);
-=======
-
-    grunt.registerTask('default', ['webpack']);
->>>>>>> master
 };
