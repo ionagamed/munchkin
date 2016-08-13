@@ -2,8 +2,6 @@
  * Created by ionagamed on 8/12/16.
  */
 
-var path = require('path');
-
 module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-webpack');
 	grunt.loadNpmTasks('grunt-babel');
@@ -53,5 +51,10 @@ module.exports = function (grunt) {
 			 }
 		}
     });
+<<<<<<< HEAD
 	grunt.registerTask('default', ['webpack', 'babel']);
+=======
+
+    grunt.registerTask('default', ['webpack']);
+>>>>>>> master
 };
