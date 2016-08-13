@@ -23,7 +23,7 @@ module.exports = function (grunt) {
                     loaders: [
                         {
                             test: /\.js$/,
-                            include: './munchkin',
+                            include: ['./munchkin','./common'],
                             loader: 'babel-loader',
                             query: {
                                 presets: ['es2015']
@@ -41,6 +41,12 @@ module.exports = function (grunt) {
 				files: [{
 					expand: true,
                 	cwd: 'server/',
+					src: ['*.js'],
+					dest: 'dist/'
+				},
+				{
+					expand: true,
+					cwd: 'common/',
 					src: ['*.js'],
 					dest: 'dist/'
 				}]
