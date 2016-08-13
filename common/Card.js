@@ -7,26 +7,7 @@
  */
 export class Card {
     constructor() {
-        /**
-         * Determines if the card is wieldable (could be placed on table)
-         *
-         * @type {boolean}
-         */
-        this.wieldable = false;
-
-        /**
-         * Determines if the card is usable (could be cast without target)
-         *
-         * @type {boolean}
-         */
-        this.usable = false;
-
-        /**
-         * Determines if the card is castable (could be casted on another player)
-         *
-         * @type {boolean}
-         */
-        this.castable = false;
+        
     }
     
     
