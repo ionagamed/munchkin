@@ -30,26 +30,7 @@ module.exports = function (grunt) {
                     ]
                 }
             }
-		},
-		babel: {
-			options: {
-				presets: ['es2015']
-			},
-			server: {
-				files: [{
-					expand: true,
-                	cwd: 'server/',
-					src: ['*.js'],
-					dest: 'dist/'
-				},
-				{
-					expand: true,
-					cwd: 'common/',
-					src: ['*.js'],
-					dest: 'dist/'
-				}]
-			 }
 		}
     });
-	grunt.registerTask('default', ['webpack', 'babel']);
+	grunt.registerTask('default', ['webpack']);
 };
