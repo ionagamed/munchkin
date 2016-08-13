@@ -18,7 +18,9 @@
   "homepage": "https://github.com/ionagamed/munchkin#readme",
   "dependencies": {
     "babel-cli": "^6.11.4",
+    "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "express-session": "^1.14.0",
     "ws": "^1.1.1"
   },
   "devDependencies": {

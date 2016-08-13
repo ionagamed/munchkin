@@ -100,27 +100,6 @@
 	var Card = exports.Card = function () {
 	  function Card() {
 	    _classCallCheck(this, Card);
-
-	    /**
-	     * Determines if the card is wieldable (could be placed on table)
-	     *
-	     * @type {boolean}
-	     */
-	    var wieldable = false;
-
-	    /**
-	     * Determines if the card is usable (could be cast without target)
-	     *
-	     * @type {boolean}
-	     */
-	    var usable = false;
-
-	    /**
-	     * Determines if the card is castable (could be casted on another player)
-	     *
-	     * @type {boolean}
-	     */
-	    var castable = false;
 	  }
 
 	  /**
@@ -200,7 +179,21 @@
 	  return Card;
 	}();
 
+	/**
+	 * Array of cards by id
+	 * 
+	 * @type {{string: Card}}
+	 */
+
+
 	Card.cards = {};
+
+	/**
+	 * Get a card by its string id
+	 * 
+	 * @param id
+	 * @returns {Card}
+	 */
 	Card.byId = function (id) {
 	  return Card.cards[id];
 	};
@@ -233,7 +226,7 @@
 	     *
 	     * @type [string]
 	     */
-	    var hand = [];
+	    this.hand = [];
 
 	    /**
 	     * An array of cards which are currently wielded (on the table)
@@ -242,13 +235,13 @@
 	     *
 	     * @type [string]
 	     */
-	    var wielded = [];
+	    this.wielded = [];
 
 	    /**
 	     * Array of cards which are placed on table, but not wielded
 	     * @type [string]
 	     */
-	    var belt = [];
+	    this.belt = [];
 
 	    /**
 	     * Player name
@@ -256,14 +249,14 @@
 	     *
 	     * @type {string}
 	     */
-	    var name = '';
+	    this.name = '';
 
 	    /**
 	     * Player level
 	     *
 	     * @type {number}
 	     */
-	    var level = 1;
+	    this.level = 1;
 	  }
 
 	  /**
