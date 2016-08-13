@@ -6,6 +6,7 @@ import { Card } from '../common/Card';
 import { Player } from '../common/Player';
 
 $(function () {
+    document.ws = new WebSocket("ws://localhost:8081");
     var game = new Phaser.Game('100', '100', Phaser.AUTO, '', {
         preload: preload,
         create: create,

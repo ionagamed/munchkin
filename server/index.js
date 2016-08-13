@@ -1,4 +1,5 @@
 import express from 'express';
+import wss     from './websocket'
 var app = express();
 
 app.use(express.static('client'));
