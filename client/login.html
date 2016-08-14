@@ -1,14 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Munchkin login</title>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Lakki+Reddy" rel="stylesheet"> 
+<title>Манчкин</title>
+    
+    <style type="text/css">
+        
+        p{
+            text-align: center;
+            font-size: 40px;
+        }
+        
+        .radius{
+            
+            border: 1px solid black; 
+            padding: 15px; 
+            border-radius: 20px 20px 20px 20px;
+        }
+        
+        input[type="text"] {
+            position: relative;  
+            width: 37%;
+            background: #fafad2; 
+            text-align: center;
+            font-family: 'Lakki Reddy', cursive;
+            font-size: 40px;
+            margin: 3px;
+
+        } 
+        input[type="submit"] {
+            background: #ffe4b5;
+            height: 7%;
+            width: 37%;
+            cursor: pointer;
+            font-family: 'Lakki Reddy', cursive;
+            font-size: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+
+        }      
+    
+        body{ 
+            background-image: url(/580979_staraya_koja.jpg);
+            font-family: 'Lakki Reddy', cursive;
+        }
+        
+        form{
+            margin-left: 37%;
+        }
+
+        img {
+            width: 37%;
+            margin: 10px;
+        }
+    </style>
 </head>
+    
 <body>
-<form method='POST' action='/login'>
-  <label for='username'>Имя пользователя:</label>
-  <input type='text' name='username' id='username' placeholder='xXx_Swag420_xXx'>
-  <input type='submit'
-</form>
+    <p>Добро пожаловать в Манчкин-онлайн!</p>
+    <form action="/login" method="post">
+        <img src="/Supermanchkin.png" /> <br/>
+        <input name="text1" type="text" name="login" placeholder='Логин'/><br/>
+        <input name="text1" type="text" name="room" placeholder='Введите Комнату'/><br/>
+        <input type="submit" class="radius" value="Присоединиться">
+    </form>
 </body>
 </html>
