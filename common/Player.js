@@ -85,7 +85,7 @@ export class Player {
     getAttack() {
         var ret = this.level;
         this.wielded.map(x => {
-            ret += Card.byId(x).getBaseAttack();
+            ret += Card.byId(x).getAttackFor(this);
         });
         return ret;
     }

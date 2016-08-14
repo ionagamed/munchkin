@@ -21,7 +21,7 @@ class GelatinousOctahedron extends Card {
             return true;
         } else {
             /*
-             drop all big
+             drop all big items
              */
             player.wielded.map(x => {
                 if (Card.byId(x).big) {
@@ -45,6 +45,14 @@ class GelatinousOctahedron extends Card {
                 }
             })
         }
+    }
+    
+    getAttackFor(players) {
+        return 2;
+    }
+    
+    get treasureCount() {
+        return 1;
     }
 }
 Card.cards[id] = new GelatinousOctahedron();

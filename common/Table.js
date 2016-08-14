@@ -42,24 +42,19 @@ export class Table {
 		this.playing = false;
 
 		/**
-		 * Determines which player have a turn
+		 * Determines whose is the current turn
+		 * idx in {players}
 		 *
 		 * @type {string}
 		 */
-		 this.turn = 0;
-	}
+		this.turn = 0;
 
-	/**
-	 * Get attack of currently active cards
-     * 
-     * @returns {number}
-	 */
-	get activeAttack() {
-		var ret = 0;
-		this.activeCards.map(x => {
-			ret += Card.byId(x).attack;
-		});
-		return ret;
+		/**
+         * Currently going fight
+		 *
+		 * @type {Fight|null}
+         */
+		this.fight = null;
 	}
 
     /**
