@@ -7,9 +7,51 @@
  */
 export class Card {
     constructor() {
-        
+        /**
+         * Either 'door' or 'treasure'
+         * 
+         * @type {string}
+         */
+        this.type = '';
+
+        /**
+         * If this card could be wielded
+         * 
+         * @type {boolean}
+         */
+        this.wieldable = false;
+
+        /**
+         * If this card could be used
+         * 
+         * @type {boolean}
+         */
+        this.usable = false;
+
+        /**
+         * If this card could be cast
+         * 
+         * @type {boolean}
+         */
+        this.castable = false;
+
+        /**
+         * Card id
+         * 
+         * @type {string}
+         */
+        this.id = '';
     }
-    
+
+
+    /**
+     * Get the image name
+     * 
+     * @returns {string}
+     */
+    get image() {
+        return [this.pack, this.type, this.id].join('_');
+    }
     
     /**
      * Called on dealing card in open way (such that everybody sees the content)
@@ -26,25 +68,7 @@ export class Card {
      * @param player Player who dealt the card
      */
     onDealtClose(player) {
-        
-    }
-    
-    /**
-     * Called when a card is wielded (placed on the table)
-     *
-     * @param player Player who wielded the card
-     */
-    onWielded(player) { 
-        
-    }
 
-    /**
-     * Called when a card is unwielded (got off the table in some way)
-     *
-     * @param player
-     */
-    onUnwielded(player) {
-        
     }
     
     /**
@@ -57,21 +81,73 @@ export class Card {
     onReceived(player, source) {
         
     }
+
+    /**
+     * Called when a card is cast on a player
+     * 
+     * @param source Player|'deck'
+     * @param destination Player
+     */ 
+    onCast(source, destination) {
+        
+    }
+
+    /**
+     * Determines if a card could be used by a player
+     * 
+     * @param player
+     * @returns {boolean}
+     */
+    canBeUsed(player) {
+        if (!this.usable) {
+            return false;
+        }
+    }
+
+    /**
+     * Called when a card is used by player
+     * 
+     * @param player
+     */
+    onUsed(player) {
+        
+    }
+
+    /**
+     * Determines if a card could be wielded by a player
+     * 
+     * @param player
+     * @returns {boolean}
+     */
+    canBeWielded(player) {
+        if (!this.wieldable) {
+            return false;
+        }
+    }
+
+    /**
+     * Called when a card is wielded by player
+     * 
+     * @param player
+     */
+    onWielded(player) {
+        
+    }
+
+    /**
+     * Called whan a card is unwielded by player
+     * 
+     * @param player
+     */
+    onUnwielded(player) {
+        
+    }
     
     /**
      * Called when a card is being disposed (removed from everywhere and placed into discarded deck)
      */
     onDisposed() {
         
-    }
-    
-    /**
-     * Returns the base attack modifier value for a card, when wielded, or used, whichever is applicable
-     *
-     * @returns {number}
-     */
-    getBaseAttack() {
-        return 0;
     }
 }
 
