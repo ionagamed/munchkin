@@ -178,18 +178,20 @@
 	     * Called on dealing card in open way (such that everybody sees the content)
 	     *
 	     * @param player Player who dealt the card
+	     * @param table Table
 	     */
-	    value: function onDealtOpen(player) {}
+	    value: function onDealtOpen(player, table) {}
 
 	    /**
 	     * Called on dealing card in closed way (such that only himself can see the content)
 	     *
 	     * @param player Player who dealt the card
+	     * @param table Table
 	     */
 
 	  }, {
 	    key: 'onDealtClose',
-	    value: function onDealtClose(player) {}
+	    value: function onDealtClose(player, table) {}
 
 	    /**
 	     * Called when a card is received from some source
@@ -197,33 +199,36 @@
 	     *
 	     * @param player Player
 	     * @param source Player|'deck'|'looting'
+	     * @param table Table
 	     */
 
 	  }, {
 	    key: 'onReceived',
-	    value: function onReceived(player, source) {}
+	    value: function onReceived(player, source, table) {}
 
 	    /**
 	     * Called when a card is cast on a player
 	     * 
 	     * @param source Player|'deck'
 	     * @param destination Player
+	     * @param table Table
 	     */
 
 	  }, {
 	    key: 'onCast',
-	    value: function onCast(source, destination) {}
+	    value: function onCast(source, destination, table) {}
 
 	    /**
 	     * Determines if a card could be used by a player
 	     * 
 	     * @param player
+	     * @param table Table
 	     * @returns {boolean}
 	     */
 
 	  }, {
 	    key: 'canBeUsed',
-	    value: function canBeUsed(player) {
+	    value: function canBeUsed(player, table) {
 	      if (!this.usable) {
 	        return false;
 	      }
@@ -232,23 +237,25 @@
 	    /**
 	     * Called when a card is used by player
 	     * 
-	     * @param player
+	     * @param player Player
+	     * @param table Table
 	     */
 
 	  }, {
 	    key: 'onUsed',
-	    value: function onUsed(player) {}
+	    value: function onUsed(player, table) {}
 
 	    /**
 	     * Determines if a card could be wielded by a player
 	     * 
-	     * @param player
+	     * @param player Player
+	     * @param table Table
 	     * @returns {boolean}
 	     */
 
 	  }, {
 	    key: 'canBeWielded',
-	    value: function canBeWielded(player) {
+	    value: function canBeWielded(player, table) {
 	      if (!this.wieldable) {
 	        return false;
 	      }
@@ -257,30 +264,34 @@
 	    /**
 	     * Called when a card is wielded by player
 	     * 
-	     * @param player
+	     * @param player Player
+	     * @param table Table
 	     */
 
 	  }, {
 	    key: 'onWielded',
-	    value: function onWielded(player) {}
+	    value: function onWielded(player, table) {}
 
 	    /**
 	     * Called whan a card is unwielded by player
 	     * 
-	     * @param player
+	     * @param player Player
+	     * @param table Table
 	     */
 
 	  }, {
 	    key: 'onUnwielded',
-	    value: function onUnwielded(player) {}
+	    value: function onUnwielded(player, table) {}
 
 	    /**
 	     * Called when a card is being disposed (removed from everywhere and placed into discarded deck)
+	     * 
+	     * @param table Table
 	     */
 
 	  }, {
 	    key: 'onDisposed',
-	    value: function onDisposed() {}
+	    value: function onDisposed(table) {}
 	  }, {
 	    key: 'image',
 	    get: function get() {
@@ -387,26 +398,30 @@
 	     * Wield a card
 	     * 
 	     * @param card string
+	     * @param table Table
 	     */
 
 	  }, {
 	    key: 'wield',
-	    value: function wield(card) {
+	    value: function wield(card, table) {
 	      this.wielded.push(card);
+	      _Card.Card.byId(card).onWielded(this, table);
 	    }
 
 	    /**
 	     * Unwield a card
 	     * 
 	     * @param card string
+	     * @param table Table
 	     */
 
 	  }, {
 	    key: 'unwield',
-	    value: function unwield(card) {
+	    value: function unwield(card, table) {
 	      this.wielded = this.wielded.filter(function (x) {
 	        return x != card;
 	      });
+	      _Card.Card.byId(card).onUnwielded(this, table);
 	    }
 
 	    /**
@@ -572,7 +587,7 @@
 
 	    _createClass(CurseLoseArmor, [{
 	        key: 'onCast',
-	        value: function onCast(source, dest) {
+	        value: function onCast(source, dest, table) {
 	            var _iteratorNormalCompletion = true;
 	            var _didIteratorError = false;
 	            var _iteratorError = undefined;
@@ -583,6 +598,9 @@
 
 	                    if (_Card2.Card.byId(i).type === 'armor') {
 	                        dest.unwield(i);
+	                        _Card2.Card.byId(i).onUnwielded(dest, table);
+	                        _Card2.Card.byId(i).onDisposed(table);
+	                        table.dispose(i);
 	                    }
 	                }
 	            } catch (err) {
@@ -696,12 +714,8 @@
 	        value: function onEscape(player, dice) {
 	            dice += 1;
 	            if (dice >= 5) {
-	                console.log('successful escape');
 	                return true;
-	            } else {
-	                console.log('nop');
-	                // TODO: do a bad thing
-	            }
+	            } else {}
 	        }
 	    }]);
 
@@ -738,6 +752,8 @@
 
 	'use strict';
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _Card2 = __webpack_require__(2);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -766,6 +782,13 @@
 	        _this.wieldable = true;
 	        return _this;
 	    }
+
+	    _createClass(MithrilArmor, [{
+	        key: 'attack',
+	        get: function get() {
+	            return 3;
+	        }
+	    }]);
 
 	    return MithrilArmor;
 	}(_Card2.Card);
