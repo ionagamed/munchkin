@@ -61,7 +61,15 @@
 
 	var _packs2 = _interopRequireDefault(_packs);
 
+	var _dice = __webpack_require__(11);
+
+	var _dice2 = _interopRequireDefault(_dice);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Created by ionagamed on 8/11/16.
+	 */
 
 	$(function () {
 	    document.ws = new WebSocket("ws://localhost:8081");
@@ -81,14 +89,18 @@
 	    }
 
 	    function create() {
-	        var octa = _Card.Card.byId('gelatinous_octahedron');
-	        game.add.sprite(50, 50, octa.image);
+	        var player = new _Player.Player();
+	        player.wielded.push('mithril_armor');
+	        console.log(player.wielded);
+	        _Card.Card.byId('curse_lose_armor').onCast('deck', player);
+	        console.log(player.wielded);
+	        $('#escape').click(function (e) {
+	            _Card.Card.byId('gelatinous_octahedron').onEscape(player, (0, _dice2.default)());
+	        });
 	    }
 
 	    function update() {}
-	}); /**
-	     * Created by ionagamed on 8/11/16.
-	     */
+	});
 
 /***/ },
 /* 2 */
@@ -272,7 +284,7 @@
 	  }, {
 	    key: 'image',
 	    get: function get() {
-	      return [this.pack, this.type, this.id].join('_');
+	      return [this.pack, this.kind, this.id].join('_');
 	    }
 	  }]);
 
@@ -362,7 +374,7 @@
 	  /**
 	   * Called when a player receives a card from any source
 	   *
-	   * @param card Card
+	   * @param card string
 	   * @param source Player|'deck'|'looting'
 	   */
 
@@ -370,6 +382,32 @@
 	  _createClass(Player, [{
 	    key: 'onCardReceived',
 	    value: function onCardReceived(card, source) {}
+
+	    /**
+	     * Wield a card
+	     * 
+	     * @param card string
+	     */
+
+	  }, {
+	    key: 'wield',
+	    value: function wield(card) {
+	      this.wielded.push(card);
+	    }
+
+	    /**
+	     * Unwield a card
+	     * 
+	     * @param card string
+	     */
+
+	  }, {
+	    key: 'unwield',
+	    value: function unwield(card) {
+	      this.wielded = this.wielded.filter(function (x) {
+	        return x != card;
+	      });
+	    }
 
 	    /**
 	     * Get base attack for player
@@ -526,7 +564,8 @@
 
 	        _this.id = id;
 	        _this.pack = 'pack1';
-	        _this.type = 'door';
+	        _this.kind = 'door';
+	        _this.type = 'curse';
 	        _this.castable = true;
 	        return _this;
 	    }
@@ -598,7 +637,8 @@
 
 	        _this.id = id;
 	        _this.pack = 'pack1';
-	        _this.type = 'door';
+	        _this.kind = 'door';
+	        _this.type = 'curse';
 	        _this.castable = true;
 	        return _this;
 	    }
@@ -646,7 +686,8 @@
 
 	        _this.id = id;
 	        _this.pack = 'pack1';
-	        _this.type = 'door';
+	        _this.kind = 'door';
+	        _this.type = 'monster';
 	        return _this;
 	    }
 
@@ -719,7 +760,8 @@
 
 	        _this.id = id;
 	        _this.pack = 'pack1';
-	        _this.type = 'treasure';
+	        _this.kind = 'treasure';
+	        _this.type = 'armor';
 	        _this.big = true;
 	        _this.wieldable = true;
 	        return _this;
@@ -729,6 +771,22 @@
 	}(_Card2.Card);
 
 	_Card2.Card.cards[id] = new MithrilArmor();
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	exports.default = function (sides) {
+	    sides = sides || 6;
+	    // TODO: add PRNG with bias to numbers, which haven't been dropped in a while
+	    return Math.floor(Math.random() * sides + 1);
+	};
 
 /***/ }
 /******/ ]);

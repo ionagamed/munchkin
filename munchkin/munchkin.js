@@ -6,6 +6,7 @@ import { Card } from '../common/Card';
 import { Player } from '../common/Player';
 
 import packs from '../common/packs.js';
+import dice from '../common/dice.js';
 
 $(function () {
     document.ws = new WebSocket("ws://localhost:8081");
@@ -27,8 +28,14 @@ $(function () {
     }
 
     function create() {
-        let octa = Card.byId('gelatinous_octahedron');
-        game.add.sprite(50, 50, octa.image);
+        let player = new Player();
+        player.wielded.push('mithril_armor');
+        console.log(player.wielded);
+        Card.byId('curse_lose_armor').onCast('deck', player);
+        console.log(player.wielded);
+        $('#escape').click(e => {
+            Card.byId('gelatinous_octahedron').onEscape(player, dice());
+        });
     }
 
     function update() {

@@ -47,13 +47,35 @@ export class Player {
     /**
      * Called when a player receives a card from any source
      *
-     * @param card Card
+     * @param card string
      * @param source Player|'deck'|'looting'
      */
     onCardReceived(card, source) {
         
     }
-    
+
+    /**
+     * Wield a card
+     * 
+     * @param card string
+     * @param table Table
+     */
+    wield(card, table) {
+        this.wielded.push(card);
+        Card.byId(card).onWielded(this, table);
+    }
+
+    /**
+     * Unwield a card
+     * 
+     * @param card string
+     * @param table Table
+     */
+    unwield(card, table) {
+        this.wielded = this.wielded.filter(x => x != card);
+        Card.byId(card).onUnwielded(this, table);
+    }
+
     /**
      * Get base attack for player
      *

@@ -20,6 +20,38 @@ class Fight {
     }
 
     /**
+     * Get overall attack of all players
+     * 
+     * @returns {number}
+     */
+    getPlayersAttack() {
+        var ret = 0;
+        this.players.map(x => {
+            ret += x.player.getAttack();
+            x.modifiers.map(y => {
+                ret += Card.byId(y).getModFor(x.player);
+            });
+        });
+        return ret;
+    }
+
+    /**
+     * Get overall attack of all monsters
+     * 
+     * @returns {number}
+     */
+    getMonstersAttack() {
+        var ret = 0;
+        this.monsters.map(x => {
+            ret += x.monster.getAttack();
+            x.modifiers.map(y => {
+                ret += Card.byId(y).getModFor(x.player);
+            });
+        })
+        return ret;
+    }
+
+    /**
      * Get the side, which will win in current conditions
      * 
      * @returns 'players'|'monsters'

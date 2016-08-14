@@ -11,7 +11,8 @@ class CurseLoseSmallItem extends Card {
         super();
         this.id = id;
         this.pack = 'pack1';
-        this.type = 'door';
+        this.kind = 'door';
+        this.type = 'curse';
         this.castable = true;
     }
     onCast(source, dest) {

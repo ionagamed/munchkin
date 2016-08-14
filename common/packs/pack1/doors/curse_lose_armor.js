@@ -11,13 +11,17 @@ class CurseLoseArmor extends Card {
         super();
         this.id = id;
         this.pack = 'pack1';
-        this.type = 'door';
+        this.kind = 'door';
+        this.type = 'curse';
         this.castable = true;
     }
-    onCast(source, dest) {
+    onCast(source, dest, table) {
         for (let i of dest.wielded) {
             if (Card.byId(i).type === 'armor') {
                 dest.unwield(i);
+                Card.byId(i).onUnwielded(dest, table);
+                Card.byId(i).onDisposed(table);
+                table.dispose(i);
             }
         }
     }

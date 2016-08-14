@@ -54,10 +54,10 @@ export class Table {
      * 
      * @returns {number}
 	 */
-	getAttack() {
+	get activeAttack() {
 		var ret = 0;
 		this.activeCards.map(x => {
-			ret += Card.byId(x).getBaseAttack();
+			ret += Card.byId(x).attack;
 		});
 		return ret;
 	}

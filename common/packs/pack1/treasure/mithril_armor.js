@@ -11,9 +11,14 @@ class MithrilArmor extends Card {
         super();
         this.id = id;
         this.pack = 'pack1';
-        this.type = 'treasure';
+        this.kind = 'treasure';
+        this.type = 'armor';
         this.big = true;
         this.wieldable = true;
+    }
+    
+    get attack() {
+        return 3;
     }
 }
 Card.cards[id] = new MithrilArmor();

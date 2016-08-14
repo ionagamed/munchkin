@@ -50,15 +50,16 @@ export class Card {
      * @returns {string}
      */
     get image() {
-        return [this.pack, this.type, this.id].join('_');
+        return [this.pack, this.kind, this.id].join('_');
     }
     
     /**
      * Called on dealing card in open way (such that everybody sees the content)
      *
      * @param player Player who dealt the card
+     * @param table Table
      */
-    onDealtOpen(player) {
+    onDealtOpen(player, table) {
         
     }
 
@@ -66,8 +67,9 @@ export class Card {
      * Called on dealing card in closed way (such that only himself can see the content)
      *
      * @param player Player who dealt the card
+     * @param table Table
      */
-    onDealtClose(player) {
+    onDealtClose(player, table) {
 
     }
     
@@ -77,8 +79,9 @@ export class Card {
      *
      * @param player Player
      * @param source Player|'deck'|'looting'
+     * @param table Table
      */
-    onReceived(player, source) {
+    onReceived(player, source, table) {
         
     }
 
@@ -87,8 +90,9 @@ export class Card {
      * 
      * @param source Player|'deck'
      * @param destination Player
+     * @param table Table
      */ 
-    onCast(source, destination) {
+    onCast(source, destination, table) {
         
     }
 
@@ -96,9 +100,10 @@ export class Card {
      * Determines if a card could be used by a player
      * 
      * @param player
+     * @param table Table
      * @returns {boolean}
      */
-    canBeUsed(player) {
+    canBeUsed(player, table) {
         if (!this.usable) {
             return false;
         }
@@ -107,19 +112,21 @@ export class Card {
     /**
      * Called when a card is used by player
      * 
-     * @param player
+     * @param player Player
+     * @param table Table
      */
-    onUsed(player) {
+    onUsed(player, table) {
         
     }
 
     /**
      * Determines if a card could be wielded by a player
      * 
-     * @param player
+     * @param player Player
+     * @param table Table
      * @returns {boolean}
      */
-    canBeWielded(player) {
+    canBeWielded(player, table) {
         if (!this.wieldable) {
             return false;
         }
@@ -128,25 +135,29 @@ export class Card {
     /**
      * Called when a card is wielded by player
      * 
-     * @param player
+     * @param player Player
+     * @param table Table
      */
-    onWielded(player) {
+    onWielded(player, table) {
         
     }
 
     /**
      * Called whan a card is unwielded by player
      * 
-     * @param player
+     * @param player Player
+     * @param table Table
      */
-    onUnwielded(player) {
+    onUnwielded(player, table) {
         
     }
     
     /**
      * Called when a card is being disposed (removed from everywhere and placed into discarded deck)
+     * 
+     * @param table Table
      */
-    onDisposed() {
+    onDisposed(table) {
         
     }
 }

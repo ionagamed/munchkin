@@ -11,17 +11,16 @@ class GelatinousOctahedron extends Card {
         super();
         this.id = id;
         this.pack = 'pack1';
-        this.type = 'door';
+        this.kind = 'door';
+        this.type = 'monster';
     }
     
     onEscape(player, dice) {
         dice += 1;
         if (dice >= 5) {
-            console.log('successful escape');
             return true;
         } else {
-            console.log('nop');
-            // TODO: do a bad thing
+            
         }
     }
 }
