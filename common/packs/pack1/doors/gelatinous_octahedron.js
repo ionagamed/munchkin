@@ -15,13 +15,44 @@ class GelatinousOctahedron extends Card {
         this.type = 'monster';
     }
     
-    onEscape(player, dice) {
+    onEscape(player, dice, table) {
         dice += 1;
         if (dice >= 5) {
             return true;
         } else {
-            
+            /*
+             drop all big items
+             */
+            player.wielded.map(x => {
+                if (Card.byId(x).big) {
+                    player.unwield(x);
+                    Card.byId(x).onDisposed(table);
+                    table.dispose(x);
+                }
+            });
+            player.belt.map((x, i) => {
+                if (Card.byId(x).big) {
+                    player.belt.splice(i, 1);
+                    Card.byId(x).onDisposed(table);
+                    table.dispose(x);
+                }
+            });
+            player.hand.map((x, i) => {
+                if (Card.byId(x).big) {
+                    player.hand.splice(i, 1);
+                    Card.byId(x).onDisposed(table);
+                    table.dispose(x);
+                }
+            })
         }
+    }
+    
+    getAttackFor(players) {
+        return 2;
+    }
+    
+    get treasureCount() {
+        return 1;
     }
 }
 Card.cards[id] = new GelatinousOctahedron();
