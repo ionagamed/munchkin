@@ -16,7 +16,7 @@ app.post('/login', function (req, res) {
 app.use('/', function (req, res, next) {
     // TODO: remove temp username
     req.session.username = 'abacaba';
-    if (req.path != '/login.html') {
+    if (req.path == '/game.html') {
         if (!req.session.username) {
             return res.redirect('/login.html');
         }
