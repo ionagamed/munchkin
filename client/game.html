@@ -1,10 +1,29 @@
 <html>
-<head>
-  <title>Munchkin</title>
-</head>
-<body>
-<script src='/lib/jquery/dist/jquery.min.js'></script>
-<script src='/lib/phaser/build/phaser.min.js'></script>
-<script src='./munchkin.js'></script>
-</body>
+    <head>
+      <title>Munchkin</title>
+    </head>
+    <body>
+        <script src='/lib/jquery/dist/jquery.min.js'></script>
+        <script src='/lib/phaser/build/phaser.min.js'></script>
+        <script src='./munchkin.js'></script>
+        <script type="text/javascript">
+            var a = 0;
+            var game = new Phaser.Game('100', '100', Phaser.AUTO, '', { preload: preload, create: create, update: update });
+            
+            function preload() {
+                game.stage.backgroundColor = "#f9be51";
+               // game.load.spritesheet('button', 'Button.png', 256, 64);
+                game.load.image('button', 'Button.png');
+            }
+            function create() {
+                //button = game.add.button(game.world.centerX - 128, game.world.centerY + 64, 'button', actionOnClick);
+            }
+            function update () {
+            }
+            function actionOnClick () {
+                game.stage.backgroundColor = a==1?"#f9be51":"#18f900";
+                a = a==1?0:1;
+            }
+        </script>
+    </body>
 </html>
