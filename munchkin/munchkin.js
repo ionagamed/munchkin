@@ -4,6 +4,7 @@
 
 import { Card } from '../common/Card';
 import { Player } from '../common/Player';
+import { Table } from '../common/Table';
 
 import packs from '../common/packs.js';
 import dice from '../common/dice.js';
@@ -29,12 +30,14 @@ $(function () {
 
     function create() {
         let player = new Player();
+        // TODO: add proper table definition
+        let table = new Table();
         player.wielded.push('mithril_armor');
         console.log(player.wielded);
-        Card.byId('curse_lose_armor').onCast('deck', player);
+        Card.byId('curse_lose_armor').onCast('deck', player, table);
         console.log(player.wielded);
         $('#escape').click(e => {
-            Card.byId('gelatinous_octahedron').onEscape(player, dice());
+            Card.byId('gelatinous_octahedron').onEscape(player, dice(), table);
         });
     }
 

@@ -1,8 +1,9 @@
 /**
  * Created by tsmish on 13/08/16.
  */
-import {Card} from './Card'
-import {Player} from './Player'
+import { Card } from './Card'
+import { Player } from './Player'
+
 export class Table {
     constructor() {
         /**
@@ -55,6 +56,19 @@ export class Table {
          * @type {Fight|null}
          */
         this.fight = null;
+    }
+
+    /**
+     * Move the card to the disposed deck
+     * 
+     * @param card
+     */
+    dispose(card) {
+        if (Card.byId(card).kind == 'door') {
+            this.discardedDoors.push(card);
+        } else if (Card.byId(card).kind == 'treasure') {
+            this.discardedTreasure.push(card);
+        }
     }
 
     /**

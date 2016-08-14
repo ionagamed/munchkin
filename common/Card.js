@@ -104,9 +104,7 @@ export class Card {
      * @returns {boolean}
      */
     canBeUsed(player, table) {
-        if (!this.usable) {
-            return false;
-        }
+        return this.usable
     }
 
     /**
@@ -127,9 +125,7 @@ export class Card {
      * @returns {boolean}
      */
     canBeWielded(player, table) {
-        if (!this.wieldable) {
-            return false;
-        }
+        return this.wieldable;
     }
 
     /**

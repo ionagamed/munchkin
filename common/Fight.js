@@ -4,7 +4,7 @@
     
 import { Card } from './Card';    
 
-class Fight {
+export class Fight {
     constructor() {
         /**
          * The player side of a fight
