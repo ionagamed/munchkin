@@ -1,14 +1,12 @@
 import express from 'express';
 import wss     from './websocket';
 import bodyParser from 'body-parser';
-import session from 'express-session';
+import session from './session';
 var app = express();
 
 app.use('/lib', express.static('bower_components'));
 app.use(bodyParser.urlencoded());
-app.use(session({
-    secret: process.env.SECRET || 'kappa kappa'
-}));
+app.use(session);
 app.post('/login', function (req, res) {
     req.session.username = req.body.username;
     return res.redirect('/game.html');
