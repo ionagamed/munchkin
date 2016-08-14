@@ -14,7 +14,7 @@ app.post('/login', function (req, res) {
     return res.redirect('/game.html');
 });
 app.use('/', function (req, res, next) {
-    if (req.path != '/login.html') {
+    if (req.path == '/game.html') {
         if (!req.session.username) {
             return res.redirect('/login.html');
         }
