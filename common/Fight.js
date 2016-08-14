@@ -1,6 +1,8 @@
 /**
  * Created by ionagamed on 8/13/16.
  */
+    
+import { Card } from './Card';    
 
 class Fight {
     constructor() {
@@ -45,9 +47,9 @@ class Fight {
         this.monsters.map(x => {
             ret += x.monster.getAttack();
             x.modifiers.map(y => {
-                ret += Card.byId(y).getModFor(x.player);
+                ret += Card.byId(y).getModFor(x.monster);
             });
-        })
+        });
         return ret;
     }
 
@@ -57,12 +59,6 @@ class Fight {
      * @returns 'players'|'monsters'
      */
     winningSide() {
-        var playersPts = 0;
-        this.players.map(x => {
-            playersPts += x.player.getAttack();
-            x.modifiers.map(y => {
-                playersPts += Card.byId(y).getModifierForPlayer(x.player);
-            });
-        });
+        return (this.getPlayersAttack() > this.getMonstersAttack() ? 'players' : 'monsters');
     }
 }
