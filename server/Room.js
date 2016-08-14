@@ -1,4 +1,6 @@
 import { Table } from '../common/Table';
+
+const MAX_PLAYERS = 6;
 export class Room {
     constructor(owner) {
         /** 
@@ -9,13 +11,6 @@ export class Room {
          */
         this.subscribers = [];
 
-        /**
-         * An array that holds players
-         * 
-         * @type [Player]
-         */
-        this.players = [];
-        
         /**
          * A table in the room
          *
