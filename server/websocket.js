@@ -1,6 +1,6 @@
 import { Server as WebSocketServer } from 'ws';
-import { Room, getRoom } from './Room'
-import session from './session'
+import { Room, getRoom } from './Room';
+import session from './session';
 
 export var wss = new WebSocketServer({
     port: 8081
@@ -29,7 +29,7 @@ wss.on('connection', ws => {
                  */
                 case 'getRoom':
                     console.log(clientSession);
-                    var room = getRoom(msg.room, clientSession.username);
+                    var room = Room.byId(msg.room, clientSession.username);
                     ws.send(JSON.stringify({
                         room: msg.room,
                         event: 'table',
@@ -37,6 +37,6 @@ wss.on('connection', ws => {
                     }));
                     break;
             }
-        })
-    })
+        });
+    });
 });
