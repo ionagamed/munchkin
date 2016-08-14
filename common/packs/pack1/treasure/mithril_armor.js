@@ -17,7 +17,7 @@ class MithrilArmor extends Card {
         this.wieldable = true;
     }
     
-    get attack() {
+    getAttackFor(player) {
         return 3;
     }
 }
