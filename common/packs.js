@@ -6,8 +6,8 @@ var packs = {
     pack1: {
         doors: [
             'gelatinous_octahedron',
-            'ghoulfiends',
-            'harpies',
+            'ghoulfiends',//todo: do not use item
+            'harpies'//todo: if (magician) return 9
             'hippogriff',
             'insurance_salesman',
             '3872_orcs',
