@@ -11,6 +11,18 @@
             font-size: 40px;
         }
         
+        p2{
+            font-size: 40px;            
+            font-family: 'Lakki Reddy', cursive;
+        }
+        
+        p1{
+            font-size: 35px;            
+            font-family: 'Lakki Reddy', cursive;
+        }
+        
+        
+        
         .radius{
             
             border: 1px solid black; 
@@ -24,10 +36,10 @@
             background: #fafad2; 
             text-align: center;
             font-family: 'Lakki Reddy', cursive;
-            font-size: 40px;
+            font-size: 35px;
             margin: 3px;
-
         } 
+        
         input[type="submit"] {
             background: #ffe4b5;
             height: 7%;
@@ -36,12 +48,16 @@
             font-family: 'Lakki Reddy', cursive;
             font-size: 30px;
             margin-top: 10px;
-            margin-bottom: 10px;
-
-        }      
+        }
+        
+        input[type="radio"] {
+            display: inline-block;
+            height: 3%;
+            width: 3%;
+        }
     
         body{ 
-            background-image: url(/img/580979_staraya_koja.jpg);
+            background: url(img/580979_staraya_koja.jpg);
             font-family: 'Lakki Reddy', cursive;
         }
         
@@ -50,8 +66,8 @@
         }
 
         img {
-            width: 37%;
-            margin: 10px;
+            width: 30%;
+            margin: 0px;
         }
     </style>
 </head>
@@ -59,10 +75,13 @@
 <body>
     <p>Добро пожаловать в Манчкин-онлайн!</p>
     <form action="/login" method="post">
-        <img src="/img/Supermanchkin.png" /> <br/>
-        <input name="text1" type="text" name="login" placeholder='Логин'/><br/>
-        <input name="text1" type="text" name="room" placeholder='Введите Комнату'/><br/>
-        <input type="submit" class="radius" value="Присоединиться">
+        <img src="img/Supermanchkin.png" /> <br/>
+        <input type="text" name="login" placeholder='Логин'/><br/>
+        <input type="text" name="room" placeholder='Введите Комнату'/><br/>
+        <p2>Укажите ваш пол:</p2> <br/>
+        <input type="radio" name="sex" value="man" checked><p1>Мужской</p1>
+        <input type="radio" name="sex" value="woman"><p1>Женский</p1> <br/>
+        <input type = "submit" class="radius" value="Присоединиться">
     </form>
 </body>
 </html>
