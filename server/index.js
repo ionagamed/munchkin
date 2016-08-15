@@ -21,6 +21,9 @@ app.use('/', function (req, res, next) {
     }
     next();
 });
+app.get('/', function (req, res) {
+    return res.redirect('/game.html');
+});
 app.use(express.static('client'));
 
 var port = process.env.PORT || 3001;
