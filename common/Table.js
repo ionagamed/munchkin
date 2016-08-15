@@ -59,11 +59,11 @@ export class Table {
     }
 
     /**
-     * Move the card to the disposed deck
+     * Move the card to the discard deck
      * 
      * @param card
      */
-    dispose(card) {
+    discard(card) {
         if (Card.byId(card).kind == 'door') {
             this.discardedDoors.push(card);
         } else if (Card.byId(card).kind == 'treasure') {

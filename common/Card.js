@@ -87,13 +87,15 @@ export class Card {
 
     /**
      * Called when a card is cast on a player
+     * Returns true if card needs to be disposed
      * 
      * @param source Player|'deck'
      * @param destination Player
      * @param table Table
+     * @returns boolean
      */ 
     onCast(source, destination, table) {
-        
+        return true;
     }
 
     /**
