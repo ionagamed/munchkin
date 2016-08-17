@@ -4,7 +4,7 @@ import session from './session';
 import url from 'url'
 
 export var wss = new WebSocketServer({
-    port: 8081
+    port: 3031
 });
 /**
  * connection init:
