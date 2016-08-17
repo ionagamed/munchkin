@@ -3,12 +3,11 @@ import { Table } from '../common/Table';
 const MAX_PLAYERS = 6;
 
 function commandSet(set, ws) {
-    return data => {
+    return msg => {
         try { 
-            var msg = JSON.parse(data); 
             set[msg.cmd](msg.data, ws);
         } catch(err) {
-            console.log('commandSet: Error: #{err}\n');
+            console.log(`Invalid input: Error: ${err}\n`);
         }
     }
 }
@@ -102,7 +101,7 @@ export class Room {
      */
     dispatch(event, data) {
         this.clients.map((ws, pos) => {
-            ws.send(JSON.stringify({event: event, data: data}), error => {
+            ws.send({event: event, data: data}, error => {
                 if(error) {
                     if(ws.playerId) this.table.players.splice(ws.playerId, 1);
                     this.clients.splice(pos, 1); 
@@ -137,7 +136,7 @@ Room.playerCommands.prototype = Room.clientCommands;
  Room.spectatorCommands.prototype = Room.clientCommands;
 
  Room.spectatorCommands['play'] = (data, ws) => {
-    ws.send(JSON.stringify({event: 'playStatus', data: ws.room.play(ws)}));
+    ws.send({event: 'playStatus', data: ws.room.play(ws)});
  }
 
 

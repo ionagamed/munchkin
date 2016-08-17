@@ -11,10 +11,10 @@ export var wss = new WebSocketServer({
  *  ws = new WebSocket('ws://server?username=$username&room=$room');
  * client->server:
  *  cmd:  string
- *  data: json
+ *  data: object
  * server->client:
  *  event: string
- *  data:  json
+ *  data:  object
  */
 wss.on('connection', ws => {
     var location = url.parse(ws.upgradeReq.url, true, true);
