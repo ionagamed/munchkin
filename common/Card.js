@@ -87,13 +87,15 @@ export class Card {
 
     /**
      * Called when a card is cast on a player
+     * Returns true if card needs to be disposed
      * 
      * @param source Player|'deck'
      * @param destination Player
      * @param table Table
+     * @returns boolean
      */ 
     onCast(source, destination, table) {
-        
+        return true;
     }
 
     /**
@@ -104,9 +106,7 @@ export class Card {
      * @returns {boolean}
      */
     canBeUsed(player, table) {
-        if (!this.usable) {
-            return false;
-        }
+        return this.usable
     }
 
     /**
@@ -127,9 +127,7 @@ export class Card {
      * @returns {boolean}
      */
     canBeWielded(player, table) {
-        if (!this.wieldable) {
-            return false;
-        }
+        return this.wieldable;
     }
 
     /**

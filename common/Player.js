@@ -56,13 +56,19 @@ export class Player {
 
     /**
      * Wield a card
+     * Returns true on success
      * 
      * @param card string
      * @param table Table
+     * 
+     * @returns boolean
      */
     wield(card, table) {
-        this.wielded.push(card);
-        Card.byId(card).onWielded(this, table);
+        if (Card.byId(card).canBeWielded(this, table)) {
+            this.wielded.push(card);
+            Card.byId(card).onWielded(this, table);
+            return true;
+        }
     }
 
     /**
@@ -88,5 +94,44 @@ export class Player {
             ret += Card.byId(x).getAttackFor(this);
         });
         return ret;
+    }
+
+    /**
+     * Determines if the player has the specified class
+     * 
+     * @param c
+     */
+    hasClass(c) {
+        var ret = false;
+        this.wielded.map(x => {
+            if (Card.byId(x).id == x) {
+                ret = true;
+            }
+        });
+        return ret;
+    }
+
+    /**
+     * Determines if the player has the class advantages
+     * 
+     * @param c
+     */
+    hasClassAdvantages(c) {
+        /**
+         * The player for now has class advantages if and only if he has that class
+         */
+        return this.hasClass(c);
+    }
+
+    /**
+     * Determines if the player has the class disadvantages
+     * 
+     * @param c
+     */
+    hasClassDisadvantages(c) {
+        const has = this.hasClass(c);
+        const sm = this.wielded.indexOf('supermunchkin') > -1;
+        const classes = this.wielded.filter(x => Card.byId(x).type == 'class').length;
+        return has && !(sm && classes == 1)
     }
 }

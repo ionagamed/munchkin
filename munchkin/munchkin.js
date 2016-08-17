@@ -4,9 +4,12 @@
 
 import { Card } from '../common/Card';
 import { Player } from '../common/Player';
+import { Table } from '../common/Table';
 
 import packs from '../common/packs.js';
 import dice from '../common/dice.js';
+
+import './test.js';
 
 $(function () {
     document.ws = new WebSocket("ws://localhost:8081");
@@ -15,7 +18,7 @@ $(function () {
         create: create,
         update: update
     });
-
+    
     function preload() {
         for (let i in packs.pack1.doors) {
             if (packs.pack1.doors.hasOwnProperty(i))
@@ -26,19 +29,12 @@ $(function () {
                 game.load.image('pack1_treasure_' + packs.pack1.treasure[i], 'packs/pack1/img/treasure-' + i + '.png');
         }
     }
-
+    
     function create() {
-        let player = new Player();
-        player.wielded.push('mithril_armor');
-        console.log(player.wielded);
-        Card.byId('curse_lose_armor').onCast('deck', player);
-        console.log(player.wielded);
-        $('#escape').click(e => {
-            Card.byId('gelatinous_octahedron').onEscape(player, dice());
-        });
-    }
-
-    function update() {
         
+    }
+    
+    function update() {
+       
     }
 });
