@@ -5,7 +5,7 @@
 import { Card } from './Card';    
     
 export class Player {
-    constructor() {
+    constructor(name) {
         /**
          * An array of cards which are in player's hand (not on the table)
          *
@@ -34,7 +34,7 @@ export class Player {
          *
          * @type {string}
          */
-        this.name = '';
+        this.name = name;
 
         /**
          * Player level
