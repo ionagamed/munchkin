@@ -1,28 +1,27 @@
 /**
- * Created by ionagamed on 8/14/16.
+ * Created by ionagamed on 8/15/16.
  */
 
 import { Card } from '../../../Card';
 
-const id = 'mithril_armor';
+const id = 'staff_of_napalm';
 
-class MithrilArmor extends Card {
+class StaffOfNapalm extends Card {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'treasure';
-        this.type = 'armor';
-        this.big = true;
+        this.type = '1-handed';
         this.wieldable = true;
     }
-    
+
     canBeWielded(player, table) {
-        return !player.hasCardWielded('wizard');
+        return player.hasCardWielded('wizard');
     }
-    
+
     getAttackFor(player) {
-        return 3;
+        return 5;
     }
 }
-Card.cards[id] = new MithrilArmor();
+Card.cards[id] = new StaffOfNapalm();

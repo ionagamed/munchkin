@@ -149,7 +149,18 @@ export class Card {
     onUnwielded(player, table) {
         
     }
-    
+
+    /**
+     * Determines if a card can be held wielded on table
+     * 
+     * @see Player.updateConstraints()
+     * @param player Player
+     * @param table Table
+     */
+    canBeHeld(player, table) {
+        return this.canBeWielded(player, table);
+    }
+
     /**
      * Called when a card is being disposed (removed from everywhere and placed into discarded deck)
      * 
