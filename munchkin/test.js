@@ -27,6 +27,7 @@ function _l(c, x) {
 $(function () {
     const player = new Player();
     var table = new Table();
+    table.players.push(player);
     table.phase = 'open';
     
     const updateView = function () {
@@ -61,6 +62,9 @@ $(function () {
             if (c.usable) {
                 t.push('<a class="use" href="#">use</a>')
             }
+            if (c.castable) {
+                t.push('<a class="cast" href="#">cast</a>');
+            }
             t.push('<a class="discard" href="#">discard</a>');
             hand.append('<li>' + t.join(' | ') + '</li>');
         });
@@ -78,6 +82,9 @@ $(function () {
             }
             if (c.usable) {
                 t.push('<a class="use" href="#">use</a>')
+            }
+            if (c.castable) {
+                t.push('<a class="cast" href="#">cast</a>');
             }
             t.push('<a class="discard" href="#">discard</a>');
             belt.append('<li>' + t.join(' | ') + '</li>');
@@ -126,7 +133,7 @@ $(function () {
         $('.player .wield').click(e => {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
             console.log(id);
-            if (player.wield(id)) {
+            if (player.wield(id, table)) {
                 player.hand.splice(player.hand.indexOf(id), 1);
             }
             updateView();
@@ -136,6 +143,16 @@ $(function () {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
             player.hand.splice(player.hand.indexOf(id), 1);
             if (Card.byId(id).onUsed(player, table)) {
+                table.discard(id);
+            }
+            updateView();
+            return false;
+        });
+        $('.player .hand .cast').click(e => {
+            const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
+            player.hand.splice(player.hand.indexOf(id), 1);
+            // TODO: add variety :)
+            if (Card.byId(id).onCast(player, 'gelatinous_octahedron', table)) {
                 table.discard(id);
             }
             updateView();

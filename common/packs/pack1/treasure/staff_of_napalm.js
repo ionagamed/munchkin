@@ -14,6 +14,7 @@ class StaffOfNapalm extends Card {
         this.kind = 'treasure';
         this.type = '1-handed';
         this.wieldable = true;
+        this.price = 800;
     }
 
     canBeWielded(player, table) {
