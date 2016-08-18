@@ -1,8 +1,8 @@
 import { Card } from '../../../Card';
 
-const id = 'harpies';
+const id = 'maul_rat';
 
-class harpies extends Card {
+class maul_rat extends Card {
     constructor() {
         super();
         this.id = id;
@@ -12,25 +12,23 @@ class harpies extends Card {
     }
     
     onEscape(player, dice, table) {
-        if (dice >= 5) {
+        if (dice >= 5)
             return true;
-        } else {
-            player.level -= 2;
-        }
+        player.level -= 1;
     }
     
     getAttackFor(players) {
-        var iswizard = false;
+        var iscleric = false;
         players.map(x => {
-            if(x.hasClassDisadvantages('wizard')) 
-                iswizard = true;
+            if(x.hasClassDisadvantages('cleric')) 
+                iscleric = true;
         })
-        if (iswizard) return 9;
-        return 4;
+        if (iscleric)
+            return 4;
+        return 1;
     }
-    
     get treasureCount() {
-        return 2;
+        return 1;
     }
 }
-Card.cards[id] = new harpies();
+Card.cards[id] = new maul_rat();

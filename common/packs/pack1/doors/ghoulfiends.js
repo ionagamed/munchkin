@@ -1,4 +1,4 @@
-/**
+    /**
  * Created by ionagamed on 8/13/16.
  */
 
@@ -20,7 +20,7 @@ class ghoulfiends extends Card {
             return true;
         } else {
             /*
-             todo: do not use item
+             TODO: do not use item
              */
             var m = 50;
             table.players.map(x => {

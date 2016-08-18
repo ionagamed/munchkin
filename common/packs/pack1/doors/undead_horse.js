@@ -1,8 +1,8 @@
 import { Card } from '../../../Card';
 
-const id = 'harpies';
+const id = 'undead_horse';
 
-class harpies extends Card {
+class undead_horse extends Card {
     constructor() {
         super();
         this.id = id;
@@ -14,23 +14,20 @@ class harpies extends Card {
     onEscape(player, dice, table) {
         if (dice >= 5) {
             return true;
-        } else {
-            player.level -= 2;
-        }
+        player.level -= 2;
     }
     
     getAttackFor(players) {
-        var iswizard = false;
+        var isdwarf = false;
         players.map(x => {
-            if(x.hasClassDisadvantages('wizard')) 
-                iswizard = true;
+            if(x.hasRaceDisadvantages('dwarf')) 
+                isdwarf = true;
+            if(isdwarf)
+                return 9;
+            return 5;
         })
-        if (iswizard) return 9;
+    get treasureCount() {
         return 4;
     }
-    
-    get treasureCount() {
-        return 2;
-    }
 }
-Card.cards[id] = new harpies();
+Card.cards[id] = new undead_horse();
