@@ -141,19 +141,29 @@ $(function () {
         });
         $('.player .hand .use').click(e => {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
-            player.hand.splice(player.hand.indexOf(id), 1);
-            if (Card.byId(id).onUsed(player, table)) {
-                table.discard(id);
+            if (Card.byId(id).canBeUsed(player, table)) {
+                player.hand.splice(player.hand.indexOf(id), 1);
+                if (Card.byId(id).onUsed(player, table)) {
+                    table.discard(id);
+                }
             }
             updateView();
             return false;
         });
         $('.player .hand .cast').click(e => {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
-            player.hand.splice(player.hand.indexOf(id), 1);
-            // TODO: add variety :)
-            if (Card.byId(id).onCast(player, 'gelatinous_octahedron', table)) {
-                table.discard(id);
+            if (Card.byId(id).canBeCast(player, 'gelatinous_octahedron', table)) {
+                player.hand.splice(player.hand.indexOf(id), 1);
+                // TODO: add variety :)
+                var dest = '';
+                if (id == 'cotion_of_ponfusion') {
+                    dest = 'gelatinous_octahedron';
+                } else {
+                    dest = player;
+                }
+                if (Card.byId(id).onCast(player, dest, table)) {
+                    table.discard(id);
+                }
             }
             updateView();
             return false;
