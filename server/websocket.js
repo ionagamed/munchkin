@@ -8,7 +8,7 @@ export var wss = new WebSocketServer({
 });
 /**
  * connection init:
- *  ws = new WebSocket('ws://server?username=$username&room=$room');
+ *  ws = new WebSocket('ws://server?userName=$username&room=$room');
  * client->server:
  *  cmd:  string
  *  data: object
@@ -19,5 +19,5 @@ export var wss = new WebSocketServer({
 wss.on('connection', ws => {
     var location = url.parse(ws.upgradeReq.url, true, true);
     ws.userName = location.query.userName;
-    Room.byId(location.query.room).connect(ws);
+    Room.byId(location.query.room, location.query.userName, ['pack1']).connect(ws);
 })
