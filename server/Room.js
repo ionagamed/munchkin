@@ -2,6 +2,7 @@ import { Player } from '../common/Player'
 import { Table } from '../common/Table';
 import packs from '../common/packs';
 import Random from 'random-js'
+import dice from '../common/dice'
 
 const MAX_PLAYERS = 6;
 const TREASURE_BEGIN_COUNT = 4;
@@ -29,10 +30,13 @@ function sendEvent(ws, event, data) {
  * @param env object various environment data
  */
 function setCommandSet(ws, set, env) {
+    ws.currentCommandSet = set;
     ws.onmessage = data => {
         try { 
             var msg = JSON.parse(data.data);
             env.room = Room.byId(env.roomId);
+            env.table = env.room.table;
+            env.player = env.table.players[ws.playerId];
             set[msg.cmd](msg.data, env);
         } catch(err) {
             console.log(`Invalid input: Error: ${err}\n`);
@@ -51,6 +55,25 @@ function copy(from, to) {
     for (var key in from) {
         to[key] = from[key];
     }
+}
+
+/** 
+ * Helper for validating phase
+ *
+ * @param player Player 
+ * @param table Table
+ * @param phase string wanted phase
+ * @returns bool is in phase 
+ */
+function phase(player, table, phase) {
+    return table.players[table.turn] == player && table.phase == phase;
+}
+
+function remove_first(what, where) {
+    var ix = where.findIndex(x => x == what);
+    if (ix == -1) return false;
+    where.splice(ix, 1);
+    return true;
 }
 
 export class Room {
@@ -105,6 +128,7 @@ export class Room {
      */
     connect(ws) {
         setCommandSet(ws, Room.spectatorCommands, {roomId: this.id, client: ws});
+        env.client.send('table', env.room.table);
         return this.clients.push(ws) - 1;
     }
     
@@ -117,10 +141,10 @@ export class Room {
      * @returns string status
      */
     play(ws) {
+        if(this.table.playing) return 'Room playing';
         if(this.table.players.length < MAX_PLAYERS) {
             ws.playerId = this.table.players.push(new Player(ws.userName)) - 1;
             setCommandSet(ws, Room.playerCommands, {roomId: this.id, client: ws});
-
             return 'Success';
         } else {
             return 'Room full';
@@ -175,6 +199,7 @@ export class Room {
         var r = new Random();
         r.shuffle(this.doorDeck);
         r.shuffle(this.treasureDeck);
+        this.table.playing = true;
 
         this.clients.forEach(ws => {
             var player = this.table.players[ws.playerId];
@@ -184,23 +209,18 @@ export class Room {
                     sendEvent(ws, 'gotCards', {
                         amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
                         cards: this.table.players[ws.playerId].hand,
-                        playerName: player.name
+                        who: player.name
                     });
                     this.dispatch('gotSomeCards', {
                         amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
-                        playerName: 
+                        who: player.name
                     });
         });
     }
 }
 
 // TODO: document commands and events 
-/**
- * Commands that could be send by server
- *
- * @type {function(object, object)}
- */
-Room.serverCommands = {};
+// TODO: move commands to different file
 
 /**
  * Commands that could be send by client
@@ -221,26 +241,139 @@ Room.clientCommands['start'] = (data, env) => {
  */
 Room.playerCommands = {};
 copy(Room.clientCommands, Room.playerCommands);
-
-Room.playerCommands['getCardsPrivate'] = (data, env) => {
+/*
+Room.giveCardsPrivate = (data, env) => {
     sendEvent(env.client, 'gotCards', {
             type: data.type,
             amount: data.amount,
             cards: env.room.getCards(data.type, data.amount),
-            playerName: env.client.userName
+            who: env.player.name
     });
     env.room.dispatch('gotSomeCards', {
         type: data.type,
         amount: data.amount,
-        playerName: env.client.userName
+        who: env.player.name
     });
 }
-Room.playerCommands['getCardsPublic'] = (data, env) => {
+Room.giveCardsPublic = (data, env) => {
     env.room.dispatch('gotCards', {
         type: data.type,
         amount: data.amount,
-        cards: env.room.getCards(data.type, data.amount), playerName: env.client.userName
+        cards: env.room.getCards(data.type, data.amount),
+        who: env.player.name
     });
+    }*/
+//TODO: move some code into common
+Room.playerCommands['tableRequest'] = (data, env) => {
+    env.client.send('table', env.room.table);
+}
+Room.playerCommands['kickDoor'] = (data, env) => {
+    if(!phase(env.player, env.table, 'begin')) return;
+    var doorCardId = env.room.doorDeck.splice(0, 1);
+    var doorCard = Card.byId(doorCardId);
+    env.room.dispatch('kickedDoor', {
+        card: doorCard,
+        who: env.player.name
+    })
+    if(doorCard.type == 'monster') {
+        if(doorCard.onCast('deck', env.player, env.table)) {
+            env.table.discard(doorCard);
+        }
+        this.table.phase = 'closed';
+    } else {
+        this.table.phase = 'open';
+        env.player.hand.push(doorCardName);
+        env.player.onCardRecieved(doorCardName, 'deck');
+    }
+}
+
+Room.playerCommands['wieldCard'] = (data, env) => {
+    var card = Card.byId(data.card);
+    if(phase(env.player, env.table, 'hand') ||
+       phase(env.player, env.table, 'drop')) return;
+
+    if(card.canBeWielded(card, env.table)) {
+        env.player.wield(card.id, env.table);
+        remove_first(card.id, env.player.hand);
+    }
+
+}
+Room.playerCommands['useCard'] = (data, env) => {
+    var card = Card.byId(data.card);
+    if(!phase(env.player, env.table, 'open')) return;
+    if(!card.canBeUsed(env.player, env.table)) return;
+    env.room.dispatch('usedCard', {
+        who: env.player.name,
+        card: card.id
+    });
+    env.table.phase = (card.type == 'monster' ? 'hand' : 'closed');
+    if(card.onUsed(env.player, env.table)) {
+        remove_first(data.card, env.player.hand);
+        env.table.discard(card);
+    }
+}
+Room.playerCommands['castCard'] = (data, env) => {
+    var card = Card.byId(data.card);
+    var on = env.table.players.find(player => player.name == data.on);
+    if(!phase(env.player, env.table, 'open')) return;
+    if(!card.canBeCast(env.player, on, env.table)) return;
+    env.room.dispatch('castedCard', {
+        who: env.player.name,
+        on: on.name,
+        card: card.id
+    });
+    if(card.onCast(env.player, on, env.table)) {
+        remove_first(data.card, env.player.hand);
+        env.table.discard(card);
+    }
+}
+
+function getCardFromPlayer(player, cardPos) {
+    switch (cardPos.place) {
+        case 'hand':
+            return env.player.hand.splice(i.pos, 1)[0];
+            break;
+        case 'belt':
+            return env.player.belt.splice(i.pos, 1)[0];
+            break;
+        case 'wielded':
+            var cardId = env.player.wielded[i.pos];
+            env.player.unwield(cardId);
+            return cardId;
+            break;
+    }
+}
+
+Room.playerForcedDropCommands = {};
+Room.playerForcedDropCommands['dropCards'] = (data, env) =>  {
+    if(env.dropValid(data.drop, env.player, env.table)) {
+        for (i in data.drop) {
+            var cardId = getCardFromPlayer(env.player, i);
+            env.player.discard(cardId);
+        }
+        setCommandSet(env.client, Room.playerCommands, {roomId: env.roomId, client: env.client});
+    }
+}
+Room.playerForcedGiveCommands = {};
+Room.playerForcedGiveCommands['giveCardsPrivate'] = (data, env) => {
+    if(env.giveValid(data.give, env.player, env.table)) {
+        for (i in data.give) {
+            var to = env.table.players.find(player => player.name == i.to);
+            var cardId = getCardFromPlayer(env.player, i);
+            to.hand.push(cardId);
+            to.onCardRecieved(cardId, env.player);
+            sendEvent(env.client, 'gotCards', {
+                amount: 1,
+                cards: [cardId],
+                who: env.player.name
+            });
+            env.dispatch('gotSomeCards', {
+                amount: 1,
+                who: env.player.name
+            });
+        }
+        setCommandSet(env.client, Room.playerCommands, {roomId: env.roomId, client: env.client});
+    }
 }
 
 
