@@ -3,6 +3,7 @@
  */
 
 import { Card } from '../../../Card';
+import { Fight } from '../../../Fight';
 
 const id = 'gelatinous_octahedron';
 
@@ -13,6 +14,23 @@ class GelatinousOctahedron extends Card {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.usable = true;
+    }
+    
+    canBeUsed(player, table) {
+        return table.currentPlayer().name == player.name && table.phase == 'open' && table.fight == null;
+    }
+
+    onUsed(player, table) {
+        table.fight = new Fight();
+        table.fight.players.push({
+            player: player,
+            modifiers: []
+        });
+        table.fight.monsters.push({
+            monster: this.id,
+            modifiers: []
+        });
     }
     
     onEscape(player, dice, table) {

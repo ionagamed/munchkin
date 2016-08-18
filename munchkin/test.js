@@ -27,11 +27,7 @@ function _l(c, x) {
 $(function () {
     const player = new Player();
     var table = new Table();
-    table.fight = new Fight();
-    table.fight.players.push({
-        player: player,
-        modifiers: []
-    });
+    table.phase = 'open';
     
     const updateView = function () {
         $('.player .player-info').html('player: <b>+' + player.getAttack() + '</b>');
@@ -96,7 +92,16 @@ $(function () {
         [].concat(table.discardedTreasure).reverse().map(x => {
             dTreasure.append('<li>' + x + '</li>');
         });
-        $('.p-attack').html(table.fight.getPlayersAttack());
+        if (table.fight) {
+            $('.fight .result').html(table.fight.getWinningSide());
+            $('.p-attack').html(table.fight.getPlayersAttack());
+            $('.m-attack').html(table.fight.getMonstersAttack());
+            const mList = $('.monsters-list');
+            mList.html('');
+            table.fight.monsters.map(x => {
+                mList.append('<li>' + x.monster + '</li>');
+            });
+        }
         // const pList = $('.players-list');
         // table.fight.players.map(x => {
         //     pList.append('<li><ul><li>modifiers</li></ul></li>')

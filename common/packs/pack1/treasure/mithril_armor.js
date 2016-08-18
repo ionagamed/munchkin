@@ -18,7 +18,7 @@ class MithrilArmor extends Card {
     }
     
     canBeWielded(player, table) {
-        return !player.hasCardWielded('wizard');
+        return !player.hasCardWielded('wizard') && table.fight == null;
     }
     
     getAttackFor(player) {
