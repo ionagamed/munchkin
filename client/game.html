@@ -1,11 +1,148 @@
 <html>
 <head>
-  <title>Munchkin</title>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Marck+Script" rel="stylesheet"> 
+    <title>Манчкин</title>    
+    
+    <style type="text/css">
+        
+        p{
+            text-align: center;
+            font-size: 40px;
+        }
+        
+        .radius{
+            
+            border: 1px solid black; 
+            padding: 15px; 
+            border-radius: 20px 20px 20px 20px;
+        }
+        
+        input[type="text"] {
+            position: relative;  
+            width: 37%;
+            background: #fafad2; 
+            text-align: center;
+            font-size: 40px;
+            margin: 3px;
+
+        } 
+        input[type="submit"] {
+            background: #ffe4b5;
+            height: 7%;
+            width: 37%;
+            cursor: pointer;
+            font-size: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+
+        }      
+    
+        body{ 
+            margin: 0;
+        }
+        
+        form{
+            margin-left: 3%;
+            margin-top: 3%;
+        }
+
+        img {
+            width: 55%;
+            margin: 10px;
+        }
+        
+    </style>
 </head>
+    
 <body>
-<button id='escape'>escape</button>
-<script src='/lib/jquery/dist/jquery.min.js'></script>
-<script src='/lib/phaser/build/phaser.min.js'></script>
-<script src='./munchkin.js'></script>
+    
+    <script type="text/javascript" src="phaser.js"> </script>
+    
+    <script>
+        var game = new Phaser.Game('100', '100', Phaser.AUTO, '', { preload: preload, create: create, update: update});
+        
+        function preload() {
+            game.load.image('koja', '580979_staraya_koja.jpg');
+            game.load.image('table', 'zwalls.ru-22669.jpg');
+            game.load.image('card0','doors-0.png');
+            game.load.image('card1','doors-1.png');
+            game.load.image('card2','doors-2.png');
+            game.load.image('card2','doors-2.png');
+            game.load.image('monster','monster.png');
+            game.load.image('warrior','warrior.png');
+            game.load.image('wall','elitefon.ru-16712.png');
+            game.load.image('grass','grass.png');
+            game.load.image('button', '')
+            
+        }
+        
+        function create() {          
+            var a = 60;
+            game.add.image(0,0,'koja');
+            var table = game.add.image(15,15,'table');
+            table.height = 750;
+            table.width = 1335;
+            
+            cards = []
+            
+            for(i = 0; i < 3; i++) {
+                cards[i] = game.add.sprite(15 + i*a,700,'card' + i)
+                cards[i].height *= 0.23;
+                cards[i].width  *= 0.23;
+                
+                cards[i].inputEnabled = true;
+                cards[i].events.onInputOver.add(function(obj, ptr) {
+                    obj.bringToTop();
+                });
+                cards[i].events.onInputOut.add(function(obj, ptr) {
+                    for(j = 0; j < cards.length; j++) {
+                        cards[j].bringToTop();
+                    }
+                });
+            }
+                    
+            var wall = game.add.image(1450,400,'wall');
+            wall.height *= 0.15;
+            wall.width *= 0.3;
+            
+            var monster = game.add.image(1457,415,'monster');
+            monster.height = monster.height*0.2; 
+            monster.width = monster.width*0.2;
+            monster.bringToTop();
+            
+            var grass = game.add.image(1450,200,'grass');
+            grass.height *= 0.1;
+            grass.width *= 0.19;
+            
+            var warrior = game.add.image(1460, 210, 'warrior');
+            warrior.height *= 0.2; 
+            warrior.width *= 0.2;
+            
+            var level = game.add.text(1440, 50, 'Ваш уровень:' ,{font: 'Comic Sans MS', fontSize : '50px'});
+            var lev = game.add.text(1775, 50, 7, {font: 'Comic Sans MS', fontSize : '50px'});
+            
+            var text1 = game.add.text(1570, 410, 'Удар монстра:', {font: 'Comic Sans MS', fontSize : '30px', fill: 'wheat'});
+            
+            var text2 = game.add.text(1637, 445, 12 , {font: 'Comic Sans MS', fontSize : '50px', fill: 'wheat'});
+            
+            var text3 = game.add.text(1578 ,210,'Удар манчкина:', {font: 'Comic Sans MS', fontSize : '30px', fill: 'aliceblue'});
+            
+            var text4 = game.add.text(1637,255, 15, {font: 'Comic Sans MS', fontSize : '50px', fill: 'aliceblue'});
+
+            
+            
+            
+            
+            
+        }
+        
+        function update() {
+            game.debug.text(game.input.mousePointer.x, 10, 10);
+            game.debug.text(game.input.mousePointer.y, 10, 30);
+        }
+        
+    </script>
+    
 </body>
 </html>
