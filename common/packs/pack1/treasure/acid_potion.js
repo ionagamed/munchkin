@@ -3,7 +3,7 @@
  */
 
 import { Card } from '../../../Card';
-import { Player } from '../../../Player';
+import { Modifier } from '../helpers/Modifier';
 
 const id = 'acid_potion';
 
@@ -17,25 +17,13 @@ class AcidPotion extends Card {
         this.castable = true;
         this.price = 200;
     }
-
+    
     canBeCast(source, dest, table) {
-        return table.fight != null;
+        return Modifier.canBeCast(source, dest, table);
     }
 
     onCast(source, dest, table) {
-        if (dest instanceof Player) {
-            table.fight.players.map(x => {
-                if (x.player.name == dest.name) {
-                    x.modifiers.push(this.id);
-                }
-            });
-        } else {
-            table.fight.monsters.map(x => {
-                if (x.monster == dest) {
-                    x.modifiers.push(this.id);
-                }
-            });
-        }
+        return Modifier.onCast(player, dest, table, this);
     }
 
     getModFor(x) {

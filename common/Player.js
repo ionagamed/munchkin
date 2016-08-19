@@ -86,7 +86,15 @@ export class Player {
      * @param table Table
      */
     unwield(card, table) {
-        this.wielded = this.wielded.filter(x => x != card);
+        var idx = this.wielded.indexOf(card);
+        if (idx > 0) {
+            if (Card.byId(this.wielded[idx - 1]).type == 'cheat') {
+                idx--;
+                this.wielded.splice(idx, 1);
+                Card.byId('cheat').onUnwielded(this, table);
+            }
+        }
+        this.wielded.splice(idx, 1);
         Card.byId(card).onUnwielded(this, table);
         this.updateConstraints(table);
     }
@@ -113,16 +121,19 @@ export class Player {
      * @param table
      */
     updateConstraints(table) {
-        this.wielded.map(x => {
-            if (!Card.byId(x).canBeHeld(this, table)) {
-                this.unwield(x);
-                if (Card.byId(x).kind == 'treasure') {
-                    this.belt.push(x);
-                } else {
-                    table.discard(x);
+        for (let i in this.wielded) {
+            if (this.wielded.hasOwnProperty(i)) {
+                const id = this.wielded[i];
+                if (!Card.byId(id).canBeHeld(this, table) && i > 0 && Card.byId(this.wielded[i - 1]).type == 'cheat') {
+                    this.unwield(x);
+                    if (Card.byId(x).kind == 'treasure') {
+                        this.belt.push(x);
+                    } else {
+                        table.discard(x);
+                    }
                 }
             }
-        });
+        }
     }
 
     /**

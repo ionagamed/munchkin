@@ -3,6 +3,9 @@
  */
 
 import { Card } from '../../../Card';
+import { BigItem } from '../helpers/BigItem';
+import { HandTakingItem } from '../helpers/HandTakingItem';
+import { Item } from "../helpers/Item";
 
 const id = 'huge_rock';
 
@@ -19,15 +22,11 @@ class HugeRock extends Card {
     }
 
     canBeHeld(player, table) {
-        return player.wielded.filter(x => Card.byId(x).big).length == 1 &&
-            player.getBusyHandCount() <= 2;
+        return BigItem.canBeHeld(player, table) && HandTakingItem.canBeHeld(player, table, 2);
     }
 
     canBeWielded(player, table) {
-        return !player.hasCardWielded('wizard') &&
-            player.wielded.filter(x => x.type == 'armor').length == 0 &&
-            player.getBusyHandCount() <= 0 &&    
-            table.fight == null;
+        return Item.canBeWielded(player, table) && BigItem.canBeWielded(player, table) && HandTakingItem.canBeWielded(player, table, 2);
     }
 
     getAttackFor(player) {

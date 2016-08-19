@@ -3,6 +3,9 @@
  */
 
 import { Card } from '../../../Card';
+import { BigItem } from "../helpers/BigItem";
+import { Armor } from "../helpers/Armor";
+import { Item } from "../helpers/Item";
 
 const id = 'mithril_armor';
 
@@ -20,13 +23,15 @@ class MithrilArmor extends Card {
     
     canBeHeld(player, table) {
         return !player.hasCardWielded('wizard') && 
-            player.wielded.filter(x => Card.byId(x).type == 'armor').length == 1;
+            BigItem.canBeHeld(player, table) &&
+            Armor.canBeHeld(player, table);    
     }
     
     canBeWielded(player, table) {
         return !player.hasCardWielded('wizard') && 
-            player.wielded.filter(x => Card.byId(x).type == 'armor').length == 0 &&
-            table.fight == null;
+            Item.canBeWielded(player, table) &&    
+            BigItem.canBeWielded(player, table) &&
+            Armor.canBeWielded(player, table);    
     }
     
     getAttackFor(player) {

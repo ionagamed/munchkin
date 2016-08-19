@@ -4,6 +4,7 @@
 
 import { Card } from '../../../Card';
 import { Player } from '../../../Player';
+import { Modifier } from '../helpers/Modifier';
 
 const id = 'doppleganger';
 
@@ -19,7 +20,7 @@ class Doppleganger extends Card {
     }
 
     canBeCast(source, dest, table) {
-        return table.fight != null;
+        return Modifier.canBeCast(source, dest, table);
     }
 
     onCast(source, dest, table) {

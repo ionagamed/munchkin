@@ -3,6 +3,8 @@
  */
 
 import { Card } from '../../../Card';
+import { HandTakingItem } from '../helpers/HandTakingItem';
+import { Item } from '../helpers/Item';
 
 const id = 'staff_of_napalm';
 
@@ -19,13 +21,13 @@ class StaffOfNapalm extends Card {
 
     canBeHeld(player, table) {
         return player.hasCardWielded('wizard') && 
-            player.getBusyHandCount() <= 2;
+            HandTakingItem.canBeHeld(player, table, 1);    
     }
     
     canBeWielded(player, table) {
         return player.hasCardWielded('wizard') && 
-            player.getBusyHandCount() <= 1 && 
-            table.fight == null;
+            Item.canBeWielded(player, table) &&
+            HandTakingItem.canBeWielded(player, table, 1);
     }
 
     getAttackFor(player) {
