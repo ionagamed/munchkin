@@ -7,7 +7,7 @@ import { Item } from '../helpers/Item';
 
 const id = 'swiss_army_polearm';
 
-class SwissArmyPolearm extends Item {
+class _ extends Item {
     constructor() {
         super();
         this.id = id;
@@ -32,4 +32,4 @@ class SwissArmyPolearm extends Item {
         return 4;
     }
 }
-Card.cards[id] = new SwissArmyPolearm();
+Card.cards[id] = new _();

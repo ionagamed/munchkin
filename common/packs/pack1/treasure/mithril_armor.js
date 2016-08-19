@@ -7,7 +7,7 @@ import { Item } from "../helpers/Item";
 
 const id = 'mithril_armor';
 
-class MithrilArmor extends Item {
+class _ extends Item {
     constructor() {
         super();
         this.id = id;
@@ -20,15 +20,15 @@ class MithrilArmor extends Item {
     }
     
     canBeHeld(player, table) {
-        return !player.hasRaceDisadvantages('wizard') && super.canBeHeld(player, table);
+        return !player.hasClassDisadvantages('wizard') && super.canBeHeld(player, table);
     }
     
     canBeWielded(player, table) {
-        return !player.hasRaceDisadvantages('wizard') && super.canBeWielded(player, table);
+        return !player.hasClassDisadvantages('wizard') && super.canBeWielded(player, table);
     }
     
     getAttackFor(player) {
         return 3;
     }
 }
-Card.cards[id] = new MithrilArmor();
+Card.cards[id] = new _();

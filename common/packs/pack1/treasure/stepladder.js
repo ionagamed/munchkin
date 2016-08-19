@@ -7,7 +7,7 @@ import { Item } from '../helpers/Item';
 
 const id = 'stepladder';
 
-class Stepladder extends Item {
+class _ extends Item {
     constructor() {
         super();
         this.id = id;
@@ -31,4 +31,4 @@ class Stepladder extends Item {
         return 3;
     }
 }
-Card.cards[id] = new Stepladder();
+Card.cards[id] = new _();

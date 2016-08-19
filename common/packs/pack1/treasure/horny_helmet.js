@@ -5,7 +5,7 @@
 import { Card } from '../../../Card';
 import { Item } from "../helpers/Item";
 
-const id = 'flaming_armor';
+const id = 'horny_helmet';
 
 class _ extends Item {
     constructor() {
@@ -13,13 +13,21 @@ class _ extends Item {
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'treasure';
-        this.type = 'armor';
+        this.type = 'headgear';
         this.wieldable = true;
         this.price = 600;
     }
 
+    canBeHeld(player, table) {
+        return !player.hasClassDisadvantages('wizard') && super.canBeHeld(player, table);
+    }
+
+    canBeWielded(player, table) {
+        return !player.hasClassDisadvantages('wizard') && super.canBeWielded(player, table);
+    }
+
     getAttackFor(player) {
-        return 3;
+        return player.hasClassAdvantages('elf') ? 3 : 1;
     }
 }
 Card.cards[id] = new _();

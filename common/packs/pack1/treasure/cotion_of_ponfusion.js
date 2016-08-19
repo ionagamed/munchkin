@@ -7,7 +7,7 @@ import { Modifier } from '../helpers/Modifier';
 
 const id = 'cotion_of_ponfusion';
 
-class CotionOfPonfusion extends Modifier {
+class _ extends Modifier {
     constructor() {
         super();
         this.id = id;
@@ -22,4 +22,4 @@ class CotionOfPonfusion extends Modifier {
         return 3;
     }
 }
-Card.cards[id] = new CotionOfPonfusion();
+Card.cards[id] = new _();

@@ -7,7 +7,7 @@ import { Item } from "../helpers/Item";
 
 const id = 'huge_rock';
 
-class HugeRock extends Item {
+class _ extends Item {
     constructor() {
         super();
         this.id = id;
@@ -24,4 +24,4 @@ class HugeRock extends Item {
         return 3;
     }
 }
-Card.cards[id] = new HugeRock();
+Card.cards[id] = new _();

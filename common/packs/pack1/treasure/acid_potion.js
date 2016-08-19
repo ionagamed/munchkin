@@ -7,7 +7,7 @@ import { Modifier } from '../helpers/Modifier';
 
 const id = 'acid_potion';
 
-class AcidPotion extends Modifier {
+class _ extends Modifier {
     constructor() {
         super();
         this.id = id;
@@ -22,4 +22,4 @@ class AcidPotion extends Modifier {
         return 5;
     }
 }
-Card.cards[id] = new AcidPotion();
+Card.cards[id] = new _();

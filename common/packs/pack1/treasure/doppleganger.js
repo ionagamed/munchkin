@@ -8,7 +8,7 @@ import { Modifier } from '../helpers/Modifier';
 
 const id = 'doppleganger';
 
-class Doppleganger extends Modifier {
+class _ extends Modifier {
     constructor() {
         super();
         this.id = id;
@@ -34,4 +34,4 @@ class Doppleganger extends Modifier {
         }
     }
 }
-Card.cards[id] = new Doppleganger();
+Card.cards[id] = new _();
