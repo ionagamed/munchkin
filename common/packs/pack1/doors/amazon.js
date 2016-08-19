@@ -23,12 +23,17 @@ class amazon extends Card {
         }
         if (dice >= 5) 
             return true;
-        //looseklass
+        
+            
+        }
+        player.level -= 3;
     }
     getAttackFor(players) {
         return 8;
     }
     get treasureCount() {
+    if (player.sex == 'female') {
+            return 1;
         return 2;
     }
 }

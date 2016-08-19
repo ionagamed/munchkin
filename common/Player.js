@@ -104,7 +104,7 @@ export class Player {
     hasClass(c) {
         var ret = false;
         this.wielded.map(x => {
-            if (Card.byId(x).id == x) {
+            if (Card.byId(x).id == c) {
                 ret = true;
             }
         });

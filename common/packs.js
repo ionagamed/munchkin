@@ -8,11 +8,11 @@ var packs = {
             'gelatinous_octahedron',//
             'ghoulfiends',//do not use item
             'harpies'//
-            'hippogriff',
-            'insurance_salesman',
+            'hippogriff',*
+            'insurance_salesman',*
             '3872_orcs',//death
             'amazon',
-            'bigfoot',
+            'bigfoot',//
             'bullrog',//level += 2, death
             'crabs',//
             'curse_lose_small_item_1',
