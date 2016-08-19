@@ -54,6 +54,29 @@ export class Fight {
     }
 
     /**
+     * When the fight began
+     * 
+     * @param {Table} table
+     */
+    onBegan(table) {
+        this.players.map(x => {
+            x.player.wielded.map(x => {
+                const c = Card.byId(x);
+                c.onFightBegan(this, table);
+            });
+        });
+    }
+
+    /**
+     * When the fight ends
+     * 
+     * @param {Table} table
+     */
+    onEnded(table) {
+        
+    }
+
+    /**
      * Get the side, which will win in current conditions
      * 
      * @returns 'players'|'monsters'
