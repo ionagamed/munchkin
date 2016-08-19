@@ -5,9 +5,9 @@
 import { Card } from '../../../Card';
 import { Player } from '../../../Player';
 
-const id = 'acid_potion';
+const id = 'doppleganger';
 
-class AcidPotion extends Card {
+class Doppleganger extends Card {
     constructor() {
         super();
         this.id = id;
@@ -15,7 +15,7 @@ class AcidPotion extends Card {
         this.kind = 'treasure';
         this.type = 'modifier';
         this.castable = true;
-        this.price = 200;
+        this.price = 300;
     }
 
     canBeCast(source, dest, table) {
@@ -38,12 +38,16 @@ class AcidPotion extends Card {
         }
     }
 
-    getModFor(x) {
-        if (x instanceof Player) {
-            return x.wielded.filter(x => x.type != 'class').reduce((acc, v) => acc + v);
+    getModFor(arg) {
+        if (arg instanceof Player) {
+            return arg.wielded
+                .filter(x => x.type != 'class')
+                .filter(x => Card.byId(x).getAttackFor)
+                .map(x => Card.byId(x).getAttackFor(arg))
+                .reduce((acc, v) => acc + v);
         } else {
-            return Card.byId(x).getAttack();
+            return Card.byId(arg).getAttack();
         }
     }
 }
-Card.cards[id] = new AcidPotion();
+Card.cards[id] = new Doppleganger();
