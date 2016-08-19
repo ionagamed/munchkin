@@ -14,18 +14,21 @@ class undead_horse extends Card {
     onEscape(player, dice, table) {
         if (dice >= 5) {
             return true;
+        }
         player.level -= 2;
     }
     
     getAttackFor(players) {
         var isdwarf = false;
         players.map(x => {
-            if(x.hasRaceDisadvantages('dwarf')) 
+            if (x.hasRaceDisadvantages('dwarf'))
                 isdwarf = true;
-            if(isdwarf)
+            if (isdwarf)
                 return 9;
             return 5;
-        })
+        });
+    }
+        
     get treasureCount() {
         return 4;
     }

@@ -18,8 +18,6 @@ class amazon extends Card {
     onEscape(player, dice, table) {
         if (player.sex == 'female') {
             return true;
-            get treasureCount()
-                return 1;
         }
         if (dice >= 5) 
             return true;
