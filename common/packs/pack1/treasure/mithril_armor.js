@@ -22,13 +22,13 @@ class MithrilArmor extends Card {
     }
     
     canBeHeld(player, table) {
-        return !player.hasCardWielded('wizard') && 
+        return !player.hasRaceDisadvantages('wizard') && 
             BigItem.canBeHeld(player, table) &&
             Armor.canBeHeld(player, table);    
     }
     
     canBeWielded(player, table) {
-        return !player.hasCardWielded('wizard') && 
+        return !player.hasRaceDisadvantages('wizard') && 
             Item.canBeWielded(player, table) &&    
             BigItem.canBeWielded(player, table) &&
             Armor.canBeWielded(player, table);    

@@ -20,12 +20,12 @@ class StaffOfNapalm extends Card {
     }
 
     canBeHeld(player, table) {
-        return player.hasCardWielded('wizard') && 
+        return player.hasRaceAdvantages('wizard') && 
             HandTakingItem.canBeHeld(player, table, 1);    
     }
     
     canBeWielded(player, table) {
-        return player.hasCardWielded('wizard') && 
+        return player.hasRaceAdvantages('wizard') && 
             Item.canBeWielded(player, table) &&
             HandTakingItem.canBeWielded(player, table, 1);
     }

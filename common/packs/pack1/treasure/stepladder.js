@@ -21,12 +21,12 @@ class Stepladder extends Card {
     }
 
     canBeHeld(player, table) {
-        return player.hasCardWielded('halfling') &&
+        return player.hasRaceAdvantages('halfling') &&
             BigItem.canBeHeld(player, table);    
     }
 
     canBeWielded(player, table) {
-        return !player.hasCardWielded('wizard') &&
+        return player.hasRaceAdvantages('halfling') &&
             Item.canBeWielded(player, table) &&
             BigItem.canBeWielded(player, table);    
     }

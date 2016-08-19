@@ -7,7 +7,7 @@ var packs = {
         doors: [
             'gelatinous_octahedron',//
             'ghoulfiends',//do not use item
-            'harpies'//
+            'harpies',//
             'hippogriff',
             'insurance_salesman',
             '3872_orcs',//death
