@@ -169,7 +169,7 @@ export class Player {
         /**
          * The player for now has class advantages if and only if he has that class
          */
-        return this.hasCardWielded(r);
+        return this.hasCardWielded(c);
     }
 
     /**
@@ -179,7 +179,7 @@ export class Player {
      */
     hasClassDisadvantages(c) {
         const has = this.hasCardWielded(c);
-        const sm = this.wielded.indexOf('supermunchkin') > -1;
+        const sm = this.hasCardWielded('super_munchkin');
         const classes = this.wielded.filter(x => Card.byId(x).type == 'class').length;
         return has && !(sm && classes == 1);
     }
@@ -190,10 +190,15 @@ export class Player {
      * @param r
      */
     hasRaceAdvantages(r) {
-        /**
-         * The player for now has race advantages if and only if he has that race
-         */
-        return this.hasCardWielded(r);
+        if (r == 'human') {
+            if (this.hasCardWielded('super_munchkin')) {
+                return this.cardsOfTypeWielded('class') <= 1;
+            } else {
+                return this.cardsOfTypeWielded('class') <= 0;
+            }
+        } else {
+            return this.hasCardWielded(r);
+        }
     }
 
     /**
@@ -203,7 +208,7 @@ export class Player {
      */
     hasRaceDisadvantages(r) {
         const has = this.hasCardWielded(c);
-        const sm = this.wielded.indexOf('half-breed') > -1;
+        const sm = this.hasCardWielded('half-breed');
         const races = this.wielded.filter(x => Card.byId(x).type == 'race').length;
         return has && !(sm && races == 1);
     }
