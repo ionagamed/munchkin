@@ -16,7 +16,7 @@ class CurseLoseSmallItem extends Card {
         this.castable = true;
     }
     onCast(source, dest) {
-        dest.dropSmallItem();
+        // dest.dropSmallItem();
     }
 }
 Card.cards[id + '_1'] = new CurseLoseSmallItem();

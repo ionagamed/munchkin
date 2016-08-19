@@ -42,6 +42,13 @@ export class Player {
          * @type {number}
          */
         this.level = 1;
+
+        /**
+         * Player sex
+         * 
+         * @type {string}
+         */
+        this.sex = 'male';
     }
     
     /**
@@ -67,6 +74,7 @@ export class Player {
         if (Card.byId(card).canBeWielded(this, table)) {
             this.wielded.push(card);
             Card.byId(card).onWielded(this, table);
+            this.updateConstraints(table);
             return true;
         }
     }
@@ -80,6 +88,7 @@ export class Player {
     unwield(card, table) {
         this.wielded = this.wielded.filter(x => x != card);
         Card.byId(card).onUnwielded(this, table);
+        this.updateConstraints(table);
     }
 
     /**
@@ -91,17 +100,37 @@ export class Player {
     getAttack() {
         var ret = this.level;
         this.wielded.map(x => {
-            ret += Card.byId(x).getAttackFor(this);
+            const c = Card.byId(x);
+            if (c.getAttackFor)
+                ret += c.getAttackFor(this);
         });
         return ret;
     }
 
     /**
-     * Determines if the player has the specified class
+     * Checks that player's current build is valid, and, if not, makes it valid
+     * 
+     * @param table
+     */
+    updateConstraints(table) {
+        this.wielded.map(x => {
+            if (!Card.byId(x).canBeHeld(this, table)) {
+                this.unwield(x);
+                if (Card.byId(x).kind == 'treasure') {
+                    this.belt.push(x);
+                } else {
+                    table.discard(x);
+                }
+            }
+        });
+    }
+
+    /**
+     * Determines if player has a card wielded
      * 
      * @param c
      */
-    hasClass(c) {
+    hasCardWielded(c) {
         var ret = false;
         this.wielded.map(x => {
             if (Card.byId(x).id == c) {
@@ -109,6 +138,15 @@ export class Player {
             }
         });
         return ret;
+    }
+
+    /**
+     * How much cards of that type are wielded
+     * 
+     * @param t
+     */
+    cardsOfTypeWielded(t) {
+        return this.wielded.filter(x => Card.byId(x).type == t).length;
     }
 
     /**
@@ -120,7 +158,7 @@ export class Player {
         /**
          * The player for now has class advantages if and only if he has that class
          */
-        return this.hasClass(c);
+        return this.hasCardWielded(r);
     }
 
     /**
@@ -129,9 +167,33 @@ export class Player {
      * @param c
      */
     hasClassDisadvantages(c) {
-        const has = this.hasClass(c);
+        const has = this.hasCardWielded(c);
         const sm = this.wielded.indexOf('supermunchkin') > -1;
         const classes = this.wielded.filter(x => Card.byId(x).type == 'class').length;
-        return has && !(sm && classes == 1)
+        return has && !(sm && classes == 1);
+    }
+
+    /**
+     * Determines if the player has the race advantages
+     *
+     * @param r
+     */
+    hasRaceAdvantages(r) {
+        /**
+         * The player for now has race advantages if and only if he has that race
+         */
+        return this.hasCardWielded(r);
+    }
+
+    /**
+     * Determines if the player has the class disadvantages
+     *
+     * @param r
+     */
+    hasRaceDisadvantages(r) {
+        const has = this.hasCardWielded(c);
+        const sm = this.wielded.indexOf('half-breed') > -1;
+        const races = this.wielded.filter(x => Card.byId(x).type == 'race').length;
+        return has && !(sm && races == 1);
     }
 }

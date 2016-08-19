@@ -1,12 +1,12 @@
 /**
- * Created by ionagamed on 8/15/16.
+ * Created by ionagamed on 8/18/16.
  */
 
 import { Card } from '../../../Card';
 
-const id = 'wizard';
+const id = 'warrior';
 
-class Wizard extends Card {
+class Warrior extends Card {
     constructor() {
         super();
         this.id = id;
@@ -15,7 +15,7 @@ class Wizard extends Card {
         this.type = 'class';
         this.wieldable = true;
     }
-    
+
     canBeWielded(player, table) {
         if (player.hasCardWielded('super_munchkin')) {
             return player.cardsOfTypeWielded('class') < 2;
@@ -23,7 +23,7 @@ class Wizard extends Card {
             return player.cardsOfTypeWielded('class') < 1;
         }
     }
-    
+
     canBeHeld(player, table) {
         if (player.hasCardWielded('super_munchkin')) {
             return player.cardsOfTypeWielded('class') <= 2;
@@ -31,7 +31,11 @@ class Wizard extends Card {
             return player.cardsOfTypeWielded('class') <= 1;
         }
     }
+    
+    getAttackFor(player) {
+        return 1;
+    }
 }
-Card.cards[id + '_1'] = new Wizard();
-Card.cards[id + '_2'] = new Wizard();
-Card.cards[id + '_3'] = new Wizard();
+Card.cards[id + '_1'] = new Warrior();
+Card.cards[id + '_2'] = new Warrior();
+Card.cards[id + '_3'] = new Warrior();

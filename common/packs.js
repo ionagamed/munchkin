@@ -111,7 +111,7 @@ var packs = {
             'staff_of_napalm',
             'stepladder',
             'swiss_army_polearm',
-            'doppelganger',
+            'doppleganger',
             'flaming_armor',
             'gentlemans_club',
             'hammer_of_kneecapping',

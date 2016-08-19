@@ -45,7 +45,7 @@ export class Fight {
     getMonstersAttack() {
         var ret = 0;
         this.monsters.map(x => {
-            ret += x.monster.getAttack();
+            ret += Card.byId(x.monster).getAttackFor(this.players);
             x.modifiers.map(y => {
                 ret += Card.byId(y).getModFor(x.monster);
             });
@@ -58,7 +58,7 @@ export class Fight {
      * 
      * @returns 'players'|'monsters'
      */
-    winningSide() {
+    getWinningSide() {
         return (this.getPlayersAttack() > this.getMonstersAttack() ? 'players' : 'monsters');
     }
 }
