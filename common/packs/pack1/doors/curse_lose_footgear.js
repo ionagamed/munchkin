@@ -1,13 +1,9 @@
-/**
- * Created by ionagamed on 8/14/16.
- */
-
 import { Card } from '../../../Card';
 import { Player } from '../../../Player';
 
-const id = 'curse_lose_armor';
+const id = 'curse_lose_footgear';
 
-class CurseLoseArmor extends Card {
+class CurseLoseFootgear extends Card {
     constructor() {
         super();
         this.id = id;
@@ -21,11 +17,11 @@ class CurseLoseArmor extends Card {
     }
     onCast(source, dest, table) {
         for (let i of dest.wielded) {
-            if (Card.byId(i).type === 'armor') {
+            if (Card.byId(i).type == 'footgear') {
                 dest.unwield(i);
                 table.dispose(i);
             }
         }
     }
 }
-Card.cards[id] = new CurseLoseArmor();
+Card.cards[id] = new CurseLoseFootgear();

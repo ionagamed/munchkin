@@ -1,13 +1,9 @@
-/**
- * Created by ionagamed on 8/14/16.
- */
-
 import { Card } from '../../../Card';
 import { Player } from '../../../Player';
 
-const id = 'curse_lose_armor';
+const id = 'curse_lose_level_2';
 
-class CurseLoseArmor extends Card {
+class curse_lose_level_2 extends Card {
     constructor() {
         super();
         this.id = id;
@@ -20,12 +16,7 @@ class CurseLoseArmor extends Card {
         return dest instanceof Player;
     }
     onCast(source, dest, table) {
-        for (let i of dest.wielded) {
-            if (Card.byId(i).type === 'armor') {
-                dest.unwield(i);
-                table.dispose(i);
-            }
-        }
+        player.level--;
     }
 }
-Card.cards[id] = new CurseLoseArmor();
+Card.cards[id] = new curse_lose_level_2();
