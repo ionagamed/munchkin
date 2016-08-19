@@ -17,8 +17,15 @@ class StaffOfNapalm extends Card {
         this.price = 800;
     }
 
+    canBeHeld(player, table) {
+        return player.hasCardWielded('wizard') && 
+            player.getBusyHandCount() <= 2;
+    }
+    
     canBeWielded(player, table) {
-        return player.hasCardWielded('wizard') && table.fight == null;
+        return player.hasCardWielded('wizard') && 
+            player.getBusyHandCount() <= 1 && 
+            table.fight == null;
     }
 
     getAttackFor(player) {

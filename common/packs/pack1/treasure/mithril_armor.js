@@ -18,8 +18,15 @@ class MithrilArmor extends Card {
         this.price = 600;
     }
     
+    canBeHeld(player, table) {
+        return !player.hasCardWielded('wizard') && 
+            player.wielded.filter(x => Card.byId(x).type == 'armor').length == 1;
+    }
+    
     canBeWielded(player, table) {
-        return !player.hasCardWielded('wizard') && table.fight == null;
+        return !player.hasCardWielded('wizard') && 
+            player.wielded.filter(x => Card.byId(x).type == 'armor').length == 0 &&
+            table.fight == null;
     }
     
     getAttackFor(player) {

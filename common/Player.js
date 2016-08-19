@@ -196,4 +196,15 @@ export class Player {
         const races = this.wielded.filter(x => Card.byId(x).type == 'race').length;
         return has && !(sm && races == 1);
     }
+
+    /**
+     * Get the amount of non-free hands
+     * 
+     * @returns {number}
+     */
+    getBusyHandCount() {
+        const types = this.wielded.map(x => Card.byId(x).type);
+        return types.filter(x => x == '1-handed').length +
+            types.filter(x => x == '2-handed').length * 2;
+    }
 }
