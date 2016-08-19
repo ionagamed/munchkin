@@ -106,7 +106,7 @@ export class Card {
      * @returns {boolean}
      */
     canBeUsed(player, table) {
-        return this.usable
+        return this.usable;
     }
 
     /**

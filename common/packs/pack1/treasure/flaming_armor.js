@@ -3,23 +3,23 @@
  */
 
 import { Card } from '../../../Card';
-import { Item } from '../helpers/Item';
+import { Item } from "../helpers/Item";
 
-const id = 'spiky_knees';
+const id = 'flaming_armor';
 
-class SpikyKnees extends Item {
+class FlamingArmor extends Item {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'treasure';
-        this.type = 'knees';
+        this.type = 'armor';
         this.wieldable = true;
-        this.price = 200;
+        this.price = 600;
     }
 
     getAttackFor(player) {
-        return 1;
+        return 3;
     }
 }
-Card.cards[id] = new SpikyKnees();
+Card.cards[id] = new MithrilArmor();

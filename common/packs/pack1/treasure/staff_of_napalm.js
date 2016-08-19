@@ -3,7 +3,6 @@
  */
 
 import { Card } from '../../../Card';
-import { HandTakingItem } from '../helpers/HandTakingItem';
 import { Item } from '../helpers/Item';
 
 const id = 'staff_of_napalm';
@@ -15,19 +14,17 @@ class StaffOfNapalm extends Card {
         this.pack = 'pack1';
         this.kind = 'treasure';
         this.type = '1-handed';
+        this.hands = 1;
         this.wieldable = true;
         this.price = 800;
     }
 
     canBeHeld(player, table) {
-        return player.hasRaceAdvantages('wizard') && 
-            HandTakingItem.canBeHeld(player, table, 1);    
+        return player.hasRaceAdvantages('wizard') && super.canBeHeld(player, table);
     }
     
     canBeWielded(player, table) {
-        return player.hasRaceAdvantages('wizard') && 
-            Item.canBeWielded(player, table) &&
-            HandTakingItem.canBeWielded(player, table, 1);
+        return player.hasRaceAdvantages('wizard') && super.canBeWielded(player, table);
     }
 
     getAttackFor(player) {

@@ -3,35 +3,29 @@
  */
 
 import { Card } from '../../../Card';
-import { BigItem } from '../helpers/BigItem';
-import { HandTakingItem } from '../helpers/HandTakingItem';
 import { Item } from '../helpers/Item';
 
 const id = 'swiss_army_polearm';
 
-class SwissArmyPolearm extends Card {
+class SwissArmyPolearm extends Item {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'treasure';
         this.type = '2-handed';
+        this.hands = 2;
         this.big = true;
         this.wieldable = true;
         this.price = 600;
     }
 
     canBeHeld(player, table) {
-        return player.hasRaceAdvantages('human') &&
-            BigItem.canBeHeld(player, table) &&
-            HandTakingItem.canBeHeld(player, table, 2);
+        return player.hasRaceAdvantages('human') && super.canBeHeld(player, table);
     }
 
     canBeWielded(player, table) {
-        return player.hasRaceAdvantages('human') &&
-            Item.canBeWielded(player, table) &&
-            BigItem.canBeWielded(player, table) &&
-            HandTakingItem.canBeWielded(player, table, 2);
+        return player.hasRaceAdvantages('human') && super.canBeWielded(player, table);
     }
 
     getAttackFor(player) {

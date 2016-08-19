@@ -3,12 +3,11 @@
  */
 
 import { Card } from '../../../Card';
-import { BigItem } from '../helpers/BigItem';
 import { Item } from '../helpers/Item';
 
 const id = 'stepladder';
 
-class Stepladder extends Card {
+class Stepladder extends Item {
     constructor() {
         super();
         this.id = id;
@@ -21,14 +20,11 @@ class Stepladder extends Card {
     }
 
     canBeHeld(player, table) {
-        return player.hasRaceAdvantages('halfling') &&
-            BigItem.canBeHeld(player, table);    
+        return player.hasRaceAdvantages('halfling') && super.canBeHeld(player, table);
     }
 
     canBeWielded(player, table) {
-        return player.hasRaceAdvantages('halfling') &&
-            Item.canBeWielded(player, table) &&
-            BigItem.canBeWielded(player, table);    
+        return player.hasRaceAdvantages('halfling') && super.canBeWielded(player, table);
     }
 
     getAttackFor(player) {

@@ -3,13 +3,11 @@
  */
 
 import { Card } from '../../../Card';
-import { BigItem } from "../helpers/BigItem";
-import { Armor } from "../helpers/Armor";
 import { Item } from "../helpers/Item";
 
 const id = 'mithril_armor';
 
-class MithrilArmor extends Card {
+class MithrilArmor extends Item {
     constructor() {
         super();
         this.id = id;
@@ -22,16 +20,11 @@ class MithrilArmor extends Card {
     }
     
     canBeHeld(player, table) {
-        return !player.hasRaceDisadvantages('wizard') && 
-            BigItem.canBeHeld(player, table) &&
-            Armor.canBeHeld(player, table);    
+        return !player.hasRaceDisadvantages('wizard') && super.canBeHeld(player, table);
     }
     
     canBeWielded(player, table) {
-        return !player.hasRaceDisadvantages('wizard') && 
-            Item.canBeWielded(player, table) &&    
-            BigItem.canBeWielded(player, table) &&
-            Armor.canBeWielded(player, table);    
+        return !player.hasRaceDisadvantages('wizard') && super.canBeWielded(player, table);
     }
     
     getAttackFor(player) {
