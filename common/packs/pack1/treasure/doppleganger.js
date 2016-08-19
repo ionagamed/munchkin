@@ -8,7 +8,7 @@ import { Modifier } from '../helpers/Modifier';
 
 const id = 'doppleganger';
 
-class Doppleganger extends Card {
+class Doppleganger extends Modifier {
     constructor() {
         super();
         this.id = id;
@@ -19,28 +19,11 @@ class Doppleganger extends Card {
         this.price = 300;
     }
 
-    canBeCast(source, dest, table) {
-        return Modifier.canBeCast(source, dest, table);
-    }
-
-    onCast(source, dest, table) {
-        if (dest instanceof Player) {
-            table.fight.players.map(x => {
-                if (x.player.name == dest.name) {
-                    x.modifiers.push(this.id);
-                }
-            });
-        } else {
-            table.fight.monsters.map(x => {
-                if (x.monster == dest) {
-                    x.modifiers.push(this.id);
-                }
-            });
-        }
-    }
-
     getModFor(arg) {
         if (arg instanceof Player) {
+            /**
+             * HACK: warrior
+             */
             return arg.wielded
                 .filter(x => x.type != 'class')
                 .filter(x => Card.byId(x).getAttackFor)

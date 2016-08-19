@@ -7,7 +7,7 @@ import { Modifier } from '../helpers/Modifier';
 
 const id = 'acid_potion';
 
-class AcidPotion extends Card {
+class AcidPotion extends Modifier {
     constructor() {
         super();
         this.id = id;
@@ -16,14 +16,6 @@ class AcidPotion extends Card {
         this.type = 'modifier';
         this.castable = true;
         this.price = 200;
-    }
-    
-    canBeCast(source, dest, table) {
-        return Modifier.canBeCast(source, dest, table);
-    }
-
-    onCast(source, dest, table) {
-        return Modifier.onCast(player, dest, table, this);
     }
 
     getModFor(x) {

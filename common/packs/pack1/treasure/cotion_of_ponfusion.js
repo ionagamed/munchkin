@@ -7,7 +7,7 @@ import { Modifier } from '../helpers/Modifier';
 
 const id = 'cotion_of_ponfusion';
 
-class CotionOfPonfusion extends Card {
+class CotionOfPonfusion extends Modifier {
     constructor() {
         super();
         this.id = id;
@@ -16,14 +16,6 @@ class CotionOfPonfusion extends Card {
         this.type = 'modifier';
         this.castable = true;
         this.price = 100;
-    }
-    
-    canBeCast(source, dest, table) {
-        return Modifier.canBeCast(source, dest, table);
-    }
-    
-    onCast(source, dest, table) {
-        return Modifier.onCast(source, dest, table, this);
     }
 
     getModFor(x) {

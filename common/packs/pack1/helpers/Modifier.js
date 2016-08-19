@@ -3,23 +3,24 @@
  */
 
 import { Player } from '../../../Player';
+import { Card } from '../../../Card';
     
-export class Modifier {
-    static canBeCast(source, dest, table) {
+export class Modifier extends Card {
+    canBeCast(source, dest, table) {
         return table.fight != null;
     }
     
-    static onCast(source, dest, table, self) {
+    onCast(source, dest, table) {
         if (dest instanceof Player) {
             table.fight.players.map(x => {
                 if (x.player.name == dest.name) {
-                    x.modifiers.push(self.id);
+                    x.modifiers.push(this.id);
                 }
             });
         } else {
             table.fight.monsters.map(x => {
                 if (x.monster == dest) {
-                    x.modifiers.push(self.id);
+                    x.modifiers.push(this.id);
                 }
             });
         }
