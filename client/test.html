@@ -21,6 +21,7 @@
         hand:
         <ul class='hand'></ul>
       </li>
+      <li></li>
       <li>
         <input type='text' class='add'>
         <button class='addButton'>add to hand</button>
@@ -30,6 +31,19 @@
   <li class='table'>
     table:
     <ul>
+      <li class='fight'>
+        fight: <span class='result'></span>
+        <ul>
+          <li>
+            players: (<b><span class='p-attack'></span></b>)
+            <ul class='players-list'></ul>
+          </li>
+          <li>
+            monsters: (<b><span class='m-attack'></span></b>)
+            <ul class='monsters-list'></ul>
+          </li>
+        </ul>
+      </li>
       <li>
         discard doors:
         <ul class='discardedDoors'></ul>
@@ -41,4 +55,13 @@
     </ul>
   </li>
 </ul>
+<style>
+  a,a:visited {
+    text-decoration: none;
+    color: blue;
+  }
+  a:hover {
+    color: #00a;
+  }
+</style>
 </html>

@@ -8,6 +8,18 @@ export class Fight {
     constructor() {
         /**
          * The player side of a fight
+         *
+         * Schema: [{
+         *     player: {Player},
+         *     state: {'fighting'|'success'|'escape'|'monster'},
+         *     modifiers: {[string]}
+         * }]
+         *
+         * States:
+         *   * 'fighting'
+         *   * 'success' - monster is beaten
+         *   * 'escape' - successful escape
+         *   * 'monster' - unsuccessful escape
          * 
          * @type [Object]
          */
@@ -45,7 +57,7 @@ export class Fight {
     getMonstersAttack() {
         var ret = 0;
         this.monsters.map(x => {
-            ret += x.monster.getAttack();
+            ret += Card.byId(x.monster).getAttackFor(this.players);
             x.modifiers.map(y => {
                 ret += Card.byId(y).getModFor(x.monster);
             });
@@ -54,11 +66,49 @@ export class Fight {
     }
 
     /**
+     * When the fight began
+     * 
+     * @param {Table} table
+     */
+    onBegan(table) {
+        this.players.map(x => {
+            x.player.wielded.map(x => {
+                const c = Card.byId(x);
+                c.onFightBegan(this, table);
+            });
+        });
+    }
+
+    /**
+     * When the fight ends
+     * 
+     * @param {Table} table
+     */
+    onEnded(table) {
+        this.players.map(x => {
+            x.player.wielded.map(x => {
+                const c = Card.byId(x);
+                c.onFightEnded(this, table);
+            });
+        });
+        this.players.map(x => {
+            x.modifiers.map(y => {
+                table.discard(y);
+            });
+        });
+        this.monsters.map(x => {
+            x.modifiers.map(y => {
+                table.discard(y);
+            });
+        });
+    }
+
+    /**
      * Get the side, which will win in current conditions
      * 
      * @returns 'players'|'monsters'
      */
-    winningSide() {
+    getWinningSide() {
         return (this.getPlayersAttack() > this.getMonstersAttack() ? 'players' : 'monsters');
     }
 }

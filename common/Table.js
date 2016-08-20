@@ -56,6 +56,13 @@ export class Table {
          * @type {Fight|null}
          */
         this.fight = null;
+
+        /**
+         * begin -> open -> hand -> closed -> drop
+         * 
+         * @type {string}
+         */
+        this.phase = 'begin';
     }
 
     /**
@@ -69,6 +76,15 @@ export class Table {
         } else if (Card.byId(card).kind == 'treasure') {
             this.discardedTreasure.push(card);
         }
+    }
+
+    /**
+     * Return the player whose turn it is right now
+     * 
+     * @returns {Player}
+     */
+    currentPlayer() {
+        return this.players[this.turn];
     }
 
     /**

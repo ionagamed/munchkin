@@ -7,12 +7,12 @@ var packs = {
         doors: [
             'gelatinous_octahedron',//
             'ghoulfiends',//do not use item
-            'harpies'//
-            'hippogriff',*
-            'insurance_salesman',*
+            'harpies',//
+            'hippogriff',
+            'insurance_salesman',
             '3872_orcs',//death
             'amazon',
-            'bigfoot',//
+            'bigfoot',
             'bullrog',//level += 2, death
             'crabs',//
             'curse_lose_small_item_1',
@@ -111,7 +111,7 @@ var packs = {
             'staff_of_napalm',
             'stepladder',
             'swiss_army_polearm',
-            'doppelganger',
+            'doppleganger',
             'flaming_armor',
             'gentlemans_club',
             'hammer_of_kneecapping',

@@ -42,6 +42,13 @@ export class Player {
          * @type {number}
          */
         this.level = 1;
+
+        /**
+         * Player sex
+         * 
+         * @type {string}
+         */
+        this.sex = 'male';
     }
     
     /**
@@ -67,6 +74,7 @@ export class Player {
         if (Card.byId(card).canBeWielded(this, table)) {
             this.wielded.push(card);
             Card.byId(card).onWielded(this, table);
+            this.updateConstraints(table);
             return true;
         }
     }
@@ -78,8 +86,17 @@ export class Player {
      * @param table Table
      */
     unwield(card, table) {
-        this.wielded = this.wielded.filter(x => x != card);
+        var idx = this.wielded.indexOf(card);
+        if (idx > 0) {
+            if (Card.byId(this.wielded[idx - 1]).type == 'cheat') {
+                idx--;
+                this.wielded.splice(idx, 1);
+                Card.byId('cheat').onUnwielded(this, table);
+            }
+        }
+        this.wielded.splice(idx, 1);
         Card.byId(card).onUnwielded(this, table);
+        this.updateConstraints(table);
     }
 
     /**
@@ -91,17 +108,40 @@ export class Player {
     getAttack() {
         var ret = this.level;
         this.wielded.map(x => {
-            ret += Card.byId(x).getAttackFor(this);
+            const c = Card.byId(x);
+            if (c.getAttackFor)
+                ret += c.getAttackFor(this);
         });
         return ret;
     }
 
     /**
-     * Determines if the player has the specified class
+     * Checks that player's current build is valid, and, if not, makes it valid
+     * 
+     * @param table
+     */
+    updateConstraints(table) {
+        for (let i in this.wielded) {
+            if (this.wielded.hasOwnProperty(i)) {
+                const id = this.wielded[i];
+                if (!Card.byId(id).canBeHeld(this, table) && i > 0 && Card.byId(this.wielded[i - 1]).type == 'cheat') {
+                    this.unwield(id);
+                    if (Card.byId(id).kind == 'treasure') {
+                        this.belt.push(id);
+                    } else {
+                        table.discard(id);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Determines if player has a card wielded
      * 
      * @param c
      */
-    hasClass(c) {
+    hasCardWielded(c) {
         var ret = false;
         this.wielded.map(x => {
             if (Card.byId(x).id == c) {
@@ -109,6 +149,15 @@ export class Player {
             }
         });
         return ret;
+    }
+
+    /**
+     * How much cards of that type are wielded
+     * 
+     * @param t
+     */
+    cardsOfTypeWielded(t) {
+        return this.wielded.filter(x => Card.byId(x).type == t).length;
     }
 
     /**
@@ -120,7 +169,7 @@ export class Player {
         /**
          * The player for now has class advantages if and only if he has that class
          */
-        return this.hasClass(c);
+        return this.hasCardWielded(c);
     }
 
     /**
@@ -129,9 +178,58 @@ export class Player {
      * @param c
      */
     hasClassDisadvantages(c) {
-        const has = this.hasClass(c);
-        const sm = this.wielded.indexOf('supermunchkin') > -1;
+        const has = this.hasCardWielded(c);
+        const sm = this.hasCardWielded('super_munchkin');
         const classes = this.wielded.filter(x => Card.byId(x).type == 'class').length;
-        return has && !(sm && classes == 1)
+        return has && !(sm && classes == 1);
+    }
+
+    /**
+     * Determines if the player has the race advantages
+     *
+     * @param r
+     */
+    hasRaceAdvantages(r) {
+        if (r == 'human') {
+            if (this.hasCardWielded('super_munchkin')) {
+                return this.cardsOfTypeWielded('class') <= 1;
+            } else {
+                return this.cardsOfTypeWielded('class') <= 0;
+            }
+        } else {
+            return this.hasCardWielded(r);
+        }
+    }
+
+    /**
+     * Determines if the player has the class disadvantages
+     *
+     * @param r
+     */
+    hasRaceDisadvantages(r) {
+        const has = this.hasCardWielded(c);
+        const sm = this.hasCardWielded('half-breed');
+        const races = this.wielded.filter(x => Card.byId(x).type == 'race').length;
+        return has && !(sm && races == 1);
+    }
+
+    /**
+     * Get the amount of non-free hands
+     * 
+     * @returns {number}
+     */
+    getBusyHandCount() {
+        const types = this.wielded.map(x => Card.byId(x).type);
+        return types.filter(x => x == '1-handed').length +
+            types.filter(x => x == '2-handed').length * 2;
+    }
+
+    /**
+     * Decrease player's level by specific amount
+     * 
+     * @param {number} amount
+     */
+    decreaseLevel(amount) {
+        this.level = Math.max(this.level - amount, 1);
     }
 }
