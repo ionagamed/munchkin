@@ -49,6 +49,13 @@ export class Player {
          * @type {string}
          */
         this.sex = 'male';
+
+        /**
+         * Player's death status
+         *
+         * @type bool
+         */
+        this.dead = true;
     }
     
     /**

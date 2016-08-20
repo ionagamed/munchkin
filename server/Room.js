@@ -11,12 +11,12 @@ const DOOR_BEGIN_COUNT = 4;
 /**
  * Helper to send event to client
  *
- * @param ws WebSocket client
+ * @param client WebSocket
  * @param event string event to send
  * @param data object data of event
  */
-function sendEvent(ws, event, data) {
-    ws.send(JSON.stringify({
+function sendEvent(client, event, data) {
+    client.send(JSON.stringify({
         event: event,
         data: data
     }));
@@ -58,6 +58,9 @@ function sendEvent(ws, event, data) {
  *          message:
  *              to [string]|'broadcast' recipients of the message
  *              text string text of the message
+ *  'resurrected'
+ *      data:
+ *          who string player who got resurrected
  */
 
 /**
@@ -68,7 +71,6 @@ function sendEvent(ws, event, data) {
  * @param env object various environment data
  */
 function setCommandSet(ws, set, env) {
-    ws.currentCommandSet = set;
     ws.onmessage = data => {
         try {
             var msg = JSON.parse(data.data);
@@ -168,12 +170,12 @@ export class Room {
     /**
      * Connect client to the room
      *
-     * @param ws WebSocket client websocket
+     * @param client WebSocket
      * @returns int position of client in array
      */
-    connect(ws) {
-        setCommandSet(ws, Room.spectatorCommands, {roomId: this.id, client: ws});
-        return this.clients.push(ws) - 1;
+    connect(client) {
+        setCommandSet(client, Room.spectatorCommands, {roomId: this.id, client: client});
+        return this.clients.push(client) - 1;
     }
 
     /**
@@ -181,16 +183,15 @@ export class Room {
      * Make spectator a player
      * inverse of spectate
      *
-     * @param ws WebSocket
+     * @param client WebSocket
      * @returns string status
      */
-    play(ws) {
+    play(client) {
         if(this.table.playing) return 'Room playing';
         if(this.table.players.length < MAX_PLAYERS) {
-            var player = new Player(ws.userName);
-            player.client = ws;
-            ws.playerId = this.table.players.push(player) - 1;
-            setCommandSet(ws, Room.playerCommands, {roomId: this.id, client: ws});
+            var player = new Player(client.userName);
+            client.playerId = this.table.players.push(player) - 1;
+            setCommandSet(client, Room.playerCommands, {roomId: this.id, client: client});
             return 'Success';
         } else {
             return 'Room full';
@@ -201,12 +202,12 @@ export class Room {
      * Make player a spectator
      * inverse of play
      *
-     * @param ws WebSocket
+     * @param client WebSocket
      */
-    spectate(ws) {
-        this.table.players.splice(ws.playerId, 1);
-        ws.playerId = undefined;
-        setCommandSet(Room.spectatorCommands, {roomId: this.id, client: ws});
+    spectate(client) {
+        this.table.players.splice(client.playerId, 1);
+        client.playerId = undefined;
+        setCommandSet(client, Room.spectatorCommands, {roomId: this.id, client: client});
     }
 
     /**
@@ -223,10 +224,10 @@ export class Room {
      * @param data  object
      */
     dispatch(event, data) {
-        this.clients.map((ws, pos) => {
-            ws.send(JSON.stringify({event: event, data: data}), error => {
+        this.clients.map((client, pos) => {
+            client.send(JSON.stringify({event: event, data: data}), error => {
                 if(error) {
-                    if(ws.playerId) this.table.players.splice(ws.playerId, 1);
+                    if(client.playerId) this.table.players.splice(client.playerId, 1);
                     this.clients.splice(pos, 1);
                 }
             });
@@ -256,22 +257,6 @@ export class Room {
         r.shuffle(this.doorDeck);
         r.shuffle(this.treasureDeck);
         this.table.playing = true;
-
-        this.clients.forEach(ws => {
-            var player = this.table.players[ws.playerId];
-            player.hand = []
-                    .concat(this.doorDeck.splice(0, DOOR_BEGIN_COUNT))
-                    .concat(this.treasureDeck.splice(0, TREASURE_BEGIN_COUNT));
-            sendEvent(ws, 'gotCards', {
-                amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
-                cards: this.table.players[ws.playerId].hand,
-                who: player.name
-            });
-            this.dispatch('gotSomeCards', {
-                amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
-                who: player.name
-            });
-        });
     }
 }
 
@@ -287,14 +272,20 @@ Room.clientCommands = {};
 
 /**
  * 'start' command:
- *      data: none
- *      additional env: none
  *  starts game
  */
 Room.clientCommands['start'] = (data, env) => {
     if(env.client.userName == env.room.owner) {
         env.room.start();
     }
+};
+
+/**
+ * 'tableRequest' command:
+ * forces server to send table in the room
+ */
+Room.clientCommands['tableRequest'] = (data, env) => {
+    sendEvent(env.client, 'table', env.room.table);
 };
 
 /**
@@ -328,12 +319,39 @@ Room.giveCardsPublic = (data, env) => {
     }*/
 //TODO: move some code into common
 /**
- * 'tableRequest' command:
- * forces server to send table in the room
+ * 'spectate' command:
+ * makes player a spectator
  */
-Room.playerCommands['tableRequest'] = (data, env) => {
-    sendEvent(env.client, 'table', env.room.table);
+Room.playerCommands['spectate'] = (data, env) => {
+    env.room.spectate(env.client);
 };
+
+/**
+ * 'getBeginCards' command:
+ * can be used only if the player is dead and game is started
+ * emits gotCards, gotSomeCards
+ */
+Room.playerCommands['resurrect'] = (data, env) => {
+    if(!env.player.dead) return;
+    if(!env.table.playing) return;
+    env.player.hand = []
+        .concat(env.room.doorDeck.splice(0, DOOR_BEGIN_COUNT))
+        .concat(env.room.treasureDeck.splice(0, TREASURE_BEGIN_COUNT));
+    sendEvent(env.client, 'gotCards', {
+        amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
+        cards: env.player.hand,
+        who: env.player.name
+    });
+    env.room.dispatch('gotSomeCards', {
+        amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
+        who: env.player.name
+    });
+    env.room.dispatch('resurrected', {
+        who: env.player.name
+    });
+    env.player.dead = false;
+};
+
 /**
  * 'kickDoor' command:
  *  kicks door
@@ -347,12 +365,22 @@ Room.playerCommands['kickDoor'] = (data, env) => {
         who: env.player.name
     });
     if(doorCard.type == 'monster') {
+        env.room.dispatch('castedCard', {
+            who: 'deck',
+            on: env.player.name,
+            card: doorCardId
+        });
         if(doorCard.onCast('deck', env.player, env.table)) {
             env.table.discard(doorCard);
         }
-        this.table.phase = 'closed';
+        env.room.table.phase = 'closed';
     } else {
-        this.table.phase = 'open';
+        env.room.table.phase = 'open';
+        env.room.dispatch('gotCards', {
+            who: env.player.name,
+            amount: 1,
+            cards: [doorCardId]
+        });
         env.player.hand.push(doorCardId);
         env.player.onCardRecieved(doorCardId, 'deck');
     }
@@ -445,12 +473,11 @@ Room.playerCommands['sendChatMessage'] = (data, env) => {
             }
         });
     } else {
-        console.log(data.to);
-        console.log(env.room.clients);
-        env.table.players
-            .filter(player => data.to.indexOf(player.name) > -1)
-            .map(player => {
-                sendEvent(player.client, 'chatMessage', {
+        //TODO: change client.userName to player.name
+        env.room.clients
+            .filter(client => data.to.indexOf(client.userName) > -1)
+            .map(client => {
+                sendEvent(client, 'chatMessage', {
                     from: env.player.name,
                     message: {
                         to: data.to,
