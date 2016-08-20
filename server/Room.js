@@ -389,6 +389,20 @@ Room.playerCommands['kickDoor'] = (data, env) => {
     }
 };
 
+Room.playerCommands['lootTheRoom'] = (data, env) => {
+    if(!phase(env.player, env.table, 'open')) return;
+    var doorCardId = env.room.doorDeck.splice(0, 1);
+    sendEvent(env.client, 'gotCards', {
+        who: env.player.name,
+        amount: 1,
+        cards: [doorCardId]
+    });
+    env.room.dispatch('gotSomeCards', {
+        who: env.player.name,
+        amount: 1,
+    });
+};
+
 /**
  * 'wieldCard' command:
  *      data: object
