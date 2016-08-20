@@ -17,7 +17,7 @@ class a3872_orcs extends Card {
             return true;
         var d = dice();
         if (d <= 2)
-            {/* TODO: death*/}
+            player.die(table);
         else {
             player.level -= d;
             if(player.level < 1)

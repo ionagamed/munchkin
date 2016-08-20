@@ -9,6 +9,7 @@ class flying_frogs extends Card {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.level = 2;
     }
     
     onEscape(player, dice, table) {
@@ -19,7 +20,6 @@ class flying_frogs extends Card {
             return true;
         player.level = 1;
     }
-    //TODO: level += 2
     getAttackFor(players) {
         return 16;
     }

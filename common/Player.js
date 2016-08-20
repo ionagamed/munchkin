@@ -223,4 +223,18 @@ export class Player {
         return types.filter(x => x == '1-handed').length +
             types.filter(x => x == '2-handed').length * 2;
     }
+    
+    die(table) {
+        this.wilded.map(x => {
+                if(Card.byId(x).type != 'race' && Card.byId(x).type != 'class' && Card.byId(x).type != 'super_munchkin' && Card.byId(x).type != 'half-breed')
+                    this.unwield(x, table);
+            });
+        this.hand.map(x => {
+            this.unwield(x, table);
+        });
+        this.belt.map(x => {
+            this.unwield(x, table);
+        });
+        this.dead = true;
+    }
 }

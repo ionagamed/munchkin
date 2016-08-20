@@ -9,10 +9,15 @@ class squidzilla extends Card {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.level = 2;
     }
     
     onEscape(player, dice, table) {
-        
+        if(!player.hasRaceDisadvantages('elf') && player.level <= 4)
+            return true;
+        if(dice >= 5)
+            return true;
+        player.die(table);
     }
     
     getAttackFor(players) {

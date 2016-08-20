@@ -9,17 +9,17 @@ class plutonium_dragon extends Card {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.level = 2;
     }
     
     onEscape(player, dice, table) {
         player.level--;
         if (dice >= 5)
             return true;
-        // TODO: death, level += 2
+        player.die(table);
     }
     
     getAttackFor(players) {
-        
         return 20;
     }
     get treasureCount() {

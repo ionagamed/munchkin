@@ -9,6 +9,7 @@ class bullrog extends Card {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.level = 2;
     }
     
     onEscape(player, dice, table) {
@@ -17,10 +18,9 @@ class bullrog extends Card {
         if (dice >= 5) {
             return true;
         } else {
-            
+            player.die(table);
         }
     }
-    // TODO: level += 2, death
     getAttackFor(players) {   
         return 18;
     }

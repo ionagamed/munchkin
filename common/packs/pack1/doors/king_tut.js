@@ -9,6 +9,7 @@ class king_tut extends Card {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.level = 2;
     }
     
     onEscape(player, dice, table) {
@@ -18,11 +19,17 @@ class king_tut extends Card {
         if (dice >= 5) {
             return true;
         }
-        player.hand.map(table.discard);
-    
-        //TODO: looseall item
+        this.wilded.map(x => {
+                if(Card.byId(x).type != 'race' && Card.byId(x).type != 'class' && Card.byId(x).type != 'super_munchkin' && Card.byId(x).type != 'half-breed')
+                    this.unwield(x, table);
+            });
+        this.hand.map(x => {
+            this.unwield(x, table);
+        });
+        this.belt.map(x => {
+            this.unwield(x, table);
+        });
     }
-    //TODO: level += 2
     getAttackFor(players) {
         return 16;
     }
