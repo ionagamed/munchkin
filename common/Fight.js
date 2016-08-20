@@ -91,6 +91,16 @@ export class Fight {
                 c.onFightEnded(this, table);
             });
         });
+        this.players.map(x => {
+            x.modifiers.map(y => {
+                table.discard(y);
+            });
+        });
+        this.monsters.map(x => {
+            x.modifiers.map(y => {
+                table.discard(y);
+            });
+        });
     }
 
     /**

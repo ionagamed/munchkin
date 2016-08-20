@@ -1,41 +1,37 @@
-face_sucker
 import { Card } from '../../../Card';
+import { Monster } from "../helpers/Monster";
 
 const id = 'drooling_slime';
 
-class drooling_slime extends Card {
+class drooling_slime extends Monster {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.treasure = 1;
     }
     
-    onEscape(player, dice, table) {
-        if (dice >= 5) 
-            return true;
-        var hadfootgear = true;
+    badThing(player, table) {
+        var hadFootgear = false;
         player.wielded.map(x => {
             if (Card.byId(x).type == 'footgear') {
-                unwield(x, table);
-                hadfootgear = false;
+                player.unwield(x, table);
+                hadFootgear = true;
             }
         });
-        if (hadfootgear)
-            player.level--;
+        if (!hadFootgear)
+            player.decreaseLevel(1);
     }
     getAttackFor(players) {
-        var iself = false;
+        var isElf = false;
         players.map(x => {
             if(x.hasRaceDisadvantages('elf')) 
-                iself = true;
-        })
-        if (iself)
+                isElf = true;
+        });
+        if (isElf)
             return 5;
-        return 1;
-    }
-    get treasureCount() {
         return 1;
     }
 }

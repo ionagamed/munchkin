@@ -223,4 +223,13 @@ export class Player {
         return types.filter(x => x == '1-handed').length +
             types.filter(x => x == '2-handed').length * 2;
     }
+
+    /**
+     * Decrease player's level by specific amount
+     * 
+     * @param {number} amount
+     */
+    decreaseLevel(amount) {
+        this.level = Math.max(this.level - amount, 1);
+    }
 }

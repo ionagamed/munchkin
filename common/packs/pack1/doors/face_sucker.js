@@ -1,37 +1,34 @@
 import { Card } from '../../../Card';
+import { Monster } from "../helpers/Monster";
 
-const id = 'flying_frogs';
+const id = 'face_sucker';
 
-class flying_frogs extends Card {
+class flying_frogs extends Monster {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.treasure = 2;
     }
     
-    onEscape(player, dice, table) {
-        if (dice >= 5) 
-            return true;
+    badThing(player, table) {
         player.level--;
         player.wielded.map(x => {
             if (Card.byId(x).type == 'headgear')
-                unwield(x, table);
+                player.unwield(x, table);
         });
     }
     getAttackFor(players) {
-        var iself = false;
+        var isElf = false;
         players.map(x => {
             if(x.hasRaceDisadvantages('elf')) 
-                iself = true;
-        })
-        if (iself)
+                isElf = true;
+        });
+        if (isElf)
             return 14;
         return 8;
-    }
-    get treasureCount() {
-        return 2;
     }
 }
 Card.cards[id] = new flying_frogs();
