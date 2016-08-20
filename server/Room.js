@@ -32,6 +32,8 @@ function sendEvent(client, event, data) {
  *          amount integer amount of cards
  *          cards [string]
  *
+ *  'gameStarted'
+ *
  *  'gotSomeCards'
  *      like 'gotCards' but without cards ids
  *
@@ -257,6 +259,7 @@ export class Room {
         r.shuffle(this.doorDeck);
         r.shuffle(this.treasureDeck);
         this.table.playing = true;
+        this.dispatch('gameStarted');
     }
 }
 
