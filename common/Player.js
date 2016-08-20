@@ -125,11 +125,11 @@ export class Player {
             if (this.wielded.hasOwnProperty(i)) {
                 const id = this.wielded[i];
                 if (!Card.byId(id).canBeHeld(this, table) && i > 0 && Card.byId(this.wielded[i - 1]).type == 'cheat') {
-                    this.unwield(x);
-                    if (Card.byId(x).kind == 'treasure') {
-                        this.belt.push(x);
+                    this.unwield(id);
+                    if (Card.byId(id).kind == 'treasure') {
+                        this.belt.push(id);
                     } else {
-                        table.discard(x);
+                        table.discard(id);
                     }
                 }
             }
