@@ -474,16 +474,13 @@ Room.playerCommands['sendChatMessage'] = (data, env) => {
 function getCardFromPlayer(player, cardPos) {
     switch (cardPos.place) {
         case 'hand':
-            return player.hand.splice(i.pos, 1)[0];
-            break;
+            return player.hand.splice(cardPos.pos, 1)[0];
         case 'belt':
-            return player.belt.splice(i.pos, 1)[0];
-            break;
+            return player.belt.splice(cardPos.pos, 1)[0];
         case 'wielded':
-            var cardId = player.wielded[i.pos];
+            var cardId = player.wielded[cardPos.pos];
             player.unwield(cardId);
             return cardId;
-            break;
     }
 }
 
