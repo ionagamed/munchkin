@@ -17,7 +17,7 @@ class a3872_orcs extends Card {
             return true;
         var d = dice();
         if (d <= 2)
-            {/* TODO: death*/};
+            {/* TODO: death*/}
         else {
             player.level -= d;
             if(player.level < 1)
@@ -30,7 +30,7 @@ class a3872_orcs extends Card {
         players.map(x => {
             if(x.hasRaceDisadvantages('dwarf')) 
                 isdwarf = true;
-        })
+        });
         if (isdwarf)
             return 16;
         return 10;

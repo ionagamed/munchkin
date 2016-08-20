@@ -1,11 +1,11 @@
 /**
- * Created by ionagamed on 8/18/16.
+ * Created by ionagamed on 8/19/16.
  */
 
 import { Card } from '../../../Card';
 import { Modifier } from '../helpers/Modifier';
 
-const id = 'acid_potion';
+const id = 'potion_of_idiotic_bravery';
 
 class _ extends Modifier {
     constructor() {
@@ -15,11 +15,11 @@ class _ extends Modifier {
         this.kind = 'treasure';
         this.type = 'modifier';
         this.castable = true;
-        this.price = 200;
+        this.price = 100;
     }
 
     getModFor(x) {
-        return 5;
+        return 2;
     }
 }
 Card.cards[id] = new _();

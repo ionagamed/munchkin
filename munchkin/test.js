@@ -41,9 +41,13 @@ $(function () {
             if (c.getAttackFor) {
                 t.push('<b>+' + c.getAttackFor(player) + '</b>');
             }
+            if (c.big) {
+                t.push('big');
+            }
             if (c.wieldable) {
                 t.push('<a class="unwield" href="#">unwield</a>');
             }
+            t.push('<a class="to-belt" href="#">to belt</a>');
             t.push('<a class="discard" href="#">discard</a>');
             wielded.append('<li>' + t.join(' | ') + '</li>');
         });
@@ -56,6 +60,9 @@ $(function () {
             if (c.getAttackFor) {
                 t.push('<b>+' + c.getAttackFor(player) + '</b>');
             }
+            if (c.big) {
+                t.push('big');
+            }
             if (c.wieldable) {
                 t.push('<a class="wield" href="#">wield</a>');
             }
@@ -65,6 +72,7 @@ $(function () {
             if (c.castable) {
                 t.push('<a class="cast" href="#">cast</a>');
             }
+            t.push('<a class="to-belt" href="#">to belt</a>');
             t.push('<a class="discard" href="#">discard</a>');
             hand.append('<li>' + t.join(' | ') + '</li>');
         });
@@ -76,6 +84,9 @@ $(function () {
             t.push(_l(c, x));
             if (c.getAttackFor) {
                 t.push('<b>+' + c.getAttackFor(player) + '</b>');
+            }
+            if (c.big) {
+                t.push('big');
             }
             if (c.wieldable) {
                 t.push('<a class="wield" href="#">wield</a>');
@@ -130,11 +141,20 @@ $(function () {
             add();
             return false;
         });
-        $('.player .wield').click(e => {
+        $('.player .hand .wield').click(e => {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
             console.log(id);
             if (player.wield(id, table)) {
                 player.hand.splice(player.hand.indexOf(id), 1);
+            }
+            updateView();
+            return false;
+        });
+        $('.player .belt .wield').click(e => {
+            const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
+            console.log(id);
+            if (player.wield(id, table)) {
+                player.belt.splice(player.belt.indexOf(id), 1);
             }
             updateView();
             return false;
@@ -165,6 +185,14 @@ $(function () {
                     table.discard(id);
                 }
             }
+            updateView();
+            return false;
+        });
+        
+        $('.player .wielded .to-belt').click(e => {
+            const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
+            player.wielded.splice(player.wielded.indexOf(id), 1);
+            player.belt.push(id);
             updateView();
             return false;
         });

@@ -1,11 +1,11 @@
 /**
- * Created by ionagamed on 8/15/16.
+ * Created by ionagamed on 8/19/16.
  */
 
 import { Card } from '../../../Card';
 import { Item } from '../helpers/Item';
 
-const id = 'staff_of_napalm';
+const id = 'shield_of_ubiquity';
 
 class _ extends Item {
     constructor() {
@@ -15,20 +15,21 @@ class _ extends Item {
         this.kind = 'treasure';
         this.type = '1-handed';
         this.hands = 1;
+        this.big = true;
         this.wieldable = true;
-        this.price = 800;
+        this.price = 600;
     }
 
     canBeHeld(player, table) {
-        return player.hasRaceAdvantages('wizard') && super.canBeHeld(player, table);
+        return player.hasClassAdvantages('warrior') && super.canBeHeld(player, table);
     }
-    
+
     canBeWielded(player, table) {
-        return player.hasRaceAdvantages('wizard') && super.canBeWielded(player, table);
+        return player.hasClassAdvantages('warrior') && super.canBeWielded(player, table);
     }
 
     getAttackFor(player) {
-        return 5;
+        return 4;
     }
 }
 Card.cards[id] = new _();

@@ -3,22 +3,24 @@
  */
 
 import { Card } from '../../../Card';
-import { Modifier } from '../helpers/Modifier';
+import { Item } from "../helpers/Item";
 
-const id = 'cotion_of_ponfusion';
+const id = 'huge_rock';
 
-class _ extends Modifier {
+class _ extends Item {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'treasure';
-        this.type = 'modifier';
-        this.castable = true;
-        this.price = 100;
+        this.type = '2-handed';
+        this.hands = 2;
+        this.big = true;
+        this.wieldable = true;
+        this.price = 0;
     }
 
-    getModFor(x) {
+    getAttackFor(player) {
         return 3;
     }
 }
