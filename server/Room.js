@@ -174,7 +174,6 @@ export class Room {
      */
     connect(ws) {
         setCommandSet(ws, Room.spectatorCommands, {roomId: this.id, client: ws});
-        sendEvent(env.client, 'table', env.room.table);
         return this.clients.push(ws) - 1;
     }
     
@@ -189,7 +188,9 @@ export class Room {
     play(ws) {
         if(this.table.playing) return 'Room playing';
         if(this.table.players.length < MAX_PLAYERS) {
-            ws.playerId = this.table.players.push(new Player(ws.userName)) - 1;
+            var player = new Player(ws.userName);
+            player.client = ws;
+            ws.playerId = this.table.players.push(player) - 1;
             setCommandSet(ws, Room.playerCommands, {roomId: this.id, client: ws});
             return 'Success';
         } else {
@@ -436,7 +437,7 @@ Room.playerCommands['castCard'] = (data, env) => {
  *  
  */
 Room.playerCommands['sendChatMessage'] = (data, env) => {
-    if(data.to == 'broadcast') {
+    if(data.to === 'broadcast') {
         env.room.dispatch('chatMessage', {
             from: env.player.name,
             message: {
@@ -444,18 +445,21 @@ Room.playerCommands['sendChatMessage'] = (data, env) => {
                 text: data.text
             }
         });
-    }
-    env.client.map(client => {
-        if(client.userName in data.to) {
-            sendEvent('chatMessage', {
-                from: env.player.name,
-                message: {
-                    to: data.to,
-                    text: data.text
-                }
+    } else {
+        console.log(data.to);
+        console.log(env.room.clients);
+        env.table.players
+            .filter(player => data.to.indexOf(player.name) > -1)
+            .map(player => {
+                sendEvent(player.client, 'chatMessage', {
+                    from: env.player.name,
+                    message: {
+                        to: data.to,
+                        text: data.text
+                    }
+                });
             });
-        }
-    });
+    }
 }
 
 /** 
