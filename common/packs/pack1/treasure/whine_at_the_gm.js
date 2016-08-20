@@ -1,11 +1,11 @@
 /**
- * Created by ionagamed on 8/19/16.
+ * Created by ionagamed on 8/20/16.
  */
 
 import { Card } from '../../../Card';
 import { Player } from "../../../Player";
 
-const id = '1000_gold';
+const id = 'whine_at_the_gm';
 
 class _ extends Card {
     constructor() {
@@ -16,21 +16,13 @@ class _ extends Card {
         this.type = 'level';
         this.castable = true;
     }
-
+    
     canBeCast(source, dest, table) {
-        return (dest instanceof Player) && dest.level < 10;
+        return (dest instanceof Player) && dest.level < 10 && dest.level < table.players.reduce((acc, v) => (acc < v ? acc : v));
     }
-
+    
     onCast(source, dest, table) {
         dest.level++;
     }
 }
-/*
- Note: all simple levelups are here
- */
 Card.cards[id] = new _();
-Card.cards['boil_an_anthill'] = new _();
-Card.cards['bribe_gm_with_food'] = new _();
-Card.cards['convenient_addition_error'] = new _();
-Card.cards['invoke_obscure_rules'] = new _();
-Card.cards['potion_of_general_studliness'] = new _();
