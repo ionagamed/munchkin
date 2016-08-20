@@ -30,7 +30,7 @@ class a3872_orcs extends Card {
         players.map(x => {
             if(x.hasRaceDisadvantages('dwarf')) 
                 isdwarf = true;
-        })
+        });
         if (isdwarf)
             return 16;
         return 10;

@@ -1,25 +1,25 @@
 /**
- * Created by ionagamed on 8/18/16.
+ * Created by ionagamed on 8/19/16.
  */
 
 import { Card } from '../../../Card';
-import { Modifier } from '../helpers/Modifier';
+import { Item } from '../helpers/Item';
 
-const id = 'acid_potion';
+const id = 'slimy_armor';
 
-class _ extends Modifier {
+class _ extends Item {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'treasure';
-        this.type = 'modifier';
-        this.castable = true;
+        this.type = 'armor';
+        this.wieldable = true;
         this.price = 200;
     }
 
-    getModFor(x) {
-        return 5;
+    getAttackFor(player) {
+        return 1;
     }
 }
 Card.cards[id] = new _();

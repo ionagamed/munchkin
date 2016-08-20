@@ -86,7 +86,15 @@ export class Player {
      * @param table Table
      */
     unwield(card, table) {
-        this.wielded = this.wielded.filter(x => x != card);
+        var idx = this.wielded.indexOf(card);
+        if (idx > 0) {
+            if (Card.byId(this.wielded[idx - 1]).type == 'cheat') {
+                idx--;
+                this.wielded.splice(idx, 1);
+                Card.byId('cheat').onUnwielded(this, table);
+            }
+        }
+        this.wielded.splice(idx, 1);
         Card.byId(card).onUnwielded(this, table);
         this.updateConstraints(table);
     }
@@ -113,16 +121,19 @@ export class Player {
      * @param table
      */
     updateConstraints(table) {
-        this.wielded.map(x => {
-            if (!Card.byId(x).canBeHeld(this, table)) {
-                this.unwield(x);
-                if (Card.byId(x).kind == 'treasure') {
-                    this.belt.push(x);
-                } else {
-                    table.discard(x);
+        for (let i in this.wielded) {
+            if (this.wielded.hasOwnProperty(i)) {
+                const id = this.wielded[i];
+                if (!Card.byId(id).canBeHeld(this, table) && i > 0 && Card.byId(this.wielded[i - 1]).type == 'cheat') {
+                    this.unwield(x);
+                    if (Card.byId(x).kind == 'treasure') {
+                        this.belt.push(x);
+                    } else {
+                        table.discard(x);
+                    }
                 }
             }
-        });
+        }
     }
 
     /**
@@ -158,7 +169,7 @@ export class Player {
         /**
          * The player for now has class advantages if and only if he has that class
          */
-        return this.hasCardWielded(r);
+        return this.hasCardWielded(c);
     }
 
     /**
@@ -168,7 +179,7 @@ export class Player {
      */
     hasClassDisadvantages(c) {
         const has = this.hasCardWielded(c);
-        const sm = this.wielded.indexOf('supermunchkin') > -1;
+        const sm = this.hasCardWielded('super_munchkin');
         const classes = this.wielded.filter(x => Card.byId(x).type == 'class').length;
         return has && !(sm && classes == 1);
     }
@@ -179,10 +190,15 @@ export class Player {
      * @param r
      */
     hasRaceAdvantages(r) {
-        /**
-         * The player for now has race advantages if and only if he has that race
-         */
-        return this.hasCardWielded(r);
+        if (r == 'human') {
+            if (this.hasCardWielded('super_munchkin')) {
+                return this.cardsOfTypeWielded('class') <= 1;
+            } else {
+                return this.cardsOfTypeWielded('class') <= 0;
+            }
+        } else {
+            return this.hasCardWielded(r);
+        }
     }
 
     /**
@@ -192,8 +208,19 @@ export class Player {
      */
     hasRaceDisadvantages(r) {
         const has = this.hasCardWielded(c);
-        const sm = this.wielded.indexOf('half-breed') > -1;
+        const sm = this.hasCardWielded('half-breed');
         const races = this.wielded.filter(x => Card.byId(x).type == 'race').length;
         return has && !(sm && races == 1);
+    }
+
+    /**
+     * Get the amount of non-free hands
+     * 
+     * @returns {number}
+     */
+    getBusyHandCount() {
+        const types = this.wielded.map(x => Card.byId(x).type);
+        return types.filter(x => x == '1-handed').length +
+            types.filter(x => x == '2-handed').length * 2;
     }
 }

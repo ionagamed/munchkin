@@ -56,8 +56,8 @@ export class Card {
     /**
      * Called on dealing card in open way (such that everybody sees the content)
      *
-     * @param player Player who dealt the card
-     * @param table Table
+     * @param {Player} player who dealt the card
+     * @param {Player} table Table
      */
     onDealtOpen(player, table) {
         
@@ -66,8 +66,8 @@ export class Card {
     /**
      * Called on dealing card in closed way (such that only himself can see the content)
      *
-     * @param player Player who dealt the card
-     * @param table Table
+     * @param {Player} player who dealt the card
+     * @param {Player} table
      */
     onDealtClose(player, table) {
 
@@ -77,9 +77,9 @@ export class Card {
      * Called when a card is received from some source
      * Source could be another player, the deck, looting
      *
-     * @param player Player
-     * @param source Player|'deck'|'looting'
-     * @param table Table
+     * @param {Player} player
+     * @param {Player|'deck'|'looting'} source 
+     * @param {Table} table
      */
     onReceived(player, source, table) {
         
@@ -89,9 +89,9 @@ export class Card {
      * Called when a card is cast on a player
      * Returns true if card needs to be disposed
      * 
-     * @param source Player|'deck'
-     * @param destination Player
-     * @param table Table
+     * @param {Player|'deck'} source 
+     * @param {Player} destination
+     * @param {Player} table 
      * @returns boolean
      */ 
     onCast(source, destination, table) {
@@ -101,19 +101,19 @@ export class Card {
     /**
      * Determines if a card could be used by a player
      * 
-     * @param player
-     * @param table Table
+     * @param {Player} player
+     * @param {Table} table 
      * @returns {boolean}
      */
     canBeUsed(player, table) {
-        return this.usable
+        return this.usable;
     }
 
     /**
      * Called when a card is used by player
      * 
-     * @param player Player
-     * @param table Table
+     * @param {Player} player
+     * @param {Player} table
      */
     onUsed(player, table) {
         
@@ -122,8 +122,8 @@ export class Card {
     /**
      * Determines if a card could be wielded by a player
      * 
-     * @param player Player
-     * @param table Table
+     * @param {Player} player
+     * @param {Table} table 
      * @returns {boolean}
      */
     canBeWielded(player, table) {
@@ -133,8 +133,8 @@ export class Card {
     /**
      * Called when a card is wielded by player
      * 
-     * @param player Player
-     * @param table Table
+     * @param {Player} player 
+     * @param {Table} table
      */
     onWielded(player, table) {
         
@@ -143,8 +143,8 @@ export class Card {
     /**
      * Called whan a card is unwielded by player
      * 
-     * @param player Player
-     * @param table Table
+     * @param {Player} player 
+     * @param {Table} table 
      */
     onUnwielded(player, table) {
         
@@ -154,8 +154,8 @@ export class Card {
      * Determines if a card can be held wielded on table
      * 
      * @see Player.updateConstraints()
-     * @param player Player
-     * @param table Table
+     * @param {Player} player
+     * @param {Table} table
      */
     canBeHeld(player, table) {
         return this.canBeWielded(player, table);
@@ -164,11 +164,42 @@ export class Card {
     /**
      * Called when a card is being disposed (removed from everywhere and placed into discarded deck)
      * 
-     * @param table Table
+     * @param {Table} table 
      */
     onDisposed(table) {
         
     }
+
+    /**
+     * When the fight begins
+     * 
+     * @param {Fight} fight
+     * @param {Fight} table
+     */
+    onFightBegan(fight, table) {
+        
+    }
+
+    /**
+     * When the fight ends
+     * 
+     * @param {Fight} fight
+     * @param {Table} table
+     */
+    onFightEnded(fight, table) {
+        
+    }
+
+    /**
+     * Get attack for a creature
+     * Could be either Player or monster card id
+     * 
+     * @param {Player|string} x
+     */
+    getAttackFor(x) {
+        
+    }
+
 }
 
 /**
