@@ -1,33 +1,30 @@
 import { Card } from '../../../Card';
+import { Monster } from "../helpers/Monster";
 
 const id = 'maul_rat';
 
-class maul_rat extends Card {
+class maul_rat extends Monster {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.treasure = 1;
     }
     
-    onEscape(player, dice, table) {
-        if (dice >= 5)
-            return true;
-        player.level -= 1;
+    badThing(player, table) {
+        player.decreaseLevel(1);
     }
     
     getAttackFor(players) {
-        var iscleric = false;
+        var isCleric = false;
         players.map(x => {
             if(x.hasClassDisadvantages('cleric')) 
-                iscleric = true;
-        })
-        if (iscleric)
+                isCleric = true;
+        });
+        if (isCleric)
             return 4;
-        return 1;
-    }
-    get treasureCount() {
         return 1;
     }
 }

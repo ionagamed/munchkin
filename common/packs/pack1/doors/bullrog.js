@@ -9,24 +9,22 @@ class bullrog extends Card {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
-        this.level = 2;
+        this.levels = 2;
+        this.treasure = 5;
     }
     
     onEscape(player, dice, table) {
         if (player.level <= 4)
             return true;
-        if (dice >= 5) {
-            return true;
-        } else {
-            player.die(table);
-        }
+        return super.onEscape(player, dice, table);
     }
-    getAttackFor(players) {   
+
+    badThing(player, table) {
+        player.die(table);
+    }
+
+    getAttackFor(players) {
         return 18;
-    }
-    
-    get treasureCount() {
-        return 5;
     }
 }
 Card.cards[id] = new bullrog();

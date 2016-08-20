@@ -16,10 +16,19 @@ class a3872_orcs extends Monster {
     
     badThing(player, table) {
         var d = dice();
+<<<<<<< HEAD
+        if (d <= 2)
+            player.die(table);
+        else {
+            player.level -= d;
+            if(player.level < 1)
+                player.level = 1;
+=======
         if (d <= 2) {
             player.die();
         } else {
             player.decreaseLevel(d);
+>>>>>>> 85eeeb8c6124f19a3659d09162fdb884f4b0e437
         }
     }
     

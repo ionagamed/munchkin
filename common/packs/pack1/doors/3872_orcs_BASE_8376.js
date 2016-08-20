@@ -1,37 +1,43 @@
 import { Card } from '../../../Card';
 import dice from '../../../dice';
-import { Monster } from '../helpers/Monster';
 
-const id = '3872_orcs';
+const id = 'a3872_orcs';
 
-class a3872_orcs extends Monster {
+class a3872_orcs extends Card {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
-        this.treasure = 3;
     }
     
-    badThing(player, table) {
+    onEscape(player, _dice, table) {
+        if (_dice >= 5)
+            return true;
         var d = dice();
-        if (d <= 2) {
-            player.die();
-        } else {
-            player.decreaseLevel(d);
+        if (d <= 2)
+            {/* TODO: death*/}
+        else {
+            player.level -= d;
+            if(player.level < 1)
+                player.level = 1;
         }
     }
     
     getAttackFor(players) {
-        var isDwarf = false;
+        var isdwarf = false;
         players.map(x => {
             if(x.hasRaceDisadvantages('dwarf')) 
-                isDwarf = true;
+                isdwarf = true;
         });
-        if (isDwarf)
+        if (isdwarf)
             return 16;
         return 10;
+    }
+    
+    get treasureCount() {
+        return 3;
     }
 }
 Card.cards[id] = new a3872_orcs();

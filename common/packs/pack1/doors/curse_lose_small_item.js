@@ -3,10 +3,11 @@
  */
 
 import { Card } from '../../../Card';
+import { Curse } from "../helpers/Curse";
 
 const id = 'curse_lose_small_item';
 
-class CurseLoseSmallItem extends Card {
+class CurseLoseSmallItem extends Curse {
     constructor() {
         super();
         this.id = id;

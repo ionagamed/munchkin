@@ -9,32 +9,34 @@ class king_tut extends Card {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
-        this.level = 2;
+        this.levels = 2;
+        this.treasure = 4;
     }
     
     onEscape(player, dice, table) {
         if(player.level <= 3)
             return true;
-        player.level -= 2;
-        if (dice >= 5) {
-            return true;
-        }
-        this.wilded.map(x => {
-                if(Card.byId(x).type != 'race' && Card.byId(x).type != 'class' && Card.byId(x).type != 'super_munchkin' && Card.byId(x).type != 'half-breed')
-                    this.unwield(x, table);
-            });
-        this.hand.map(x => {
-            this.unwield(x, table);
+        player.decreaseLevel(2);
+        return super.onEscape(player, dice, table);
+    }
+    badThing(player, table) {
+        player.hand.map(table.discard);
+        player.hand = [];
+        player.wielded.map(x => {
+            if (Card.byId(x).price >= 0) {
+                player.unwield(x);
+                table.discard(x);
+            }
         });
-        this.belt.map(x => {
-            this.unwield(x, table);
+        player.belt.map((x, i) => {
+            if (Card.byId(x).price >= 0) {
+                player.belt.splice(i, 1);
+                table.discard(x);
+            }
         });
     }
     getAttackFor(players) {
         return 16;
-    }
-    get treasureCount() {
-        return 4;
     }
 }
 Card.cards[id] = new king_tut();

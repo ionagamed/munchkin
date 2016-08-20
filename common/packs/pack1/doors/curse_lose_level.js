@@ -1,9 +1,9 @@
 import { Card } from '../../../Card';
-import { Player } from '../../../Player';
+import { Curse } from "../helpers/Curse";
 
-const id = 'curse_lose_level_1';
+const id = 'curse_lose_level';
 
-class curse_lose_level_1 extends Card {
+class curse_lose_level extends Curse {
     constructor() {
         super();
         this.id = id;
@@ -12,11 +12,9 @@ class curse_lose_level_1 extends Card {
         this.type = 'curse';
         this.castable = true;
     }
-    canBeCast(source, dest, table) {
-        return dest instanceof Player;
-    }
     onCast(source, dest, table) {
         player.level--;
     }
 }
-Card.cards[id] = new curse_lose_level_1();
+Card.cards[id + '_1'] = new curse_lose_level();
+Card.cards[id + '_2'] = new curse_lose_level();

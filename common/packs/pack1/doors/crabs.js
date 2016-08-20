@@ -9,18 +9,16 @@ class crabs extends Card {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.treasure = 1;
     }
     
     onEscape(player, dice, table) {
         player.wielded.map(x => {
             if (Card.byId(x).type == 'footgear' || Card.byId(x).type == 'armor' || Card.byId(x).type == 'knees')
-                unwield(x, table);
+                player.unwield(x, table);
         });
     }
     getAttackFor(players) {
-        return 1;
-    }
-    get treasureCount() {
         return 1;
     }
 }
