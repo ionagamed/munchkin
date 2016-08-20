@@ -18,7 +18,7 @@ class _ extends Card {
     }
 
     canBeCast(source, dest, table) {
-        return (dest instanceof Player) && dest.level < 10;
+        return (dest instanceof Player) && dest.level < 9;
     }
 
     onCast(source, dest, table) {
@@ -34,3 +34,4 @@ Card.cards['bribe_gm_with_food'] = new _();
 Card.cards['convenient_addition_error'] = new _();
 Card.cards['invoke_obscure_rules'] = new _();
 Card.cards['potion_of_general_studliness'] = new _();
+Card.cards['go_up_a_level'] = new _();

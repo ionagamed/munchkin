@@ -184,7 +184,7 @@ export class Card {
      * When the fight ends
      * 
      * @param {Fight} fight
-     * @param {Fight} table
+     * @param {Table} table
      */
     onFightEnded(fight, table) {
         
@@ -199,6 +199,7 @@ export class Card {
     getAttackFor(x) {
         
     }
+
 }
 
 /**

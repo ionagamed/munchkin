@@ -8,6 +8,18 @@ export class Fight {
     constructor() {
         /**
          * The player side of a fight
+         *
+         * Schema: [{
+         *     player: {Player},
+         *     state: {'fighting'|'success'|'escape'|'monster'},
+         *     modifiers: {[string]}
+         * }]
+         *
+         * States:
+         *   * 'fighting'
+         *   * 'success' - monster is beaten
+         *   * 'escape' - successful escape
+         *   * 'monster' - unsuccessful escape
          * 
          * @type [Object]
          */
@@ -73,7 +85,12 @@ export class Fight {
      * @param {Table} table
      */
     onEnded(table) {
-        
+        this.players.map(x => {
+            x.player.wielded.map(x => {
+                const c = Card.byId(x);
+                c.onFightEnded(this, table);
+            });
+        });
     }
 
     /**

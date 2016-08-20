@@ -5,7 +5,7 @@
 import { Card } from '../../../Card';
 import { Player } from "../../../Player";
 
-const id = 'whine_at_the_gm';
+const id = 'steal_a_level';
 
 class _ extends Card {
     constructor() {
@@ -16,13 +16,16 @@ class _ extends Card {
         this.type = 'level';
         this.castable = true;
     }
-    
+
     canBeCast(source, dest, table) {
-        return (dest instanceof Player) && dest.level < 9 && dest.level < table.players.reduce((acc, v) => (acc < v ? acc : v));
+        return (dest instanceof Player) && 
+            (source instanceof Player) && 
+            source.level < 9 && 
+            dest.level > 1;
     }
-    
+
     onCast(source, dest, table) {
-        dest.level++;
+        source.level++;
+        dest.level--;
     }
 }
-Card.cards[id] = new _();
