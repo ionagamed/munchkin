@@ -12,19 +12,20 @@ class potted_plant extends Card {
     }
     
     onEscape(player, dice, table) {
-            return true;
+        return true;
     }
     
     getAttackFor(players) {
         return 1;
     }
-    get treasureCount() {
-        var iself = false;
-        players.map(x => {
-            if(x.hasRaceDisadvantages('elf')) 
-                iself = true;
-        })
-        if (iself)
+    
+    getTreasure(fight, table) {
+        var isElf = false;
+        fight.players.map(x => {
+            if(x.player.hasRaceAdvantages('elf'))
+                isElf = true;
+        });
+        if (isElf)
             return 2;
         return 1;
     }

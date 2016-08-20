@@ -132,11 +132,11 @@ export class Player {
             if (this.wielded.hasOwnProperty(i)) {
                 const id = this.wielded[i];
                 if (!Card.byId(id).canBeHeld(this, table) && i > 0 && Card.byId(this.wielded[i - 1]).type == 'cheat') {
-                    this.unwield(x);
-                    if (Card.byId(x).kind == 'treasure') {
-                        this.belt.push(x);
+                    this.unwield(id);
+                    if (Card.byId(id).kind == 'treasure') {
+                        this.belt.push(id);
                     } else {
-                        table.discard(x);
+                        table.discard(id);
                     }
                 }
             }
@@ -229,5 +229,14 @@ export class Player {
         const types = this.wielded.map(x => Card.byId(x).type);
         return types.filter(x => x == '1-handed').length +
             types.filter(x => x == '2-handed').length * 2;
+    }
+
+    /**
+     * Decrease player's level by specific amount
+     * 
+     * @param {number} amount
+     */
+    decreaseLevel(amount) {
+        this.level = Math.max(this.level - amount, 1);
     }
 }

@@ -57,7 +57,7 @@ export class Card {
      * Called on dealing card in open way (such that everybody sees the content)
      *
      * @param {Player} player who dealt the card
-     * @param {Player} table Table
+     * @param {Table} table
      */
     onDealtOpen(player, table) {
         
@@ -67,7 +67,7 @@ export class Card {
      * Called on dealing card in closed way (such that only himself can see the content)
      *
      * @param {Player} player who dealt the card
-     * @param {Player} table
+     * @param {Table} table
      */
     onDealtClose(player, table) {
 
@@ -91,7 +91,7 @@ export class Card {
      * 
      * @param {Player|'deck'} source 
      * @param {Player} destination
-     * @param {Player} table 
+     * @param {Table} table 
      * @returns boolean
      */ 
     onCast(source, destination, table) {
@@ -113,7 +113,7 @@ export class Card {
      * Called when a card is used by player
      * 
      * @param {Player} player
-     * @param {Player} table
+     * @param {Table} table
      */
     onUsed(player, table) {
         
@@ -162,11 +162,11 @@ export class Card {
     }
 
     /**
-     * Called when a card is being disposed (removed from everywhere and placed into discarded deck)
+     * Called when a card is being discarded (removed from everywhere and placed into discarded deck)
      * 
      * @param {Table} table 
      */
-    onDisposed(table) {
+    onDiscarded(table) {
         
     }
 
@@ -174,7 +174,7 @@ export class Card {
      * When the fight begins
      * 
      * @param {Fight} fight
-     * @param {Fight} table
+     * @param {Table} table
      */
     onFightBegan(fight, table) {
         
