@@ -1,9 +1,8 @@
-//TODO: everything
-import { Player } from '../common/Player'
+import { Card } from '../common/Card';
+import { Player } from '../common/Player';
 import { Table } from '../common/Table';
 import packs from '../common/packs';
-import Random from 'random-js'
-import dice from '../common/dice'
+import Random from 'random-js';
 
 const MAX_PLAYERS = 6;
 const TREASURE_BEGIN_COUNT = 4;
@@ -26,16 +25,16 @@ function sendEvent(ws, event, data) {
  * Events:
  *  'table'
  *      data: table table in the room
- *          
+ *
  *  'gotCards'
- *      data: 
+ *      data:
  *          who string player who got the cards
  *          amount integer amount of cards
- *          cards [string] 
+ *          cards [string]
  *
  *  'gotSomeCards'
  *      like 'gotCards' but without cards ids
- * 
+ *
  *  'kickedDoor'
  *      data:
  *          who string player who kicked the door
@@ -53,7 +52,7 @@ function sendEvent(ws, event, data) {
  *          who string player who casted the card
  *          on string player on who card was casted
  *          card string id of the card
- *  'chatMessage' 
+ *  'chatMessage'
  *      data:
  *          from string player that sent the message
  *          message:
@@ -71,16 +70,16 @@ function sendEvent(ws, event, data) {
 function setCommandSet(ws, set, env) {
     ws.currentCommandSet = set;
     ws.onmessage = data => {
-        try { 
+        try {
             var msg = JSON.parse(data.data);
             env.room = Room.byId(env.roomId);
             env.table = env.room.table;
             env.player = env.table.players[ws.playerId];
             set[msg.cmd](msg.data, env);
-        } catch(err) {
-            console.log(`Invalid input: Error: ${err}\n`);
+        } catch (err) {
+            console.log(`Command error: ${err}\n`);
         }
-    }
+    };
 }
 
 /**
@@ -96,13 +95,13 @@ function copy(from, to) {
     }
 }
 
-/** 
+/**
  * Helper for validating phase
  *
- * @param player Player 
+ * @param player Player
  * @param table Table
  * @param phase string wanted phase
- * @returns bool is in phase 
+ * @returns bool is in phase
  */
 function phase(player, table, phase) {
     return table.players[table.turn].name == player.name && table.phase == phase;
@@ -111,7 +110,7 @@ function phase(player, table, phase) {
 /**
  * Helper to remove first occurence of object
  *
- * @param what object 
+ * @param what object
  * @param where [object]
  * @returns bool element was deleted
  */
@@ -124,7 +123,7 @@ function remove_first(what, where) {
 
 export class Room {
     constructor(id, owner, decks) {
-        /** 
+        /**
          * An array that holds users(players and spectators)
          * which want room events
          *
@@ -140,11 +139,11 @@ export class Room {
 
         /**
          * Owner of the room
-         * 
+         *
          * @type string
          */
         this.owner = owner;
-        
+
         /**
          * An id of the room
          *
@@ -176,12 +175,12 @@ export class Room {
         setCommandSet(ws, Room.spectatorCommands, {roomId: this.id, client: ws});
         return this.clients.push(ws) - 1;
     }
-    
+
     /**
      * TODO: better naming
      * Make spectator a player
      * inverse of spectate
-     * 
+     *
      * @param ws WebSocket
      * @returns string status
      */
@@ -217,7 +216,7 @@ export class Room {
         Room.rooms[this.id] = undefined;
     }
 
-    /** 
+    /**
      * Send event to all clients in the room
      *
      * @param event string
@@ -228,9 +227,9 @@ export class Room {
             ws.send(JSON.stringify({event: event, data: data}), error => {
                 if(error) {
                     if(ws.playerId) this.table.players.splice(ws.playerId, 1);
-                    this.clients.splice(pos, 1); 
+                    this.clients.splice(pos, 1);
                 }
-            })
+            });
         });
         if(this.clients.length == 0) this.destroy();
     }
@@ -263,20 +262,20 @@ export class Room {
             player.hand = []
                     .concat(this.doorDeck.splice(0, DOOR_BEGIN_COUNT))
                     .concat(this.treasureDeck.splice(0, TREASURE_BEGIN_COUNT));
-                    sendEvent(ws, 'gotCards', {
-                        amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
-                        cards: this.table.players[ws.playerId].hand,
-                        who: player.name
-                    });
-                    this.dispatch('gotSomeCards', {
-                        amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
-                        who: player.name
-                    });
+            sendEvent(ws, 'gotCards', {
+                amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
+                cards: this.table.players[ws.playerId].hand,
+                who: player.name
+            });
+            this.dispatch('gotSomeCards', {
+                amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
+                who: player.name
+            });
         });
     }
 }
 
-// TODO: document commands and events 
+// TODO: document commands and events
 // TODO: move commands to different file
 
 /**
@@ -296,7 +295,7 @@ Room.clientCommands['start'] = (data, env) => {
     if(env.client.userName == env.room.owner) {
         env.room.start();
     }
-}
+};
 
 /**
  * Commands that could be send by player
@@ -334,7 +333,7 @@ Room.giveCardsPublic = (data, env) => {
  */
 Room.playerCommands['tableRequest'] = (data, env) => {
     sendEvent(env.client, 'table', env.room.table);
-}
+};
 /**
  * 'kickDoor' command:
  *  kicks door
@@ -346,7 +345,7 @@ Room.playerCommands['kickDoor'] = (data, env) => {
     env.room.dispatch('kickedDoor', {
         card: doorCard,
         who: env.player.name
-    })
+    });
     if(doorCard.type == 'monster') {
         if(doorCard.onCast('deck', env.player, env.table)) {
             env.table.discard(doorCard);
@@ -354,10 +353,10 @@ Room.playerCommands['kickDoor'] = (data, env) => {
         this.table.phase = 'closed';
     } else {
         this.table.phase = 'open';
-        env.player.hand.push(doorCardName);
-        env.player.onCardRecieved(doorCardName, 'deck');
+        env.player.hand.push(doorCardId);
+        env.player.onCardRecieved(doorCardId, 'deck');
     }
-}
+};
 
 /**
  * 'wieldCard' command:
@@ -381,7 +380,7 @@ Room.playerCommands['wieldCard'] = (data, env) => {
         remove_first(card.id, env.player.hand);
     }
 
-}
+};
 
 /**
  * 'useCard' command:
@@ -403,7 +402,7 @@ Room.playerCommands['useCard'] = (data, env) => {
         remove_first(data.card, env.player.hand);
         env.table.discard(card);
     }
-}
+};
 
 /**
  * 'castCard' command:
@@ -427,14 +426,14 @@ Room.playerCommands['castCard'] = (data, env) => {
         remove_first(data.card, env.player.hand);
         env.table.discard(card);
     }
-}
+};
 
 /**
  * 'sendChatMessage' command:
  *  data:
  *      to [string]|'broadcast' recipients of the message
  *      text string text of the message
- *  
+ *
  */
 Room.playerCommands['sendChatMessage'] = (data, env) => {
     if(data.to === 'broadcast') {
@@ -460,9 +459,9 @@ Room.playerCommands['sendChatMessage'] = (data, env) => {
                 });
             });
     }
-}
+};
 
-/** 
+/**
  * Helper that gets card from the player
  *
  * @param player Player
@@ -497,21 +496,21 @@ Room.playerForcedDropCommands = {};
  * 'dropCards' command:
  *     data:
  *          drop [cardPos] cardPos of cards to drop
- *     env: 
+ *     env:
  *          dropValid(drop, player, table) checks that drop is valid
  */
 Room.playerForcedDropCommands['dropCards'] = (data, env) =>  {
     if(env.dropValid(data.drop, env.player, env.table)) {
-        for (i in data.drop) {
+        for (var i in data.drop) {
             var cardId = getCardFromPlayer(env.player, i);
             env.player.discard(cardId);
         }
         setCommandSet(env.client, Room.playerCommands, {roomId: env.roomId, client: env.client});
     }
-}
+};
 
 /**
- * Restricted set of commands that is used 
+ * Restricted set of commands that is used
  * if the player needs to give cards to other players
  */
 
@@ -520,12 +519,12 @@ Room.playerForcedGiveCommands = {};
  * 'giveCardsPrivate' command:
  *     data:
  *          give [cardPos] cardPos of cards to give
- *     env: 
+ *     env:
  *          giveValid(drop, player, table) checks that give is valid
  */
 Room.playerForcedGiveCommands['giveCardsPrivate'] = (data, env) => {
     if(env.giveValid(data.give, env.player, env.table)) {
-        for (i in data.give) {
+        for (var i in data.give) {
             var to = env.table.players.find(player => player.name == i.to);
             var cardId = getCardFromPlayer(env.player, i);
             to.hand.push(cardId);
@@ -542,7 +541,7 @@ Room.playerForcedGiveCommands['giveCardsPrivate'] = (data, env) => {
         }
         setCommandSet(env.client, Room.playerCommands, {roomId: env.roomId, client: env.client});
     }
-}
+};
 
 
 /**
@@ -554,7 +553,7 @@ Room.spectatorCommands = {};
 copy(Room.clientCommands, Room.spectatorCommands);
 Room.spectatorCommands['play'] = (data, env) => {
     sendEvent(env.client, 'playStatus', env.room.play(env.client));
-}
+};
 
 
 Room.rooms = {};
@@ -568,5 +567,5 @@ Room.rooms = {};
 Room.byId = function(id, who, decks) {
     Room.rooms[id] = Room.rooms[id] || new Room(id, who, decks);
     return Room.rooms[id];
-}
+};
 
