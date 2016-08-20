@@ -22,7 +22,7 @@ class bigfoot extends Card {
     getAttackFor(players) {
         var level = 12
         fight.players.map(x => {
-            if (x.race == 'halfling' || player(x).race == 'dwarf')
+            if (x.race == 'halfling' || x.race == 'dwarf')
                 level = 15;
         });
         return level;

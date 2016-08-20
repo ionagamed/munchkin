@@ -7,22 +7,22 @@ var packs = {
         doors: [
             'gelatinous_octahedron',//
             'ghoulfiends',//do not use item
-            'harpies'//
-            'hippogriff',*
-            'insurance_salesman',*
+            'harpies',//
+            'hippogriff',//*
+            'insurance_salesman',//*
             '3872_orcs',//death
-            'amazon',
+            'amazon',// TODO: remake amazon
             'bigfoot',//
             'bullrog',//level += 2, death
             'crabs',//
-            'curse_lose_small_item_1',
-            'curse_lose_small_item_2',
+            'curse_lose_small_item_1',//*
+            'curse_lose_small_item_2',//*
             'curse_lose_armor',//
             'curse_lose_footgear',//
             'curse_lose_headgear',//
-            'wizard_1',
-            'curse_change_class',
-            'curse_change_race',
+            'wizard_1',//*
+            'curse_change_class',//
+            'curse_change_race',//
             'curse_change_sex',
             'curse_chicken',
             'halfling_1',
@@ -36,8 +36,8 @@ var packs = {
             'mate',
             'out_to_lunch',
             'squidzilla',//level += 2, death
-            'stoned_golem',
-            'tongue_demon',
+            'stoned_golem',//*
+            'tongue_demon',//*
             'undead_horse',//
             'horror',
             'ancient',
@@ -58,8 +58,8 @@ var packs = {
             'plutonium_dragon',//level += 2, death
             'potted_plant',//
             'pukachu',
-            'shrieking_geek',
-            'snails_on_speed',
+            'shrieking_geek',//
+            'snails_on_speed',//*
             'dwarf_3',
             'elf_1',
             'elf_2',    

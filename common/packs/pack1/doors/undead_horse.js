@@ -12,11 +12,10 @@ class undead_horse extends Card {
     }
     
     onEscape(player, dice, table) {
-        if (dice >= 5) {
+        if (dice >= 5)
             return true;
         player.level -= 2;
     }
-    
     getAttackFor(players) {
         var isdwarf = false;
         players.map(x => {
@@ -24,8 +23,9 @@ class undead_horse extends Card {
                 isdwarf = true;
             if(isdwarf)
                 return 9;
-            return 5;
+            return 4;
         })
+    }
     get treasureCount() {
         return 4;
     }

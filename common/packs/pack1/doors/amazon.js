@@ -18,15 +18,18 @@ class amazon extends Card {
     onEscape(player, dice, table) {
         if (player.sex == 'female') {
             return true;
-            get treasureCount()
-                return 1;
         }
         if (dice >= 5) 
             return true;
-        
-            
-        }
-        player.level -= 3;
+        var hasCl = false;
+        player.wielded.map (x => {
+           if (Card.byId(x).type == 'class') {
+               player.unwield(x, table);
+               hasCl = true;
+           } 
+        });
+        if (!hasCl)
+            player.level -= 3;
     }
     getAttackFor(players) {
         return 8;
