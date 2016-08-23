@@ -9,28 +9,21 @@ export class Table {
         /**
          * An array of players sitting on the table
          *
-         * @type [player]
+         * @type {[Player]}
          */
         this.players = [];
 
         /**
-         * An array of currently active cards (in the middle of table)
-         *
-         * @type [string]
-         */
-        this.activeCards = [];
-
-        /**
          * An array of discarded doors
          *
-         * @type [string]
+         * @type {[string]}
          */
         this.discardedDoors = [];
 
         /**
          * An array of discarded treasure cards
          *
-         * @type [string]
+         * @type {[string]}
          */
         this.discardedTreasure = [];
 
@@ -68,7 +61,7 @@ export class Table {
     /**
      * Move the card to the discard deck
      * 
-     * @param card
+     * @param {string} card
      */
     discard(card) {
         if (Card.byId(card).kind == 'door') {
