@@ -12,7 +12,6 @@ import dice from '../common/dice.js';
 import './test.js';
 
 $(function () {
-    document.ws = new WebSocket("ws://localhost:8081");
     var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
         preload: preload,
         create: create,

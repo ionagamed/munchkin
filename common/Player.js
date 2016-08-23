@@ -5,7 +5,7 @@
 import { Card } from './Card';    
     
 export class Player {
-    constructor() {
+    constructor(name) {
         /**
          * An array of cards which are in player's hand (not on the table)
          *
@@ -34,7 +34,7 @@ export class Player {
          *
          * @type {string}
          */
-        this.name = '';
+        this.name = name;
 
         /**
          * Player level
@@ -49,6 +49,13 @@ export class Player {
          * @type {string}
          */
         this.sex = 'male';
+
+        /**
+         * Player's death status
+         *
+         * @type bool
+         */
+        this.dead = true;
     }
     
     /**
@@ -214,7 +221,7 @@ export class Player {
      * @param r
      */
     hasRaceDisadvantages(r) {
-        const has = this.hasCardWielded(c);
+        const has = this.hasCardWielded(r);
         const sm = this.hasCardWielded('half-breed');
         const races = this.wielded.filter(x => Card.byId(x).type == 'race').length;
         return has && !(sm && races == 1);
@@ -229,6 +236,20 @@ export class Player {
         const types = this.wielded.map(x => Card.byId(x).type);
         return types.filter(x => x == '1-handed').length +
             types.filter(x => x == '2-handed').length * 2;
+    }
+
+    die(table) {
+        this.wilded.map(x => {
+                if(Card.byId(x).type != 'race' && Card.byId(x).type != 'class' && Card.byId(x).type != 'super_munchkin' && Card.byId(x).type != 'half-breed')
+                    this.unwield(x, table);
+            });
+        this.hand.map(x => {
+            this.unwield(x, table);
+        });
+        this.belt.map(x => {
+            this.unwield(x, table);
+        });
+        this.dead = true;
     }
 
     /**

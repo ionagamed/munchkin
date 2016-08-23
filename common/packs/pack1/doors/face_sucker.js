@@ -1,5 +1,5 @@
 import { Card } from '../../../Card';
-import { Monster } from "../helpers/Monster";
+import { Monster } from '../helpers/Monster';
 
 const id = 'face_sucker';
 

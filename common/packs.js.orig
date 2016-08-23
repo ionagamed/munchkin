@@ -8,12 +8,21 @@ var packs = {
             'gelatinous_octahedron',//
             'ghoulfiends',//do not use item
             'harpies',//
+<<<<<<< HEAD
             'hippogriff',//*
             'insurance_salesman',//*
             '3872_orcs',//
             'amazon',// TODO: remake amazon
             'bigfoot',//
             'bullrog',//
+=======
+            'hippogriff',
+            'insurance_salesman',
+            '3872_orcs',//death
+            'amazon',
+            'bigfoot',
+            'bullrog',//level += 2, death
+>>>>>>> 85eeeb8c6124f19a3659d09162fdb884f4b0e437
             'crabs',//
             'curse_lose_small_item_1',//*
             'curse_lose_small_item_2',//*

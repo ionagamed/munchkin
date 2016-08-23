@@ -24,7 +24,6 @@ class flying_frogs extends Monster {
     badThing(player, table) { 
         player.level = 1;
     }
-    
     getAttackFor(players) {
         return 16;
     }
