@@ -203,7 +203,7 @@ $(function () {
         
         $('.player .wielded .to-belt').click(e => {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
-            player.wielded.splice(player.wielded.indexOf(id), 1);
+            player.unwield(id);
             player.belt.push(id);
             updateView();
             return false;

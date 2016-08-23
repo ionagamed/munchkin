@@ -246,16 +246,15 @@ export class Player {
      */
     die(table) {
         this.wielded.map(x => {
-                if(Card.byId(x).type != 'race' && Card.byId(x).type != 'class' && Card.byId(x).type != 'super_munchkin' && Card.byId(x).type != 'half-breed')
-                    this.unwield(x, table);
-            });
-        this.hand.map(x => {
-            this.unwield(x, table);
+            if (Card.byId(x).type != 'race' && Card.byId(x).type != 'class' && Card.byId(x).type != 'super_munchkin' && Card.byId(x).type != 'half-breed') {
+                this.unwield(x, table);
+                table.discard(x);
+            }
         });
-        this.belt.map(x => {
-            this.unwield(x, table);
-        });
-        this.dead = true;
+        this.hand.map(table.discard);
+        this.hand = [];
+        this.belt.map(table.discard);
+        this.belt = [];
     }
 
     /**
