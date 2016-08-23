@@ -4,7 +4,7 @@
 
 import { Card } from '../../../Card';
 import { Player } from '../../../Player';
-import { Curse } from "../helpers/Curse";
+import { Curse } from '../helpers/Curse';
 
 const id = 'curse_lose_armor';
 

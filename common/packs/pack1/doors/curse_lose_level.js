@@ -1,5 +1,5 @@
 import { Card } from '../../../Card';
-import { Curse } from "../helpers/Curse";
+import { Curse } from '../helpers/Curse';
 
 const id = 'curse_lose_level';
 
@@ -13,7 +13,7 @@ class curse_lose_level extends Curse {
         this.castable = true;
     }
     onCast(source, dest, table) {
-        player.level--;
+        dest.level--;
     }
 }
 Card.cards[id + '_1'] = new curse_lose_level();
