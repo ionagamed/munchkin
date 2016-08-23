@@ -44,6 +44,7 @@ $(function () {
             if (c.big) {
                 t.push('big');
             }
+            t.push(c.type);
             if (c.wieldable) {
                 t.push('<a class="unwield" href="#">unwield</a>');
             }
@@ -63,6 +64,7 @@ $(function () {
             if (c.big) {
                 t.push('big');
             }
+            t.push(c.type);
             if (c.wieldable) {
                 t.push('<a class="wield" href="#">wield</a>');
             }
@@ -88,6 +90,7 @@ $(function () {
             if (c.big) {
                 t.push('big');
             }
+            t.push(c.type);
             if (c.wieldable) {
                 t.push('<a class="wield" href="#">wield</a>');
             }

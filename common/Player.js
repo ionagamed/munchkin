@@ -65,14 +65,19 @@ export class Player {
      * Wield a card
      * Returns true on success
      * 
-     * @param card string
-     * @param table Table
+     * @param {string} card 
+     * @param {Table} table 
      * 
      * @returns boolean
      */
     wield(card, table) {
-        if (Card.byId(card).canBeWielded(this, table)) {
-            this.wielded.push(card);
+        const cheat = this.wielded.indexOf('cheat');
+        if (Card.byId(card).canBeWielded(this, table) || (cheat < this.wielded.length - 1 && this.wielded[cheat + 1] == 'cheat_free_helper')) {
+            if (cheat >= 0 && cheat < this.wielded.length - 1 && this.wielded[cheat + 1] == 'cheat_free_helper') {
+                this.wielded.splice(cheat + 1, 1, card);
+            } else {
+                this.wielded.push(card);
+            }
             Card.byId(card).onWielded(this, table);
             this.updateConstraints(table);
             return true;
@@ -82,8 +87,8 @@ export class Player {
     /**
      * Unwield a card
      * 
-     * @param card string
-     * @param table Table
+     * @param {string} card 
+     * @param {Table} table 
      */
     unwield(card, table) {
         var idx = this.wielded.indexOf(card);
@@ -92,6 +97,7 @@ export class Player {
                 idx--;
                 this.wielded.splice(idx, 1);
                 Card.byId('cheat').onUnwielded(this, table);
+                table.discard('cheat');
             }
         }
         this.wielded.splice(idx, 1);
@@ -121,11 +127,12 @@ export class Player {
      * @param table
      */
     updateConstraints(table) {
+        console.log(this.wielded);
         for (let i in this.wielded) {
             if (this.wielded.hasOwnProperty(i)) {
                 const id = this.wielded[i];
                 if (!Card.byId(id).canBeHeld(this, table) && !(i > 0 && Card.byId(this.wielded[i - 1]).type == 'cheat')) {
-                    this.unwield(id);
+                    this.unwield(id, table);
                     if (Card.byId(id).kind == 'treasure') {
                         this.belt.push(id);
                     } else {
