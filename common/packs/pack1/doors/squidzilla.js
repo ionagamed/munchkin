@@ -1,38 +1,39 @@
 import { Card } from '../../../Card';
+import { Monster } from "../helpers/Monster";
 
 const id = 'squidzilla';
 
-class squidzilla extends Card {
+class squidzilla extends Monster {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
-        this.level = 2;
+        this.treasure = 4;
+        this.levels = 2;
     }
     
     onEscape(player, dice, table) {
-        if(!player.hasRaceDisadvantages('elf') && player.level <= 4)
+        if (player.level < 4 && !player.hasRaceDisadvantages('elf')) {
             return true;
-        if(dice >= 5)
-            return true;
-        player.die(table);
+        }
+        return super.onEscape(player, dice, table);
+    }
+    
+    badThing(player, table) {
+        player.die();
     }
     
     getAttackFor(players) {
-        var iself = false;
+        var isElf = false;
         players.map(x => {
-            if(x.hasRaceDisadvantages('elf')) 
-                iself = true;
-        })
-        if (iself)
+            if(x.hasRaceDisadvantages('elf'))
+                isElf = true;
+        });
+        if (isElf)
             return 22;
         return 18;
-    }
-    // TODO: level += 2, death
-    get treasureCount() {
-        return 4;
     }
 }
 Card.cards[id] = new squidzilla();
