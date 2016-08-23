@@ -3,7 +3,7 @@ import { Room, getRoom } from './Room';
 import session from './session';
 
 export var wss = new WebSocketServer({
-    port: 8081
+    port: process.env.WS_PORT || 8081
 });
 /**
  * client->server:
