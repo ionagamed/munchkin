@@ -124,7 +124,7 @@ export class Player {
         for (let i in this.wielded) {
             if (this.wielded.hasOwnProperty(i)) {
                 const id = this.wielded[i];
-                if (!Card.byId(id).canBeHeld(this, table) && i > 0 && Card.byId(this.wielded[i - 1]).type == 'cheat') {
+                if (!Card.byId(id).canBeHeld(this, table) && !(i > 0 && Card.byId(this.wielded[i - 1]).type == 'cheat')) {
                     this.unwield(id);
                     if (Card.byId(id).kind == 'treasure') {
                         this.belt.push(id);
