@@ -28,10 +28,17 @@ class squidzilla extends Monster {
     getAttackFor(players) {
         var isElf = false;
         players.map(x => {
+<<<<<<< HEAD
             if(x.hasRaceDisadvantages('elf'))
                 isElf = true;
         });
         if (isElf)
+=======
+            if(x.hasRaceDisadvantages('elf')) 
+                iself = true;
+        });
+        if (iself)
+>>>>>>> origin/tsmish
             return 22;
         return 18;
     }
