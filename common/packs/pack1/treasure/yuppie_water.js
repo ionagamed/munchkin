@@ -4,7 +4,7 @@
 
 import { Card } from '../../../Card';
 import { Modifier } from '../helpers/Modifier';
-import { Player } from "../../../Player";
+import { Player } from '../../../Player';
 
 const id = 'yuppie_water';
 

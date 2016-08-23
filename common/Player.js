@@ -214,7 +214,7 @@ export class Player {
      * @param r
      */
     hasRaceDisadvantages(r) {
-        const has = this.hasCardWielded(c);
+        const has = this.hasCardWielded(r);
         const sm = this.hasCardWielded('half-breed');
         const races = this.wielded.filter(x => Card.byId(x).type == 'race').length;
         return has && !(sm && races == 1);

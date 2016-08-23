@@ -4,7 +4,7 @@
 
 import { Card } from '../../../Card';
 import { Item } from '../helpers/Item';
-import { Player } from "../../../Player";
+import { Player } from '../../../Player';
 
 const id = 'rat_on_a_stick';
 
