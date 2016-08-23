@@ -3,10 +3,11 @@
  */
 
 import { Card } from '../../../Card';
+import { Class } from "../helpers/Class";
 
 const id = 'warrior';
 
-class Warrior extends Card {
+class Warrior extends Class {
     constructor() {
         super();
         this.id = id;
