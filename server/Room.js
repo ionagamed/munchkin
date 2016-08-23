@@ -605,8 +605,15 @@ Room.playerCommands['getCardFromPlayer'] = (data, env) => {
     }
 };
 
+/**
+ * 'dropPlayerCard' command:
+ *  data:
+ *      who string player who drops the card
+ *      cardPos cardPos position of card
+ */
 Room.playerCommands['dropPlayerCard'] = (data, env) => {
-    var card = getCardFromPlayer(env.room, env.table.players.find(player => player.name == data.from), data.cardPos);
+    //TODO: add security check
+    var card = getCardFromPlayer(env.room, env.table.players.find(player => player.name == data.who), data.cardPos);
     env.room.dispatch('discardedCard', card.id);
     env.table.discard(card.id);
 };
