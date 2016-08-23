@@ -1,34 +1,32 @@
-import { Card } from '../../../Card';
+import { Card } from '../../../Card'
+import { Monster } from '../helpers/Monster';
 
 const id = 'bigfoot';
 
-class bigfoot extends Card {
+class bigfoot extends Monster {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.treasure = 3;
     }
     
-    onEscape(player, dice, table) {
-        if (dice >= 5)
-            return true;
+    badThing(player, table) {
         player.wielded.map(x => {
             if (Card.byId(x).type == 'headgear')
-                unwield(x, table);
-            });
+                player.unwield(x, table);
+        });
     }
+    
     getAttackFor(players) {
-        var level = 12
-        fight.players.map(x => {
-            if (x.race == 'halfling' || x.race == 'dwarf')
+        var level = 12;
+        players.map(x => {
+            if (x.hasRaceDisadvantages('halfling') || x.hasRaceDisadvantages('dwarf'))
                 level = 15;
         });
         return level;
-    }
-    get treasureCount() {
-        return 3;
     }
 }
 Card.cards[id] = new bigfoot();

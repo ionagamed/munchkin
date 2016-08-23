@@ -15,7 +15,7 @@ class CurseLoseFootgear extends Curse {
     onCast(source, dest, table) {
         for (let i of dest.wielded) {
             if (Card.byId(i).type == 'footgear') {
-                dest.unwield(i);
+                dest.unwield(i, table);
                 table.discard(i);
             }
         }

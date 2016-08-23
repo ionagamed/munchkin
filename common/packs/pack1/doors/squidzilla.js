@@ -15,8 +15,10 @@ class squidzilla extends Card {
     onEscape(player, dice, table) {
         if(!player.hasRaceDisadvantages('elf') && player.level <= 4)
             return true;
-        if(dice >= 5)
-            return true;
+        return super.onEscape(player, dice, table);
+    }
+    
+    badThing(player, table) {
         player.die(table);
     }
     

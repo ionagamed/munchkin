@@ -1,4 +1,3 @@
-.type == 'headgear
 import { Card } from '../../../Card';
 import { Player } from '../../../Player';
 
@@ -16,12 +15,5 @@ class curse_chicken extends Card {
     canBeCast(source, dest, table) {
         return dest instanceof Player;
     }
-    onCast(source, dest, table) {
-        
-    }
-    onEscape(player, dice, table) {
-            return (dice - 1);
-    }
-    // TODO: connect with haedgear;
 }
-Card.cards[id] = new curse_change_sex();
+Card.cards[id] = new curse_chicken();

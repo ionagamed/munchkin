@@ -24,6 +24,15 @@ function _l(c, x) {
     }
 }
 
+function __l(x) {
+    const c = Card.byId(x);
+    if (c.kind == 'door') {
+        return '/packs/pack1/img/doors-' + idToInt(x) + '.png';
+    } else {
+        return '/packs/pack1/img/treasure-' + idToInt(x) + '.png';
+    }
+}
+
 $(function () {
     const player = new Player();
     var table = new Table();
@@ -227,6 +236,11 @@ $(function () {
         if (e.which == 13) {
             add();
             return false;
+        }
+    });
+    $('#id').keypress(e => {
+        if (e.which == 13) {
+            $('#img').html('<img width="330" height="524" src="' + __l($('#id').val()) + '">');
         }
     });
     

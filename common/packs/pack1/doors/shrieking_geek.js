@@ -11,24 +11,22 @@ class shrieking_geek extends Card {
         this.type = 'monster';
     }
     
-    onEscape(player, dice, table) {
-        if(dise >= 5)
-            return true;
+    badThing(player, table) {
         player.wielded.map (x => {
            if (Card.byId(x).type == 'class' || Card.byId(x).type == 'race')
                player.unwield(x, table);
         });
     }
     
-    getAttackFor(players) {
-        var iswarrior = false;
-        if  players.map(x => {
-            if(x.hasClassDisadvantages('warrior')) 
-                iswarrior = true;
-        })
-        if (iswarrior) return 12;
-        return 6;
-    }
+    // getAttackFor(players) {
+    //     var iswarrior = false;
+    //     if  players.map(x => {
+    //         if(x.hasClassDisadvantages('warrior')) 
+    //             iswarrior = true;
+    //     })
+    //     if (iswarrior) return 12;
+    //     return 6;
+    // }
     get treasureCount() {
         return 2;
     }
