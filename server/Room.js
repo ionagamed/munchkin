@@ -1,6 +1,7 @@
 import { Card } from '../common/Card';
 import { Player } from '../common/Player';
 import { Table } from '../common/Table';
+import dice from '../common/dice.js';
 import packs from '../common/packs';
 import Random from 'random-js';
 
@@ -24,7 +25,7 @@ function sendEvent(client, event, data) {
 /**
  * Events:
  *  'table'
- *      data: table table in the room
+ *      data table table in the room
  *
  *  'gotCards'
  *      data:
@@ -43,8 +44,12 @@ function sendEvent(client, event, data) {
  *          card string id of card that we got from kicking the door
  *  'wieldedCard'
  *      data:
- *          who string player wearing the card
+ *          who string player wielding the card
  *          card string id of the card
+ *  'unwieldedCard'
+ *     data:
+ *         who string player unwielding the card
+ *         card string id of the card
  *  'usedCard'
  *      data:
  *          who string player using the card
@@ -54,6 +59,10 @@ function sendEvent(client, event, data) {
  *          who string player who casted the card
  *          on string player on who card was casted
  *          card string id of the card
+ *  'dealtOpen'
+ *      data:
+ *          on string player on who card was dealt
+ *          card string card id
  *  'chatMessage'
  *      data:
  *          from string player that sent the message
@@ -61,9 +70,32 @@ function sendEvent(client, event, data) {
  *              to [string]|'broadcast' recipients of the message
  *              text string text of the message
  *  'resurrected'
+ *      data string player who got resurrected
+ *
+ *  'died'
+ *      data string player who died
+ *
+ *  'lostCard'
  *      data:
- *          who string player who got resurrected
+ *          who string player who lost the card
+ *          card string id of the card
+ *
+ *  'lostSomeCard'
+ *      data:
+ *          who string player who lost the card
+ *          card cardPos position of the card
+ *
+ *  'changedPhase'
+ *      data string current phase
+ *
+ *  'discardedCard'
+ *      data string id of the card
+ *
+ *  'movedToBelt'
+ *      who string
+ *      card string
  */
+
 
 /**
  * Helper to set command set for client to use
@@ -77,7 +109,7 @@ function setCommandSet(ws, set, env) {
         try {
             var msg = JSON.parse(data.data);
             env.room = Room.byId(env.roomId);
-            env.table = env.room.table;
+            env.table = env.table;
             env.player = env.table.players[ws.playerId];
             set[msg.cmd](msg.data, env);
         } catch (err) {
@@ -123,6 +155,31 @@ function remove_first(what, where) {
     if (ix == -1) return false;
     where.splice(ix, 1);
     return true;
+}
+/**
+ * Helper that gets card from the player
+ *
+ * @param player Player
+ * @param cardPos object
+ *              place string 'hand'|'belt'|'wielded'
+ *              pos integer position of card
+ */
+
+function getCardFromPlayer(room, player, cardPos) {
+    room.dispatch('lostSomeCard', {
+        who: player.name,
+        card: cardPos
+    });
+    switch (cardPos.place) {
+        case 'hand':
+            return player.hand.splice(cardPos.pos, 1)[0];
+        case 'belt':
+            return player.belt.splice(cardPos.pos, 1)[0];
+        case 'wielded':
+            var cardId = player.wielded[cardPos.pos];
+            player.unwield(cardId);
+            return cardId;
+    }
 }
 
 export class Room {
@@ -267,6 +324,51 @@ export class Room {
 // TODO: move commands to different file
 
 /**
+ * function to give players cards
+ *
+ * @param source Player|'deck'|'looting'|'god'
+ * @param to Player
+ * @param cardIds {Card|'door'|'treasure'}
+ * @param room Room
+ * @param method 'open'|'close'
+ */
+Room.giveCards = function(source, to, cardIds, room, method) {
+    var cards = cardIds.map(cardId => {
+        switch(cardId) {
+            case 'door':
+                return room.doorDeck.splice(0, 1)[0];
+            case 'treasure':
+                return room.treasureDeck.splice(0, 1)[0];
+            default:
+                return cardId;
+        }
+    });
+    switch (method) {
+        case 'open':
+            room.dispatch('gotCards', {
+                who: to.name,
+                amount: cards.length,
+                cards: cards
+            });
+            break;
+        case 'close':
+            sendEvent(room.clients.find(client => client.userName == to.name), 'gotCards', {
+                who: to.name,
+                amount: cards.length,
+                cards: cards
+            });
+            room.dispatch('gotSomeCards', {
+                who: to.name,
+                amount: cards.length
+            });
+            break;
+    }
+    cards.map(cardId => {
+        to.onCardReceived(cardId, source);
+        Card.byId(cardId).onReceived(to, source, room.table);
+    });
+};
+/**
  * Commands that could be send by client
  *
  * @type {function(object, object)}
@@ -278,7 +380,7 @@ Room.clientCommands = {};
  *  starts game
  */
 Room.clientCommands['start'] = (data, env) => {
-    if(env.client.userName == env.room.owner) {
+    if(env.client.userName === env.room.owner) {
         env.room.start();
     }
 };
@@ -288,7 +390,7 @@ Room.clientCommands['start'] = (data, env) => {
  * forces server to send table in the room
  */
 Room.clientCommands['tableRequest'] = (data, env) => {
-    sendEvent(env.client, 'table', env.room.table);
+    sendEvent(env.client, 'table', env.table);
 };
 
 /**
@@ -298,28 +400,6 @@ Room.clientCommands['tableRequest'] = (data, env) => {
  */
 Room.playerCommands = {};
 copy(Room.clientCommands, Room.playerCommands);
-/*
-Room.giveCardsPrivate = (data, env) => {
-    sendEvent(env.client, 'gotCards', {
-            type: data.type,
-            amount: data.amount,
-            cards: env.room.getCards(data.type, data.amount),
-            who: env.player.name
-    });
-    env.room.dispatch('gotSomeCards', {
-        type: data.type,
-        amount: data.amount,
-        who: env.player.name
-    });
-}
-Room.giveCardsPublic = (data, env) => {
-    env.room.dispatch('gotCards', {
-        type: data.type,
-        amount: data.amount,
-        cards: env.room.getCards(data.type, data.amount),
-        who: env.player.name
-    });
-    }*/
 //TODO: move some code into common
 /**
  * 'spectate' command:
@@ -330,7 +410,7 @@ Room.playerCommands['spectate'] = (data, env) => {
 };
 
 /**
- * 'getBeginCards' command:
+ * 'resurrect' command:
  * can be used only if the player is dead and game is started
  * emits gotCards, gotSomeCards
  */
@@ -340,6 +420,10 @@ Room.playerCommands['resurrect'] = (data, env) => {
     env.player.hand = []
         .concat(env.room.doorDeck.splice(0, DOOR_BEGIN_COUNT))
         .concat(env.room.treasureDeck.splice(0, TREASURE_BEGIN_COUNT));
+    env.player.hand.map(cardId => {
+        Card.byId(cardId).onReceived(env.player, 'deck', env.table);
+        env.player.onCardReceived(cardId, 'deck');
+    });
     sendEvent(env.client, 'gotCards', {
         amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
         cards: env.player.hand,
@@ -356,8 +440,18 @@ Room.playerCommands['resurrect'] = (data, env) => {
 };
 
 /**
+ * 'escape' command:
+ * data:
+ *  from integer id of monster from who player is escaping
+ */
+Room.playerCommands['escape'] = (data, env) => {
+    env.table.fight.monsters[data.from].onEscape(env.player, dice(), env.table);
+};
+
+/**
  * 'kickDoor' command:
  *  kicks door
+ *  emits: castedCard, gotCards, gotSomeCards
  */
 Room.playerCommands['kickDoor'] = (data, env) => {
     if(!phase(env.player, env.table, 'begin')) return;
@@ -367,31 +461,56 @@ Room.playerCommands['kickDoor'] = (data, env) => {
         card: doorCard,
         who: env.player.name
     });
-    if(doorCard.type == 'monster') {
-        env.room.dispatch('castedCard', {
-            who: 'deck',
-            on: env.player.name,
-            card: doorCardId
-        });
-        if(doorCard.onCast('deck', env.player, env.table)) {
-            env.table.discard(doorCard);
-        }
-        env.room.table.phase = 'closed';
-    } else {
-        env.room.table.phase = 'open';
-        env.room.dispatch('gotCards', {
-            who: env.player.name,
-            amount: 1,
-            cards: [doorCardId]
-        });
-        env.player.hand.push(doorCardId);
-        env.player.onCardRecieved(doorCardId, 'deck');
+    switch (doorCard.type) {
+        case 'monster':
+            env.room.dispatch('dealtOpen', {
+                on: env.player.name,
+                card: doorCardId
+            });
+            doorCard.onDealtOpen(env.player, env.table);
+            env.table.discard(doorCardId);
+            env.room.dispatch('discardedCard', doorCardId);
+            doorCard.onDiscarded(env.table);
+            env.table.phase = 'closed';
+            break;
+        case 'curse':
+            env.room.dispatch('castedCard', {
+                who: 'deck',
+                on: env.player.name,
+                card: doorCardId
+            });
+            if(doorCard.onCast('deck', env.player, env.table)) {
+                env.table.discard(doorCardId);
+                env.room.dispatch('discardedCard', doorCardId);
+                doorCard.onDiscarded(env.table);
+                env.table.phase = 'open';
+            }
+            break;
+        default:
+            env.room.dispatch('gotCards', {
+                who: env.player.name,
+                amount: 1,
+                cards: [doorCardId]
+            });
+            env.room.dispatch('gotSomeCards', {
+                who: env.player.name,
+                amount: 1,
+            });
+            env.player.hand.push(doorCardId);
+            doorCard.onReceived(env.player, 'deck', env.table);
+            env.player.onCardReceived(doorCardId, 'deck');
+            env.table.phase = 'open';
     }
+    env.room.dispatch('changedPhase', env.table.phase);
 };
 
 Room.playerCommands['lootTheRoom'] = (data, env) => {
     if(!phase(env.player, env.table, 'open')) return;
     var doorCardId = env.room.doorDeck.splice(0, 1);
+    var doorCard = Card.byId(doorCardId);
+    env.player.hand.push(doorCardId);
+    doorCard.onReceived(env.player, 'looting', env.table);
+    env.player.onCardReceived(doorCardId, 'looting');
     sendEvent(env.client, 'gotCards', {
         who: env.player.name,
         amount: 1,
@@ -401,6 +520,8 @@ Room.playerCommands['lootTheRoom'] = (data, env) => {
         who: env.player.name,
         amount: 1,
     });
+    env.player.phase = 'closed';
+    env.room.dispatch('changedPhase', env.table.phase);
 };
 
 /**
@@ -422,9 +543,30 @@ Room.playerCommands['wieldCard'] = (data, env) => {
             card: card.id
         });
         env.player.wield(card.id, env.table);
+        card.onWielded(env.player, env.table);
         remove_first(card.id, env.player.hand);
     }
+};
 
+/**
+ * 'unwieldCard' command:
+ *      data: object
+ *          card string id of the card
+ *      emits 'unwieldedCard'
+ *  unwield the card
+ */
+Room.playerCommands['unwieldCard'] = (data, env) => {
+    var card = Card.byId(data.card);
+    if(phase(env.player, env.table, 'hand') ||
+       phase(env.player, env.table, 'drop')) return;
+    if(env.player.hand.indexOf(card.id)) {
+        env.player.unwield(card.id);
+        env.room.dispatch('unwieldedCard', {
+            who: env.player.name,
+            card: card.id
+        });
+        env.player.belt.push(card.id);
+    }
 };
 
 /**
@@ -444,9 +586,16 @@ Room.playerCommands['useCard'] = (data, env) => {
     });
     env.table.phase = (card.type == 'monster' ? 'hand' : 'closed');
     if(card.onUsed(env.player, env.table)) {
-        remove_first(data.card, env.player.hand);
-        env.table.discard(card);
+        env.dispatch('lostCard', {
+            who: env.player.name,
+            card: card.id
+        });
+        remove_first(card.id, env.player.hand);
+        card.onDiscarded(env.table);
+        env.table.discard(card.id);
+        env.room.dispatch('discardedCard', card.id);
     }
+    env.room.dispatch('changedPhase', env.table.phase);
 };
 
 /**
@@ -468,8 +617,30 @@ Room.playerCommands['castCard'] = (data, env) => {
         card: card.id
     });
     if(card.onCast(env.player, on, env.table)) {
-        remove_first(data.card, env.player.hand);
-        env.table.discard(card);
+        env.dispatch('lostCard', {
+            who: env.player.name,
+            card: card.id
+        });
+        remove_first(card.id, env.player.hand);
+        env.room.dispatch('discardedCard', card.id);
+        card.onDiscarded(env.table);
+        env.table.discard(card.id);
+    }
+};
+
+/**
+ * 'moveToBelt' command:
+ *  data:
+ *      card string card id
+ */
+Room.playerCommands['moveToBelt'] = (data, env) => {
+    var card = Card.byId(data.card);
+    if(remove_first(card.id, env.player.hand)) {
+        env.player.belt.push(card.id);
+        env.room.dispatch('movedToBelt', {
+            who: env.player.name,
+            card: card.id
+        });
     }
 };
 
@@ -506,82 +677,34 @@ Room.playerCommands['sendChatMessage'] = (data, env) => {
 };
 
 /**
- * Helper that gets card from the player
- *
- * @param player Player
- * @param cardPos object
- *              place string 'hand'|'belt'|'wielded'
- *              pos integer position of card
+ * 'getCardFromPlayer' command:
+ *  data:
+ *      from string player from who we get card
+ *      cardPos cardPos position of card
+ *      method 'open'|'close'
  */
+Room.playerCommands['getCardFromPlayer'] = (data, env) => {
+    //TODO: add security check
+    var fromPlayer = env.table.players.find(player => player.name == data.from);
+    var card = getCardFromPlayer(env.room, fromPlayer, data.cardPos);
+    env.player.hand.push(card.id);
+    card.onReceived(env.player, fromPlayer, env.table);
+    env.player.onCardReceived(card.id, env.player);
 
-
-function getCardFromPlayer(player, cardPos) {
-    switch (cardPos.place) {
-        case 'hand':
-            return player.hand.splice(cardPos.pos, 1)[0];
-        case 'belt':
-            return player.belt.splice(cardPos.pos, 1)[0];
-        case 'wielded':
-            var cardId = player.wielded[cardPos.pos];
-            player.unwield(cardId);
-            return cardId;
-    }
-}
-
-/**
- * Restricted set of commands that is used if the player needs to drop cards
- */
-
-Room.playerForcedDropCommands = {};
-/**
- * 'dropCards' command:
- *     data:
- *          drop [cardPos] cardPos of cards to drop
- *     env:
- *          dropValid(drop, player, table) checks that drop is valid
- */
-Room.playerForcedDropCommands['dropCards'] = (data, env) =>  {
-    if(env.dropValid(data.drop, env.player, env.table)) {
-        for (var i in data.drop) {
-            var cardId = getCardFromPlayer(env.player, i);
-            env.player.discard(cardId);
-        }
-        setCommandSet(env.client, Room.playerCommands, {roomId: env.roomId, client: env.client});
-    }
 };
 
 /**
- * Restricted set of commands that is used
- * if the player needs to give cards to other players
+ * 'dropPlayerCard' command:
+ *  data:
+ *      who string player who drops the card
+ *      cardPos cardPos position of card
  */
-
-Room.playerForcedGiveCommands = {};
-/**
- * 'giveCardsPrivate' command:
- *     data:
- *          give [cardPos] cardPos of cards to give
- *     env:
- *          giveValid(drop, player, table) checks that give is valid
- */
-Room.playerForcedGiveCommands['giveCardsPrivate'] = (data, env) => {
-    if(env.giveValid(data.give, env.player, env.table)) {
-        for (var i in data.give) {
-            var to = env.table.players.find(player => player.name == i.to);
-            var cardId = getCardFromPlayer(env.player, i);
-            to.hand.push(cardId);
-            to.onCardRecieved(cardId, env.player);
-            sendEvent(env.client, 'gotCards', {
-                amount: 1,
-                cards: [cardId],
-                who: env.player.name
-            });
-            env.room.dispatch('gotSomeCards', {
-                amount: 1,
-                who: env.player.name
-            });
-        }
-        setCommandSet(env.client, Room.playerCommands, {roomId: env.roomId, client: env.client});
-    }
+Room.playerCommands['dropPlayerCard'] = (data, env) => {
+    //TODO: add security check
+    var card = getCardFromPlayer(env.room, env.table.players.find(player => player.name == data.who), data.cardPos);
+    card.onDiscarded(env.table);
+    env.room.dispatch('discardedCard', card.id);
+    env.table.discard(card.id);
 };
 
 
