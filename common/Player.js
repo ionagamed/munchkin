@@ -238,8 +238,14 @@ export class Player {
             types.filter(x => x == '2-handed').length * 2;
     }
 
+
+    /**
+     * Makes the player DEEEEEEEAD
+     * 
+     * @param {Table} table
+     */
     die(table) {
-        this.wilded.map(x => {
+        this.wielded.map(x => {
                 if(Card.byId(x).type != 'race' && Card.byId(x).type != 'class' && Card.byId(x).type != 'super_munchkin' && Card.byId(x).type != 'half-breed')
                     this.unwield(x, table);
             });
