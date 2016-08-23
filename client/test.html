@@ -1,0 +1,67 @@
+<html>
+<head>
+  <title>__test page__</title>
+</head>
+<script src='/lib/phaser/build/phaser.min.js'></script>
+<script src='/lib/jquery/dist/jquery.min.js'></script>
+<script src='munchkin.js'></script>
+<ul>
+  <li class='player'>
+    <div class='player-info'>player:</div>
+    <ul>
+      <li>
+        wielded:
+        <ul class='wielded'></ul>
+      </li>
+      <li>
+        belt:
+        <ul class='belt'></ul>
+      </li>
+      <li>
+        hand:
+        <ul class='hand'></ul>
+      </li>
+      <li></li>
+      <li>
+        <input type='text' class='add'>
+        <button class='addButton'>add to hand</button>
+      </li>
+    </ul>
+  </li>
+  <li class='table'>
+    table:
+    <ul>
+      <li class='fight'>
+        fight: <span class='result'></span>
+        <ul>
+          <li>
+            players: (<b><span class='p-attack'></span></b>)
+            <ul class='players-list'></ul>
+          </li>
+          <li>
+            monsters: (<b><span class='m-attack'></span></b>)
+            <ul class='monsters-list'></ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        discard doors:
+        <ul class='discardedDoors'></ul>
+      </li>
+      <li>
+        discard treasure:
+        <ul class='discardedTreasure'></ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<style>
+  a,a:visited {
+    text-decoration: none;
+    color: blue;
+  }
+  a:hover {
+    color: #00a;
+  }
+</style>
+</html>

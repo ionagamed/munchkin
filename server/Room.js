@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Card } from '../common/Card';
 import { Player } from '../common/Player';
 import { Table } from '../common/Table';
@@ -169,12 +170,30 @@ function getCardFromPlayer(room, player, cardPos) {
 export class Room {
     constructor(id, owner, decks) {
         /**
+=======
+import { Table } from '../common/Table';
+export class Room {
+    constructor(owner) {
+        /** 
+>>>>>>> master
          * An array that holds users(players and spectators)
          * which want room events
          *
          * @type [WebSocket]
          */
+<<<<<<< HEAD
         this.clients = [];
+=======
+        this.subscribers = [];
+
+        /**
+         * An array that holds players
+         * 
+         * @type [Player]
+         */
+        this.players = [];
+        
+>>>>>>> master
         /**
          * A table in the room
          *
@@ -188,6 +207,7 @@ export class Room {
          * @type string
          */
         this.owner = owner;
+<<<<<<< HEAD
 
         /**
          * An id of the room
@@ -644,4 +664,16 @@ Room.byId = function(id, who, decks) {
     return Room.rooms[id];
 };
 
+=======
+    }
+}
+Room.rooms = {};
+/**
+ *  Gets room by id or creates it if necessary
+ */
+Room.byId = function(id, who) {
+    Room.rooms[id] = Room.rooms[id] || new Room(who);
+    return Room.rooms[id];
+}
+>>>>>>> master
 

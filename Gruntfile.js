@@ -4,7 +4,7 @@
 
 module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-webpack');
-	grunt.loadNpmTasks('grunt-babel');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -30,7 +30,18 @@ module.exports = function (grunt) {
                     ]
                 }
             }
-		}
+		},
+        uglify: {
+            options: {
+                mangleProperties: true,
+                reserveDOMCache: true
+            },
+            munchkin: {
+                files: {
+                    'client/munchkin.min.js': ['client/munchkin.js']
+                }
+            }
+        }
     });
-	grunt.registerTask('default', ['webpack']);
+	grunt.registerTask('default', ['webpack', 'uglify']);
 };
