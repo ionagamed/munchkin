@@ -22,7 +22,7 @@ class plutonium_dragon extends Monster {
     }
 
     badThing(player, table) {
-        player.die();
+        player.die(table);
     }
     
     getAttackFor(players) {

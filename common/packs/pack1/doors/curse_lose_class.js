@@ -1,3 +1,4 @@
+curse_lose_class
 import { Card } from '../../../Card';
 import { Player } from '../../../Player';
 
@@ -16,20 +17,16 @@ class _ extends Card {
         return dest instanceof Player;
     }
     onCast(source, dest, table) {
-        var hasRa = false;
+        var hasCl = false;
         player.wielded.map (x => {
            if (Card.byId(x).type == 'race') {
                player.unwield(x, table);
-               hasRa = true;
+               hasCl = true;
            } 
         });
-        if (hasRa) {
-            for (let i of [].concat(discardedDoors).reverse()) {
-                if (Card.byId(x).type == 'race')
-                    wield(Card.byId(x), table);
-                    break;
-            }
-        }
+        // TODO: remake 
+        if (!hasCl)
+            player.level--;
     }
 }
 Card.cards[id] = new _();

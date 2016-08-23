@@ -39,7 +39,7 @@ var packs = {
             'stoned_golem',//*
             'tongue_demon',//*
             'undead_horse',//
-            'horror',
+            'horror',//
             'ancient',
             'baby',
             'enraged',
@@ -65,21 +65,21 @@ var packs = {
             'elf_2',    
             'elf_3',
             'halfling_3',
-            'king_tut',//looseall item
+            'king_tut',//
             'lame_goblin',//
-            'large_angry_chicken',
+            'large_angry_chicken',//
             'lawyers',//*
             'leperchaun',//*
             'drooling_slime',//
             'face_sucker',//
             'floating_nose',
             'flying_frogs',//
-            'gazebo',
+            'gazebo',//TODO: button off
             'curse_lose_two_cards',
             'curse_lose_class',
-            'curse_lose_race',
+            'curse_lose_race',//
             'curse_malign_mirror',
-            'truly_obnoxious_curse',
+            'truly_obnoxious_curse',//
             'curse_duck_of_doom',//
             'curse_income_tax',
             'curse_lose_big_item',

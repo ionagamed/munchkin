@@ -15,7 +15,7 @@ class pukachu extends Card {
         if (dise >= 5)
             return true;
         player.hand.map(x => {
-           unwield(x, table) 
+           unwield(x, table);
         });
     }
     

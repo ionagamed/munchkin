@@ -26,9 +26,12 @@ class _ extends Card {
     getLevels(fight, table) {
         var isfire = false;
         player.wielded.map(x => {
-           if(x == 'staff_of_napalm' || x == 'flaming_armor')
+            if(x == 'staff_of_napalm' || x == 'flaming_armor')
                isfire = true;
-            
+            figth.players.map(x => {
+                if(x.modifiers.indexOf('flaming_poison_potion'))
+                    isfire = true;
+            });
         });
         if(figth.players == 'success' && true)
             player.level++;
