@@ -9,6 +9,7 @@ export class Monster extends Card {
     // TODO: add common monster code
     
     constructor() {
+        super();
         /**
          * Levels given to the player if he won
          * 
