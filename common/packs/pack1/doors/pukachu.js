@@ -1,8 +1,9 @@
 import { Card } from '../../../Card';
+import { Monster } from "../helpers/Monster";
 
 const id = 'pukachu';
 
-class pukachu extends Card {
+class pukachu extends Monster {
     constructor() {
         super();
         this.id = id;
@@ -20,20 +21,19 @@ class pukachu extends Card {
     getAttackFor(players) {
         return 6;
     }
-    // onFightEnded(fight, table) {
-    //     if(fight.players.length == 1 && fight.players[0].modifiers.length == 0) {
-    //         var isWarrior = false;
-    //         players.map(x => {
-    //         if(x.hasClassAdvantages('warrior')) 
-    //             iswarrior = true;
-    //         if(iswarrior)
-    //             if(player.level >=6)
-    //                 player.level++;
-    //         else
-    //             if(player.level > 6)
-    //                 player.level++;
-    //         });
-    //     }        
-    // }
+    onFightEnded(fight, table) {
+        if(fight.players.length == 1 && fight.players[0].modifiers.length == 0) {
+            const player = fight.players[0].player;
+            if (player.hasClassAdvantages('warrior')) {
+                if (player.level >= 6) {
+                    player.level++;
+                }
+            } else {
+                if (player.level > 6) {
+                    player.level++;
+                }
+            }
+        }        
+    }
 }
 Card.cards[id] = new pukachu();

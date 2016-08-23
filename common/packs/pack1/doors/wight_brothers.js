@@ -10,6 +10,7 @@ class flying_frogs extends Monster {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.undead = true;
         this.levels = 2;
         this.treasure = 4;
     }
