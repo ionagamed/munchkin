@@ -2,13 +2,14 @@
  * Created by ionagamed on 8/20/16.
  */
 
-import { Card } from "../../../Card";
-import { Fight } from "../../../Fight";
+import { Card } from '../../../Card';
+import { Fight } from '../../../Fight';
 
 export class Monster extends Card {
     // TODO: add common monster code
     
     constructor() {
+        super();
         /**
          * Levels given to the player if he won
          * 

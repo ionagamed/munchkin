@@ -3,7 +3,7 @@
  */
 
 import { Card } from '../../../Card';
-import { Player } from "../../../Player";
+import { Player } from '../../../Player';
 
 const id = 'whine_at_the_gm';
 

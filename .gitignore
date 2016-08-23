@@ -4,3 +4,4 @@ bower_components
 client/munchkin.js
 client/munchkin.min.js
 dist
+.eslintrc.*

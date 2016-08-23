@@ -25,7 +25,7 @@ class squidzilla extends Card {
         players.map(x => {
             if(x.hasRaceDisadvantages('elf')) 
                 iself = true;
-        })
+        });
         if (iself)
             return 22;
         return 18;
