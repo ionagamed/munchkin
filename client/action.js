@@ -1,0 +1,7 @@
+function actionAttack() {
+
+}
+
+function actionSmivka() {
+
+}

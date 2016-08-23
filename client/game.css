@@ -1,0 +1,50 @@
+p{
+    text-align: center;
+    font-size: 40px;
+}
+
+.radius{
+    
+    border: 1px solid black; 
+    padding: 15px; 
+    border-radius: 20px 20px 20px 20px;
+}
+
+input[type="text"] {
+    position: relative;  
+    width: 37%;
+    background: #fafad2; 
+    text-align: center;
+    font-size: 40px;
+    margin: 3px;
+
+} 
+input[type="submit"] {
+    background: #ffe4b5;
+    height: 7%;
+    width: 37%;
+    cursor: pointer;
+    font-size: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}      
+
+body{ 
+    margin: 0;
+}
+
+form{
+    margin-left: 3%;
+    margin-top: 3%;
+}
+
+img {
+    width: 55%;
+    margin: 10px;
+}
+
+@font-face {
+    font-family: Pixeled; /* Гарнитура шрифта */
+    src: url(fonts/pixeled/Pixeled.ttf); /* Путь к файлу со шрифтом */
+}
