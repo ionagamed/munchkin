@@ -203,7 +203,7 @@ $(function () {
         
         $('.player .wielded .to-belt').click(e => {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
-            player.unwield(id);
+            player.unwield(id, table);
             player.belt.push(id);
             updateView();
             return false;
