@@ -1,6 +1,7 @@
 import { Card } from '../common/Card';
 import { Player } from '../common/Player';
 import { Table } from '../common/Table';
+import dice from '../common/dice.js';
 import packs from '../common/packs';
 import Random from 'random-js';
 
@@ -62,6 +63,9 @@ function sendEvent(client, event, data) {
  *              text string text of the message
  *  'resurrected'
  *      data string player who got resurrected
+ *
+ *  'died'
+ *      data string player who died
  *
  *  'lostCard'
  *      data:
@@ -397,6 +401,15 @@ Room.playerCommands['resurrect'] = (data, env) => {
         who: env.player.name
     });
     env.player.dead = false;
+};
+
+/**
+ * 'escape' command:
+ * data:
+ *  from integer id of monster from who player is escaping
+ */
+Room.playerCommands['escape'] = (data, env) => {
+    env.table.fight.monsters[data.from].onEscape(env.player, dice(), env.table);
 };
 
 /**
