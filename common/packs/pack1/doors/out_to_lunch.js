@@ -1,5 +1,5 @@
 import { Card } from '../../../Card';
-import { Figth } from '../../../Figth';
+import { Figth } from '../../../Fight';
 
 const id = 'out_to_lunch';
 
