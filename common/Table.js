@@ -1,36 +1,29 @@
 /**
  * Created by tsmish on 13/08/16.
  */
-import { Card } from './Card'
-import { Player } from './Player'
+import { Card } from './Card';
+import { Player } from './Player';
 
 export class Table {
     constructor() {
         /**
          * An array of players sitting on the table
          *
-         * @type [player]
+         * @type {[Player]}
          */
         this.players = [];
 
         /**
-         * An array of currently active cards (in the middle of table)
-         *
-         * @type [string]
-         */
-        this.activeCards = [];
-
-        /**
          * An array of discarded doors
          *
-         * @type [string]
+         * @type {[string]}
          */
         this.discardedDoors = [];
 
         /**
          * An array of discarded treasure cards
          *
-         * @type [string]
+         * @type {[string]}
          */
         this.discardedTreasure = [];
 
@@ -56,12 +49,19 @@ export class Table {
          * @type {Fight|null}
          */
         this.fight = null;
+
+        /**
+         * begin -> open -> hand -> closed -> drop
+         * 
+         * @type {string}
+         */
+        this.phase = 'begin';
     }
 
     /**
      * Move the card to the discard deck
      * 
-     * @param card
+     * @param {string} card
      */
     discard(card) {
         if (Card.byId(card).kind == 'door') {
@@ -69,6 +69,15 @@ export class Table {
         } else if (Card.byId(card).kind == 'treasure') {
             this.discardedTreasure.push(card);
         }
+    }
+
+    /**
+     * Return the player whose turn it is right now
+     * 
+     * @returns {Player}
+     */
+    currentPlayer() {
+        return this.players[this.turn];
     }
 
     /**

@@ -5,24 +5,24 @@
 var packs = {
     pack1: {
         doors: [
-            'gelatinous_octahedron',
-            'ghoulfiends',
-            'harpies',
-            'hippogriff',
-            'insurance_salesman',
-            '3872_orcs',
-            'amazon',
-            'bigfoot',
-            'bullrog',
-            'crabs',
-            'curse_lose_small_item_1',
-            'curse_lose_small_item_2',
-            'curse_lose_armor',
-            'curse_lose_footgear',
-            'curse_lose_headgear',
-            'wizard_1',
-            'curse_change_class',
-            'curse_change_race',
+            'gelatinous_octahedron',//
+            'ghoulfiends',//do not use item
+            'harpies',//
+            'hippogriff',//*
+            'insurance_salesman',//*
+            '3872_orcs',//
+            'amazon',// TODO: remake amazon
+            'bigfoot',//
+            'bullrog',//
+            'crabs',//
+            'curse_lose_small_item_1',//*
+            'curse_lose_small_item_2',//*
+            'curse_lose_armor',//
+            'curse_lose_footgear',//
+            'curse_lose_headgear',//
+            'wizard_1',//*
+            'curse_change_class',//
+            'curse_change_race',//
             'curse_change_sex',
             'curse_chicken',
             'halfling_1',
@@ -35,18 +35,18 @@ var packs = {
             'illusion',
             'mate',
             'out_to_lunch',
-            'squidzilla',
-            'stoned_golem',
-            'tongue_demon',
-            'undead_horse',
+            'squidzilla',//
+            'stoned_golem',//*
+            'tongue_demon',//*
+            'undead_horse',//
             'horror',
             'ancient',
             'baby',
             'enraged',
             'humongous',
             'intelligent',
-            'maul_rat',
-            'mr_bones',
+            'maul_rat',//
+            'mr_bones',//
             'net_troll',
             'pit_bull',
             'platycore',
@@ -55,36 +55,36 @@ var packs = {
             'cleric_3',
             'dwarf_1',
             'dwarf_2',
-            'plutonium_dragon',
-            'potted_plant',
-            'pukachu',
-            'shrieking_geek',
-            'snails_on_speed',
+            'plutonium_dragon',//
+            'potted_plant',//
+            'pukachu',//
+            'shrieking_geek',//
+            'snails_on_speed',//*
             'dwarf_3',
             'elf_1',
-            'elf_2',
+            'elf_2',    
             'elf_3',
             'halfling_3',
-            'king_tut',
-            'lame_goblin',
+            'king_tut',//looseall item
+            'lame_goblin',//
             'large_angry_chicken',
-            'lawyers',
-            'leperchaun',
-            'drooling_slime',
-            'face_sucker',
+            'lawyers',//*
+            'leperchaun',//*
+            'drooling_slime',//
+            'face_sucker',//
             'floating_nose',
-            'flying_frogs',
+            'flying_frogs',//
             'gazebo',
             'curse_lose_two_cards',
             'curse_lose_class',
             'curse_lose_race',
             'curse_malign_mirror',
             'truly_obnoxious_curse',
-            'curse_duck_of_doom',
+            'curse_duck_of_doom',//
             'curse_income_tax',
             'curse_lose_big_item',
-            'curse_lose_level_1',
-            'curse_lose_level_2',
+            'curse_lose_level_1',//
+            'curse_lose_level_2',//
             'warrior_1',
             'warrior_2',
             'warrior_3',
@@ -96,7 +96,7 @@ var packs = {
             'wandering_monster_2',
             'wandering_monster_3',
             'wannabe_vampire',
-            'wight_brothers',
+            'wight_brothers',//
             'cheat',
             'divine_intervention',
             'half-breed_2'
@@ -111,7 +111,7 @@ var packs = {
             'staff_of_napalm',
             'stepladder',
             'swiss_army_polearm',
-            'doppelganger',
+            'doppleganger',
             'flaming_armor',
             'gentlemans_club',
             'hammer_of_kneecapping',

@@ -3,10 +3,12 @@
  */
 
 import { Card } from '../../../Card';
+import { Player } from '../../../Player';
+import { Curse } from '../helpers/Curse';
 
 const id = 'curse_lose_armor';
 
-class CurseLoseArmor extends Card {
+class CurseLoseArmor extends Curse {
     constructor() {
         super();
         this.id = id;
@@ -18,12 +20,11 @@ class CurseLoseArmor extends Card {
     onCast(source, dest, table) {
         for (let i of dest.wielded) {
             if (Card.byId(i).type === 'armor') {
-                dest.unwield(i);
-                Card.byId(i).onUnwielded(dest, table);
-                Card.byId(i).onDisposed(table);
-                table.dispose(i);
+                dest.unwield(i, table);
+                table.discard(i);
             }
         }
+        return true;
     }
 }
 Card.cards[id] = new CurseLoseArmor();
