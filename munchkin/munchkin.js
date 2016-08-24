@@ -72,7 +72,6 @@ $(function () {
                 console.log(msg);
                 console.log(cards[0]);
                 console.log(Card.byId(cards[0]));
-                //player.wild(cards[0], table);
             }
         };
     }

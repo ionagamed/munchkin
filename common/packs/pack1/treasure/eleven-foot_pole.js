@@ -6,7 +6,7 @@
 import { Card } from '../../../Card';
 import { Item } from '../helpers/Item';
 
-const id = 'cheese_grater_of_piece';
+const id = 'eleven-foot_pole';
 
 class _ extends Item {
     constructor() {

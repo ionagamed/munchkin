@@ -1,5 +1,6 @@
-import * as global from './munchkin.js'
+import * as global from './munchkin.js';
 import { Card } from '../common/Card';
+import { Player } from '../common/Player';
 
 export function over(obj)
 {
@@ -20,8 +21,9 @@ export function out(obj)
 }
 export function down(obj)
 {
-    obj = Card.byId(obj);
-    if (obj.wieldable) {
-        console.log('1ol');
+    var oo = Card.byId(obj.key.substr(6));  
+    if (oo.canBeWielded(global.player, global.table)){
+        global.player.wield(obj.key.substr(6), global.table);
+        console.log(global.player);
     }
 }
