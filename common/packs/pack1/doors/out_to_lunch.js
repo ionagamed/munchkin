@@ -12,7 +12,7 @@ class out_to_lunch extends Card {
         this.type = 'out_to_lunch';
     }
     
-    Figth.monsters.map( x => {
+    Fight.monsters.map( x => {
         table.discard(x.monster); 
     });
     
