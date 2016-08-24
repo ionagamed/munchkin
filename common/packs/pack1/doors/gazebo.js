@@ -1,8 +1,9 @@
 import { Card } from '../../../Card';
+import { Monster } from '../helpers/Monster';
 
 const id = 'gazebo';
 
-class _ extends Card {
+class _ extends Monster {
     constructor() {
         super();
         this.id = id;
@@ -12,10 +13,8 @@ class _ extends Card {
         this.treasure = 2;
     }
     
-    onEscape(player, dice, table) {
-        if (dise >= 5)
-            return true;
-        player.level -= 3;
+    badThing(player, table) {
+        player.decreaseLevel(3);
     }
     
     getAttackFor(players) {
@@ -23,8 +22,8 @@ class _ extends Card {
     }
     
     onFightEnded(fight, table) {
-        if (fight.players.length == 1) {
-            conole.log('gazebo debag');
+        if (fight.players.length != 1) {
+            console.log('gazebo debug');
             throw new Exception();
         }
     }

@@ -1,10 +1,9 @@
-curse_lose_class
 import { Card } from '../../../Card';
-import { Player } from '../../../Player';
+import { Curse } from '../helpers/Curse';
 
 const id = 'curse_change_race';
 
-class _ extends Card {
+class _ extends Curse {
     constructor() {
         super();
         this.id = id;
@@ -13,20 +12,17 @@ class _ extends Card {
         this.type = 'curse';
         this.castable = true;
     }
-    canBeCast(source, dest, table) {
-        return dest instanceof Player;
-    }
     onCast(source, dest, table) {
         var hasCl = false;
-        player.wielded.map (x => {
-           if (Card.byId(x).type == 'race') {
-               player.unwield(x, table);
-               hasCl = true;
-           } 
+        dest.wielded.map (x => {
+            if (Card.byId(x).type == 'race') {
+                dest.unwield(x, table);
+                hasCl = true;
+            } 
         });
         // TODO: remake 
         if (!hasCl)
-            player.level--;
+            dest.decreaseLevel(1);
     }
 }
 Card.cards[id] = new _();

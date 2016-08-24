@@ -3,7 +3,7 @@
  */
 
 import { Card } from '../../../Card';
-import { Class } from "../helpers/Class";
+import { Class } from '../helpers/Class';
 
 const id = 'wizard';
 
@@ -15,22 +15,6 @@ class Wizard extends Class {
         this.kind = 'door';
         this.type = 'class';
         this.wieldable = true;
-    }
-    
-    canBeWielded(player, table) {
-        if (player.hasCardWielded('super_munchkin')) {
-            return player.cardsOfTypeWielded('class') < 2;
-        } else {
-            return player.cardsOfTypeWielded('class') < 1;
-        }
-    }
-    
-    canBeHeld(player, table) {
-        if (player.hasCardWielded('super_munchkin')) {
-            return player.cardsOfTypeWielded('class') <= 2;
-        } else {
-            return player.cardsOfTypeWielded('class') <= 1;
-        }
     }
 }
 Card.cards[id + '_1'] = new Wizard();
