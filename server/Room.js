@@ -23,6 +23,12 @@ function sendEvent(client, event, data) {
     }));
 }
 /**
+ * CardPos type
+ *  data:
+ *      place 'hand'|'belt'|'wielded'
+ *      pos integer position
+ */
+/**
  * Events:
  *  'room'
  *      data room filtered room
