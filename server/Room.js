@@ -373,13 +373,27 @@ Room.clientCommands['start'] = (data, env) => {
     }
 };
 
+function sanitizePlayer(player) {
+    player.hand = player.hand.map(cardId => {
+        return Card.byId(cardId).kind;
+    });
+    return player;
+}
 /**
  * 'roomRequest' command:
- * forces server to send table in the room
+ * forces server to send room
  */
 Room.clientCommands['roomRequest'] = (data, env) => {
-    //TODO: remove hands from response
-    sendEvent(env.client, 'room', {owner: env.room.owner, table: env.table});
+    var sanitizedTable = {};
+    Object.assign(sanitizedTable, env.table);
+    sanitizedTable.players = sanitizedTable.players.map(player => {
+        if(env.player && player.name == env.player.name) return player;
+        return sanitizePlayer(player);
+    });
+    sendEvent(env.client, 'room', {
+        owner: env.room.owner,
+        table: sanitizedTable
+    });
 };
 
 /**
