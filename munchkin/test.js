@@ -2,12 +2,12 @@
  * Created by ionagamed on 8/14/16.
  */
 
-import { Player } from '../common/Player';
-import { Table } from '../common/Table';
-import { Card } from '../common/Card';
-import { Fight } from '../common/Fight';
+import { Player } from '../logic/Player';
+import { Table } from '../logic/Table';
+import { Card } from '../logic/Card';
+import { Fight } from '../logic/Fight';
 
-import packs from '../common/packs.js';
+import packs from '../logic/packs.js';
 
 function idToInt(id) {
     if (Card.byId(id).kind == 'door') {
@@ -245,10 +245,23 @@ $(function () {
     });
     
     $('.connectButton').click(e => {
-        document.ws = new WebSocket('ws://' + $('#ip').val() + '/?username=' + $('#username').val() + '&room=abacaba');
-        document.ws.onmessage = function (data) {console.log(data.data);};
+        document.ws = new WebSocket('ws://' + $('#ip').val() + '/?userName=' + $('#username').val() + '&room=abacaba');
+        document.ws.onmessage = function (data) {
+            const d = JSON.parse(data.data);
+            if (d.event == 'gotCards') {
+                player.hand = player.hand.concat(d.data.cards);
+                console.log(d);
+            }
+        };
         document.ws.onopen = function () {
             document.ws.send(JSON.stringify({cmd: 'play'}));
+            setTimeout(() => {
+                document.ws.send(JSON.stringify({cmd: 'start'}));
+                setTimeout(() => {
+                    document.ws.send(JSON.stringify({cmd: 'resurrect'}));
+                    setTimeout(updateView, 1000);
+                }, 1000);
+            }, 1000);
         };
     });
     

@@ -1,8 +1,8 @@
-import { Card } from '../common/Card';
-import { Player } from '../common/Player';
-import { Table } from '../common/Table';
-import dice from '../common/dice.js';
-import packs from '../common/packs';
+import { Card } from '../logic/Card';
+import { Player } from '../logic/Player';
+import { Table } from '../logic/Table';
+import dice from '../logic/dice.js';
+import packs from '../logic/packs';
 import Random from 'random-js';
 
 const MAX_PLAYERS = 6;

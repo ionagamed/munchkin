@@ -1,6 +1,6 @@
 import * as global from './munchkin.js';
-import { Card } from '../common/Card';
-import { Player } from '../common/Player';
+import { Card } from '../logic/Card';
+import { Player } from '../logic/Player';
 
 export function over(obj)
 {

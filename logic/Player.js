@@ -2,7 +2,8 @@
  * Created by ionagamed on 8/11/16.
  */
 
-import { Card } from './Card';    
+import { Card } from './Card';
+import { Monster } from './packs/pack1/helpers/Monster';    
     
 export class Player {
     constructor(name) {
@@ -122,7 +123,7 @@ export class Player {
         var ret = this.level;
         this.wielded.map(x => {
             const c = Card.byId(x);
-            if (c.getAttackFor)
+            if (c.getAttackFor && !(c instanceof Monster))
                 ret += c.getAttackFor(this);
         });
         return ret;
