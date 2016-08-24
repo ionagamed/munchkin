@@ -1,11 +1,40 @@
 <html>
 <head>
-  <title>Munchkin</title>
+    <meta charset="utf-8">
+    <!--link href="https://fonts.googleapis.com/css?family=Marck+Script" rel="stylesheet"--> 
+    <title>Манчкин</title>    
+    <link rel="stylesheet" href="game.css">
 </head>
+    
 <body>
-<button id='escape'>escape</button>
-<script src='/lib/jquery/dist/jquery.min.js'></script>
-<script src='/lib/phaser/build/phaser.min.js'></script>
-<script src='munchkin.js'></script>
+    <!--<script src='/lib/jquery/dist/jquery.min.js'></script>-->
+    <script src='phaser.js'></script>
+    <script src='action.js'></script>
+    <script src='load.js'></script>
+    <script src='events.js'></script>
+    <script src='munchkin.js'></script>
+    <script>
+        var game = new Phaser.Game('100', '100', Phaser.AUTO, '', { preload: preload, create: create, update: update});
+        var ccount = 14, cards = [], openChat, closeChat;
+        var paper, keyboard, scale, down_lower, upper_lower;
+        var level, power, antipower, monster, cobble, grass, knight;
+        var buttonAttack, buttonSmivka;
+        function preload() {
+            load();
+        }
+        
+        function create() {
+            create_lower();
+            create_info();
+            create_cards();
+            create_chat();
+            create_buttons();
+        }
+        
+        function update() {
+        }
+        
+    </script>
+    
 </body>
 </html>
