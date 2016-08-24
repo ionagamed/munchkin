@@ -69,8 +69,8 @@ export function create_info() {
 }
 
 export function create_cards() {
-	for (var i = 0; i < global.ccount; i++) {
-        global.cards[i] = global.game.add.image(0, 0, 'doors'+i);
+	for (var i = 0; i < global.player.hand.length; i++) {
+        global.cards[i] = global.game.add.image(0, 0, global.player.hand[i]);//'doors'+i);
         global.cards[i].anchor.setTo(0.5, 0.5);
         global.cards[i].height = global.game.height * 0.25;
         global.cards[i].width =global.cards[i].height /1028*661;

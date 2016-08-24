@@ -17,9 +17,9 @@ import { load, create_lower, create_info, create_cards, create_buttons } from '.
 export var game,
     ccount = 14, cards = [], openChat, closeChat,
     paper, keyboard, scale, down_lower, upper_lower,
-    level, power, antipower, monster, cobble, grass, knight,
+    level={}, power, antipower, monster, cobble, grass, knight,
     buttonAttack, buttonSmivka,
-    table = new Table();
+    player = new Player();
 
 $(function () {
     game = new Phaser.Game('100', '100', Phaser.AUTO, '', {
@@ -38,6 +38,23 @@ $(function () {
                 game.load.image('pack1_treasure_' + packs.pack1.treasure[i], 'packs/pack1/img/treasure-' + i + '.png');
         }
         load();
+        document.ws = new WebSocket('ws://localhost:3031/?userName=DAr&room=Kek');
+        document.ws.onmessage = function(data){
+            const msg = JSON.parse(data.data);
+            if (msg.event == "gotCards") {
+                player.hand = player.hand.concat(msg.data.cards);
+                console.log(player);
+            }
+        };
+        document.ws.onopen = function(){
+            document.ws.send(JSON.stringify({cmd: 'play'}));
+            setTimeout(() => {
+                document.ws.send(JSON.stringify({cmd: 'start'}));
+                setTimeout(() => {
+                    document.ws.send(JSON.stringify({cmd: 'resurrect'}));
+                }, 1000);
+            }, 1000);
+        }
     }
     
     function create() {
@@ -45,9 +62,17 @@ $(function () {
         create_info();
         create_cards();
         create_buttons();
+        level.level = player.level;
     }
     
     function update() {
-       
+       //create_cards();
+       document.ws.onmessage = function(data){
+            const msg = JSON.parse(data.data);
+            if (msg.event == "gotCards") {
+                player.hand = player.hand.concat(msg.data.cards);
+                console.log(player);
+            }
+        };
     }
 });
