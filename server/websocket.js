@@ -3,7 +3,7 @@ import { Room } from './Room';
 import url from 'url';
 
 export var wss = new WebSocketServer({
-    port: 3031
+    port: process.env.WS_PORT || 3031
 });
 /**
  * connection init:
