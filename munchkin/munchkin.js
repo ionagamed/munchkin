@@ -17,7 +17,7 @@ import { load, create_lower, create_info, create_cards, create_buttons } from '.
 export var game,
     ccount = 14, cards = [], openChat, closeChat,
     paper, keyboard, scale, down_lower, upper_lower,
-    level, power, antipower, monster, cobble, grass, knight,
+    level={}, power, antipower, monster, cobble, grass, knight,
     buttonAttack, buttonSmivka,
     player = new Player();
 
@@ -62,9 +62,10 @@ $(function () {
         create_info();
         create_cards();
         create_buttons();
+        level.level = player.level;
     }
     
     function update() {
-       
+       //create_cards();
     }
 });
