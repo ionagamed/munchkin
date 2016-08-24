@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "grunt",
-    "run": "node_modules/babel-cli/bin/babel-node.js server/index.js"
+    "start": "node_modules/babel-cli/bin/babel-node.js server/index.js"
   },
   "repository": {
     "type": "git",
