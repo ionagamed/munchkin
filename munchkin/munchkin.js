@@ -37,7 +37,7 @@ $(function () {
             if (packs.pack1.treasure.hasOwnProperty(i))
                 game.load.image('pack1_treasure_' + packs.pack1.treasure[i], 'packs/pack1/img/treasure-' + i + '.png');
         }
-        // load();
+        load();
     }
     
     function create() {
