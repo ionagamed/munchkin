@@ -1,10 +1,11 @@
 
 import { Card } from '../../../Card';
 import { Player } from '../../../Player';
+import { Curse } from '../helpers/Curse';
 
 const id = 'truly_obnoxious_curse';
 
-class _ extends Card {
+class _ extends Curse {
     constructor() {
         super();
         this.id = id;
@@ -13,15 +14,13 @@ class _ extends Card {
         this.type = 'curse';
         this.castable = true;
     }
-    canBeCast(source, dest, table) {
-        return dest instanceof Player;
-    }
     onCast(source, dest, table) {
-        var m = 0, max = 0;
-        dest.wielded.map (x => {
+        var m = '', max = 0;
+        dest.wielded.map(x => {
             if (Card.byId(x).type == 'modifier') {
-                if (Card.byId(x).getAttackFor(player) > max) {
-                    max = getAttackFor(player);
+                const atk = Card.byId(x).getAttackFor(dest);
+                if (atk > max) {
+                    max = atk;
                     m = x;
                 }
             }

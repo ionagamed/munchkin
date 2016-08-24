@@ -14,11 +14,12 @@ class flying_frogs extends Monster {
     }
     
     badThing(player, table) {
-        player.level--;
+        player.decreaseLevel(1);
         player.wielded.map(x => {
-            if (Card.byId(x).type == 'headgear' || i == 'curse_chicken')
+            if (Card.byId(x).type == 'headgear' || x == 'curse_chicken') {
                 player.unwield(x, table);
                 table.discard(x);
+            }
         });
     }
     getAttackFor(players) {

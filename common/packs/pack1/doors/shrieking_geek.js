@@ -1,5 +1,5 @@
 import { Card } from '../../../Card';
-import { Monster } from "../helpers/Monster";
+import { Monster } from '../helpers/Monster';
 
 const id = 'shrieking_geek';
 
@@ -14,8 +14,8 @@ class shrieking_geek extends Monster {
     
     badThing(player, table) {
         player.wielded.map (x => {
-           if (Card.byId(x).type == 'class' || Card.byId(x).type == 'race')
-               player.unwield(x, table);
+            if (Card.byId(x).type == 'class' || Card.byId(x).type == 'race')
+                player.unwield(x, table);
         });
     }
     

@@ -215,6 +215,7 @@ Card.cards = {};
  * @param id
  * @returns {Card}
  */
+const defaultCard = new Card();
 Card.byId = function(id) {
-    return Card.cards[id];
+    return Card.cards[id] || defaultCard;
 };

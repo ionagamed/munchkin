@@ -244,5 +244,13 @@ $(function () {
         }
     });
     
+    $('.connectButton').click(e => {
+        document.ws = new WebSocket('ws://' + $('#ip').val() + '/?username=' + $('#username').val() + '&room=abacaba');
+        document.ws.onmessage = function (data) {console.log(data.data);};
+        document.ws.onopen = function () {
+            document.ws.send(JSON.stringify({cmd: 'play'}));
+        };
+    });
+    
     updateView();
 });

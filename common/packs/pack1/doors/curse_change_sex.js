@@ -1,9 +1,9 @@
 import { Card } from '../../../Card';
-import { Player } from '../../../Player';
+import { Curse } from '../helpers/Curse';
 
 const id = 'curse_change_sex';
 
-class curse_change_sex extends Card {
+class curse_change_sex extends Curse {
     constructor() {
         super();
         this.id = id;
@@ -12,16 +12,13 @@ class curse_change_sex extends Card {
         this.type = 'curse';
         this.castable = true;
     }
-    canBeCast(source, dest, table) {
-        return dest instanceof Player;
-    }
     onCast(source, dest, table) {
-        if (player.sex == 'male')
-            player.sex = 'female';
+        if (dest.sex == 'male')
+            dest.sex = 'female';
         else
-            player.sex = 'male';
+            dest.sex = 'male';
     }
-    getAttackFor() {
+    getAttackFor(x) {
         return -5;
     }
     //TODO:

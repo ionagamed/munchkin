@@ -1,9 +1,9 @@
 import { Card } from '../../../Card';
-import { Player } from '../../../Player';
+import { Curse } from '../helpers/Curse';
 
 const id = 'curse_change_race';
 
-class _ extends Card {
+class _ extends Curse {
     constructor() {
         super();
         this.id = id;
@@ -12,22 +12,20 @@ class _ extends Card {
         this.type = 'curse';
         this.castable = true;
     }
-    canBeCast(source, dest, table) {
-        return dest instanceof Player;
-    }
     onCast(source, dest, table) {
         var hasRa = false;
-        player.wielded.map (x => {
-           if (Card.byId(x).type == 'race') {
-               player.unwield(x, table);
-               hasRa = true;
-           } 
+        dest.wielded.map(x => {
+            if (Card.byId(x).type == 'race') {
+                dest.unwield(x, table);
+                hasRa = true;
+            } 
         });
         if (hasRa) {
-            for (let i of [].concat(discardedDoors).reverse()) {
-                if (Card.byId(x).type == 'race')
-                    wield(Card.byId(x), table);
+            for (let i of [].concat(table.discardedDoors).reverse()) {
+                if (Card.byId(i).type == 'race') {
+                    dest.wield(i, table);
                     break;
+                }
             }
         }
     }

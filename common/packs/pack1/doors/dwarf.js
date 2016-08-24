@@ -1,5 +1,5 @@
 import { Card } from '../../../Card';
-import { Class } from "../helpers/Class";
+import { Race } from '../helpers/Race';
 
 const id = 'dwarf';
 
