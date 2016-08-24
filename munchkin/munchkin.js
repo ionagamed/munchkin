@@ -35,15 +35,15 @@ $(function () {
             if (packs.pack1.treasure.hasOwnProperty(i))
                 game.load.image('pack1_treasure_' + packs.pack1.treasure[i], 'packs/pack1/img/treasure-' + i + '.png');
         }
-        load();
+        // load();
     }
     
     function create() {
-        create_lower();
-        create_info();
-        create_cards();
-        create_chat();
-        create_buttons();
+        // create_lower();
+        // create_info();
+        // create_cards();
+        // create_chat();
+        // create_buttons();
         
     }
     
