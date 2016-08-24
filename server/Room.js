@@ -119,19 +119,6 @@ function setCommandSet(ws, set, env) {
 }
 
 /**
- * Helper to copy objects
- * Currently used only to copy command sets
- *
- * @param from object
- * @param to object
- */
-function copy(from, to) {
-    for (var key in from) {
-        to[key] = from[key];
-    }
-}
-
-/**
  * Helper for validating phase
  *
  * @param player Player
@@ -401,7 +388,7 @@ Room.clientCommands['roomRequest'] = (data, env) => {
  * @type {function(object, object)}
  */
 Room.playerCommands = {};
-copy(Room.clientCommands, Room.playerCommands);
+Object.assign(Room.playerCommands, Room.clientCommands);
 //TODO: move some code into common
 /**
  * 'spectate' command:
@@ -536,7 +523,7 @@ Room.playerCommands['lootTheRoom'] = (data, env) => {
  */
 
 Room.playerCommands['wieldCard'] = (data, env) => {
-    const cardId = data.card
+    const cardId = data.card;
     const card = Card.byId(cardId);
     if(phase(env.player, env.table, 'hand') ||
        phase(env.player, env.table, 'drop')) return;
@@ -560,8 +547,7 @@ Room.playerCommands['wieldCard'] = (data, env) => {
  *  unwield the card
  */
 Room.playerCommands['unwieldCard'] = (data, env) => {
-    const cardId = data.card
-    const card = Card.byId(cardId);
+    const cardId = data.card;
     if(phase(env.player, env.table, 'hand') ||
        phase(env.player, env.table, 'drop')) return;
     if(env.player.hand.indexOf(cardId)) {
@@ -582,7 +568,7 @@ Room.playerCommands['unwieldCard'] = (data, env) => {
  * use card
  */
 Room.playerCommands['useCard'] = (data, env) => {
-    const cardId = data.card
+    const cardId = data.card;
     const card = Card.byId(cardId);
     if(!phase(env.player, env.table, 'open')) return;
     if(!card.canBeUsed(env.player, env.table)) return;
@@ -613,7 +599,7 @@ Room.playerCommands['useCard'] = (data, env) => {
  */
 
 Room.playerCommands['castCard'] = (data, env) => {
-    const cardId = data.card
+    const cardId = data.card;
     const card = Card.byId(cardId);
     var on = env.table.players.find(player => player.name == data.on);
     if(!phase(env.player, env.table, 'open')) return;
@@ -641,7 +627,7 @@ Room.playerCommands['castCard'] = (data, env) => {
  *      card string card id
  */
 Room.playerCommands['moveToBelt'] = (data, env) => {
-    var card = Card.byId(data.card);
+    const cardId = data.card;
     if(remove_first(cardId, env.player.hand)) {
         env.player.belt.push(cardId);
         env.room.dispatch('movedToBelt', {
@@ -708,8 +694,8 @@ Room.playerCommands['getCardFromPlayer'] = (data, env) => {
  */
 Room.playerCommands['dropPlayerCard'] = (data, env) => {
     //TODO: add security check
-    var card = getCardFromPlayer(env.room, env.table.players.find(player => player.name == data.who), data.cardPos);
-    card.onDiscarded(env.table);
+    var cardId = getCardFromPlayer(env.room, env.table.players.find(player => player.name == data.who), data.cardPos);
+    Card.byId(cardId).onDiscarded(env.table);
     env.room.dispatch('discardedCard', cardId);
     env.table.discard(cardId);
 };
@@ -721,7 +707,7 @@ Room.playerCommands['dropPlayerCard'] = (data, env) => {
  * @type {function(object, object)}
  */
 Room.spectatorCommands = {};
-copy(Room.clientCommands, Room.spectatorCommands);
+Object.assign(Room.spectatorCommands, Room.clientCommands);
 Room.spectatorCommands['play'] = (data, env) => {
     sendEvent(env.client, 'playStatus', env.room.play(env.client));
 };
