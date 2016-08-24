@@ -330,7 +330,7 @@ Room.giveCards = function(source, to, cardIds, room, method) {
                 return cardId;
         }
     });
-    to.hand.concat(cards);
+    to.hand = to.hand.concat(cards);
     switch (method) {
         case 'open':
             room.dispatch('gotCards', {
