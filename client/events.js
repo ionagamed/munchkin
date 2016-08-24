@@ -3,6 +3,13 @@ function over(obj)
     obj.width *= 2;
     obj.height *= 2;
     obj.y = game.height - obj.height / 2;
+    for (var i = obj.iter + 1; i < ccount; i++) {
+        cards[i].sendToBack();
+    }
+    down_lower.sendToBack();
+    for (var i = 0; i <= obj.iter; i++) {
+        cards[i].bringToTop();
+    }
 }
 function out(obj)
 {

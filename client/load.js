@@ -52,8 +52,8 @@ function create_info() {
     power.x = power.x + knight.width/5 + 30;
     cobble = game.add.image(game.width * scale, 400, 'cobble');
     cobble.anchor.setTo(0.5, 0.5);
-    cobble.width = cobble.width * 0.22;
-    cobble.height = cobble.width * 3 / 5;
+    cobble.width = grass.width;
+    cobble.height = grass.height;
     cobble.y = grass.y + grass.height * 1.1;
     monster = game.add.image(game.width*scale, 400, 'monster');
     monster.height = cobble.height - 30;
@@ -98,14 +98,11 @@ function create_chat() {
 
 function create_buttons() {
     buttonAttack = game.add.button(0, 0, 'knife', actionAttack);
-    buttonAttack.visible = true;
+    buttonAttack.visible = false;
     buttonAttack.anchor.setTo(0.5, 0.5);
-    buttonAttack.y = game.width - upper_lower.width;
-    buttonAttack.width = cobble.width / 2;
-    buttonAttack.height = buttonAttack.width;
 
     buttonSmivka = game.add.button(0, 0, 'nosok', actionSmivka);
-    buttonSmivka.visible = true;
+    buttonSmivka.visible = false;
     buttonSmivka.anchor.setTo(0.5, 0.5);
 
 }
