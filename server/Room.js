@@ -714,11 +714,28 @@ Room.playerCommands['getCardFromPlayer'] = (data, env) => {
  */
 Room.playerCommands['dropPlayerCard'] = (data, env) => {
     //TODO: add security check
-    var cardId = getCardFromPlayer(env.room, env.table.players.find(player => player.name == data.who), data.cardPos);
+    const cardId = getCardFromPlayer(env.room, env.table.players.find(player => player.name == data.who), data.cardPos);
     Card.byId(cardId).onDiscarded(env.table);
     env.room.dispatch('discardedCard', cardId);
     env.table.discard(cardId);
 };
+
+/**
+ *  'discard' command:
+ *  data:
+ *      card string id of the card
+ */
+Room.playerCommands['discard'] = (data, env) => {
+    const cardId = data.card;
+    env.room.dispatch('lostCard', {
+        who: env.player.name,
+        card: cardId
+    });
+    env.player.hand = env.player.hand.filter(card => card != cardId);
+    Card.byId(cardId).onDiscarded(env.table);
+    env.room.dispatch('discardedCard', cardId);
+    env.table.discard(cardId);
+}
 
 
 /**
