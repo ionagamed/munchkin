@@ -30,7 +30,7 @@ export function create_lower() {
 export function create_info() {
 	global.level = global.game.add.text(global.game.width * global.scale, 30, "", {font: "Pixeled", fontSize: global.game.height*0.04+"px", fill: "#6B534B"});
     global.level.anchor.setTo(0.5, 0.5);
-    global.level.level = 0;
+    global.level.level = global.player.level;
     global.level.text = "Your Level = " + global.level.level;
     global.grass = global.game.add.image(global.game.width * global.scale, 400,'grass');
     global.grass.width = global.game.width * 0.2;
@@ -44,7 +44,7 @@ export function create_info() {
     global.knight.y = 65 + global.knight.height/2;
     global.knight.x = global.knight.x - global.knight.width/5;
     global.power = global.game.add.text(global.game.width * global.scale, 400, '', {font: "Pixeled", fontSize: global.game.height*0.11+"px", fill: "#FF6836"});   
-    global.power.power = 99;
+    global.power.power = global.player.getAttack();;
     global.power.text =  global.power.power;
     global.power.y = global.grass.y;
     global.power.anchor.setTo(0.5, 0.5);
@@ -70,7 +70,7 @@ export function create_info() {
 
 export function create_cards() {
 	for (var i = 0; i < global.player.hand.length; i++) {
-        global.cards[i] = global.game.add.image(0, 0, global.player.hand[i]);//'doors'+i);
+        global.cards[i] = global.game.add.image(0, 0, 'pack1_' +global.player.hand[i]);//'doors'+i);
         global.cards[i].anchor.setTo(0.5, 0.5);
         global.cards[i].height = global.game.height * 0.25;
         global.cards[i].width =global.cards[i].height /1028*661;

@@ -17,9 +17,9 @@ import { load, create_lower, create_info, create_cards, create_buttons } from '.
 export var game,
     ccount = 14, cards = [], openChat, closeChat,
     paper, keyboard, scale, down_lower, upper_lower,
-    level={}, power, antipower, monster, cobble, grass, knight,
+    level = {}, power, antipower, monster, cobble, grass, knight,
     buttonAttack, buttonSmivka,
-    player = new Player();
+    player = new Player(), table = new Table();
 
 $(function () {
     game = new Phaser.Game('100', '100', Phaser.AUTO, '', {
@@ -31,21 +31,21 @@ $(function () {
     function preload() {
         for (let i in packs.pack1.doors) {
             if (packs.pack1.doors.hasOwnProperty(i))
-                game.load.image('pack1_door_' + packs.pack1.doors[i], 'packs/pack1/img/doors-' + i + '.png');
+                game.load.image('pack1_' + packs.pack1.doors[i], 'packs/pack1/img/doors-' + i + '.png');
         }
         for (let i in packs.pack1.treasure) {
             if (packs.pack1.treasure.hasOwnProperty(i))
-                game.load.image('pack1_treasure_' + packs.pack1.treasure[i], 'packs/pack1/img/treasure-' + i + '.png');
+                game.load.image('pack1_' + packs.pack1.treasure[i], 'packs/pack1/img/treasure-' + i + '.png');
         }
         load();
         document.ws = new WebSocket('ws://localhost:3031/?userName=DAr&room=Kek');
-        document.ws.onmessage = function(data){
+        /*document.ws.onmessage = function(data){
             const msg = JSON.parse(data.data);
             if (msg.event == "gotCards") {
                 player.hand = player.hand.concat(msg.data.cards);
                 console.log(player);
             }
-        };
+        };*/
         document.ws.onopen = function(){
             document.ws.send(JSON.stringify({cmd: 'play'}));
             setTimeout(() => {
@@ -62,16 +62,21 @@ $(function () {
         create_info();
         create_cards();
         create_buttons();
-        level.level = player.level;
     }
     
     function update() {
-       //create_cards();
-       document.ws.onmessage = function(data){
+        level.text = "Your Level = ";
+        document.ws.onmessage = function(data){
             const msg = JSON.parse(data.data);
             if (msg.event == "gotCards") {
                 player.hand = player.hand.concat(msg.data.cards);
+                create_cards();
+                level.text = "Your Level = " + player.level;
                 console.log(player);
+                console.log(msg);
+                console.log(cards[0]);
+                Card.byId(cards[0]);
+                player.wild(cards[0], table);
             }
         };
     }
