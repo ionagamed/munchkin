@@ -3,7 +3,7 @@ import { Monster } from '../helpers/Monster';
 
 const id = 'amazon';
 
-class amazon extends Monster {
+class _ extends Monster {
     constructor() {
         super();
         this.id = id;
@@ -38,4 +38,4 @@ class amazon extends Monster {
         return 8;
     }
 }
-Card.cards[id] = new amazon();
+Card.cards[id] = new _();

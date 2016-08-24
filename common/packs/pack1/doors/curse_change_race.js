@@ -3,7 +3,7 @@ import { Player } from '../../../Player';
 
 const id = 'curse_change_race';
 
-class curse_change_race extends Card {
+class _ extends Card {
     constructor() {
         super();
         this.id = id;
@@ -32,4 +32,4 @@ class curse_change_race extends Card {
         }
     }
 }
-Card.cards[id] = new curse_change_race();
+Card.cards[id] = new _();

@@ -21,7 +21,11 @@ class squidzilla extends Monster {
     }
     
     badThing(player, table) {
+<<<<<<< HEAD
+        player.die();
+=======
         player.die(table);
+>>>>>>> 17531423901606a52d139a865516c0e228cf7e05
     }
     
     getAttackFor(players) {

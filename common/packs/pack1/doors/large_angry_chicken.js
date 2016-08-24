@@ -19,6 +19,7 @@ class _ extends Card {
     getAttackFor(players) {
         return 2;
     }
+    
     onFightEnded(fight, table) {
         fight.players.map(x => {
             if (x.state == 'success') {
