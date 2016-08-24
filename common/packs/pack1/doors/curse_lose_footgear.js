@@ -1,5 +1,5 @@
 import { Card } from '../../../Card';
-import { Curse } from "../helpers/Curse";
+import { Curse } from '../helpers/Curse';
 
 const id = 'curse_lose_footgear';
 
@@ -15,7 +15,7 @@ class CurseLoseFootgear extends Curse {
     onCast(source, dest, table) {
         for (let i of dest.wielded) {
             if (Card.byId(i).type == 'footgear') {
-                dest.unwield(i);
+                dest.unwield(i, table);
                 table.discard(i);
             }
         }

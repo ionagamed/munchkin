@@ -1,41 +1,39 @@
 import { Card } from '../../../Card';
-import dice from '../../../dice';
+import { Monster } from "../helpers/Monster";
 
 const id = 'horror';
 
-class horror extends Card {
+class horror extends Monster {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.treasure = 4;
     }
     
-    onEscape(player, _dice, table) {
-        if (dice >= 5)
-            return true;
-        player.wielded.map (x => {
-           if (Card.byId(x).type == 'class')
-               if (x == 'wizard') {
-                   unwield(Card.byId(x), table);
-                   return false;
-               }
-        // TODO: death;
+    badThing(player, table) {
+        if (player.hasClassAdvantages('wizard')) {
+            player.wielded.map(x => {
+                if (Card.byId(x).id == 'wizard') {
+                    player.unwield(x, table);
+                }
+            });
+        } else {
+            player.die(table);
+        }
     }
+    
     getAttackFor(players) {
-        var iswarrior = false;
+        var isWarrior = false;
         players.map(x => {
             if(x.hasRaceDisadvantages('warrior')) 
-                iswarrior = true;
-        })
-        if (iswarrior)
+                isWarrior = true;
+        });
+        if (isWarrior)
             return 18;
         return 14;
-    }
-    
-    get treasureCount() {
-        return 4;
     }
 }
 Card.cards[id] = new horror();

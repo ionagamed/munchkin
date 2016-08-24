@@ -16,21 +16,18 @@ class ghoulfiends extends Card {
         this.treasure = 2;
     }
     
-    onEscape(player, dice, table) {
-        if (dice >= 5) {
-            return true;
-        } else {
-            /*
-             TODO: do not use item
-             */
-            var m = 50;
-            table.players.map(x => {
-                if (x.level < m) 
-                    m = x.level;
-            });
-            if(m != 50)
-                player.level = m;
-        }
+    /*
+     TODO: do not use item
+     */
+    
+    badThing(player, table) {
+        var m = 50;
+        table.players.map(x => {
+            if (x.level < m)
+                m = x.level;
+        });
+        if(m != 50)
+            player.level = m;
     }
     
     getAttackFor(players) {

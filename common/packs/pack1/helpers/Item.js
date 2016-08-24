@@ -52,8 +52,7 @@ export class Item extends Card {
         return player.cardsOfTypeWielded('footgear') <= 1;
     }
     canBeHeld(player, table) {
-        return super.canBeHeld(player, table) &&
-            (this.big ? this.__big_canBeHeld(player, table) : true) &&
+        return (this.big ? this.__big_canBeHeld(player, table) : true) &&
             (this.hands ? this.__hands_canBeHeld(player, table, this.hands) : true) &&
             (this.type == 'armor' ? this.__armor_canBeHeld(player, table) : true) &&
             (this.type == 'headgear' ? this.__headgear_canBeHeld(player, table) : true) &&

@@ -1,8 +1,9 @@
 import { Card } from '../../../Card';
+import { Monster } from "../helpers/Monster";
 
 const id = 'shrieking_geek';
 
-class shrieking_geek extends Card {
+class shrieking_geek extends Monster {
     constructor() {
         super();
         this.id = id;
@@ -11,9 +12,7 @@ class shrieking_geek extends Card {
         this.type = 'monster';
     }
     
-    onEscape(player, dice, table) {
-        if(dise >= 5)
-            return true;
+    badThing(player, table) {
         player.wielded.map (x => {
            if (Card.byId(x).type == 'class' || Card.byId(x).type == 'race')
                player.unwield(x, table);
@@ -21,12 +20,12 @@ class shrieking_geek extends Card {
     }
     
     getAttackFor(players) {
-        var iswarrior = false;
-        if  players.map(x => {
+        var isWarrior = false;
+        players.map(x => {
             if(x.hasClassDisadvantages('warrior')) 
-                iswarrior = true;
-        })
-        if (iswarrior) return 12;
+                isWarrior = true;
+        });
+        if (isWarrior) return 12;
         return 6;
     }
     get treasureCount() {

@@ -1,5 +1,5 @@
 import { Card } from '../../../Card';
-import { Monster } from "../helpers/Monster";
+import { Monster } from '../helpers/Monster';
 
 const id = 'squidzilla';
 
@@ -10,19 +10,22 @@ class squidzilla extends Monster {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.level = 2;
         this.treasure = 4;
-        this.levels = 2;
     }
     
     onEscape(player, dice, table) {
-        if (player.level < 4 && !player.hasRaceDisadvantages('elf')) {
+        if(!player.hasRaceDisadvantages('elf') && player.level <= 4)
             return true;
-        }
         return super.onEscape(player, dice, table);
     }
     
     badThing(player, table) {
+<<<<<<< HEAD
         player.die();
+=======
+        player.die(table);
+>>>>>>> 17531423901606a52d139a865516c0e228cf7e05
     }
     
     getAttackFor(players) {

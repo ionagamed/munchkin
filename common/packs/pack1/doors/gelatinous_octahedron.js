@@ -4,7 +4,7 @@
 
 import { Card } from '../../../Card';
 import { Fight } from '../../../Fight';
-import { Monster } from "../helpers/Monster";
+import { Monster } from '../helpers/Monster';
 
 const id = 'gelatinous_octahedron';
 
@@ -25,7 +25,7 @@ class GelatinousOctahedron extends Monster {
     badThing(player, table) {
         player.wielded.map(x => {
             if (Card.byId(x).big) {
-                player.unwield(x);
+                player.unwield(x, table);
                 table.discard(x);
             }
         });
@@ -40,7 +40,7 @@ class GelatinousOctahedron extends Monster {
                 player.hand.splice(i, 1);
                 table.discard(x);
             }
-        })
+        });
     }
     
     getAttackFor(players) {

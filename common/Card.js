@@ -197,7 +197,7 @@ export class Card {
      * @param {Player|string} x
      */
     getAttackFor(x) {
-        
+        return 0;
     }
 
 }

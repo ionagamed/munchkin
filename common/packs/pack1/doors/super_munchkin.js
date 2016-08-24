@@ -27,7 +27,7 @@ class Supermunchkin extends Card {
     onUnwielded(player, table) {
         player.wielded.map(x => {
             if (Card.byId(x).type == 'class') {
-                player.unwield(x);
+                player.unwield(x, table);
                 table.discard(x);
             }
         });

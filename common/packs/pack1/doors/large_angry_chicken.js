@@ -9,32 +9,27 @@ class _ extends Card {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.treasure = 1;
     }
     
-    onEscape(player, dice, table) {
-        if(dice >= 5)
-            return true;
-        player.level--;
+    badThing(player, table) {
+        player.decreaseLevel(1);
     }
     
     getAttackFor(players) {
         return 2;
     }
-    get treasureCount() {
-        return 1;
-    }
-    getLevels(fight, table) {
-        var isfire = false;
-        player.wielded.map(x => {
-            if(x == 'staff_of_napalm' || x == 'flaming_armor')
-               isfire = true;
-            figth.players.map(x => {
-                if(x.modifiers.indexOf('flaming_poison_potion'))
-                    isfire = true;
-            });
+    
+    onFightEnded(fight, table) {
+        fight.players.map(x => {
+            if (x.state == 'success') {
+                if (x.player.name == fight.mainPlayer || x.player.hasRaceAdvantages('elf')) {
+                    if (x.player.hasCardWielded('staff_of_napalm') || x.player.hasCardWielded('flaming_armor') || x.modifiers.indexOf('flaming_poison_potion') >= 0) {
+                        x.player.level++;
+                    }
+                }
+            }
         });
-        if(figth.players == 'success' && true)
-            player.level++;
     }
 }
 Card.cards[id] = new _();

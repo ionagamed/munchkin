@@ -3,7 +3,7 @@
  */
 
 import { Card } from '../../../Card';
-import { Item } from "../helpers/Item";
+import { Item } from '../helpers/Item';
 
 const id = 'flaming_armor';
 

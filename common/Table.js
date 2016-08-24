@@ -1,8 +1,8 @@
 /**
  * Created by tsmish on 13/08/16.
  */
-import { Card } from './Card'
-import { Player } from './Player'
+import { Card } from './Card';
+import { Player } from './Player';
 
 export class Table {
     constructor() {

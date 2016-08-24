@@ -2,8 +2,8 @@
  * Created by ionagamed on 8/20/16.
  */
 
-import { Card } from "../../../Card";
-import { Fight } from "../../../Fight";
+import { Card } from '../../../Card';
+import { Fight } from '../../../Fight';
 
 export class Monster extends Card {
     // TODO: add common monster code
@@ -38,7 +38,7 @@ export class Monster extends Card {
             state: 'fighting',
             modifiers: []
         });
-        table.fight.players.push({
+        table.fight.monsters.push({
             monster: this.id,
             modifiers: []
         });

@@ -1,14 +1,16 @@
 import { Card } from '../../../Card';
+import { Monster } from "../helpers/Monster";
 
 const id = 'king_tut';
 
-class king_tut extends Card {
+class king_tut extends Monster {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.undead = true;
         this.levels = 2;
         this.treasure = 4;
     }

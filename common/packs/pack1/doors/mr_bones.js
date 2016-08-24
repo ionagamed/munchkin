@@ -1,5 +1,5 @@
 import { Card } from '../../../Card';
-import { Monster } from "../helpers/Monster";
+import { Monster } from '../helpers/Monster';
 
 const id = 'mr_bones';
 
@@ -10,6 +10,7 @@ class mr_bones extends Monster {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.undead = true;
         this.treasure = 1;
     }
     

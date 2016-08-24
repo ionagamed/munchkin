@@ -3,7 +3,7 @@
  */
 
 import { Card } from '../../../Card';
-import { Curse } from "../helpers/Curse";
+import { Curse } from '../helpers/Curse';
 
 const id = 'curse_lose_small_item';
 

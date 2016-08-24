@@ -24,6 +24,15 @@ function _l(c, x) {
     }
 }
 
+function __l(x) {
+    const c = Card.byId(x);
+    if (c.kind == 'door') {
+        return '/packs/pack1/img/doors-' + idToInt(x) + '.png';
+    } else {
+        return '/packs/pack1/img/treasure-' + idToInt(x) + '.png';
+    }
+}
+
 $(function () {
     const player = new Player();
     var table = new Table();
@@ -44,6 +53,7 @@ $(function () {
             if (c.big) {
                 t.push('big');
             }
+            t.push(c.type);
             if (c.wieldable) {
                 t.push('<a class="unwield" href="#">unwield</a>');
             }
@@ -63,6 +73,7 @@ $(function () {
             if (c.big) {
                 t.push('big');
             }
+            t.push(c.type);
             if (c.wieldable) {
                 t.push('<a class="wield" href="#">wield</a>');
             }
@@ -88,6 +99,7 @@ $(function () {
             if (c.big) {
                 t.push('big');
             }
+            t.push(c.type);
             if (c.wieldable) {
                 t.push('<a class="wield" href="#">wield</a>');
             }
@@ -191,7 +203,7 @@ $(function () {
         
         $('.player .wielded .to-belt').click(e => {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
-            player.wielded.splice(player.wielded.indexOf(id), 1);
+            player.unwield(id, table);
             player.belt.push(id);
             updateView();
             return false;
@@ -224,6 +236,11 @@ $(function () {
         if (e.which == 13) {
             add();
             return false;
+        }
+    });
+    $('#id').keypress(e => {
+        if (e.which == 13) {
+            $('#img').html('<img width="330" height="524" src="' + __l($('#id').val()) + '">');
         }
     });
     

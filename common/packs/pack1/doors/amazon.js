@@ -1,5 +1,5 @@
 import { Card } from '../../../Card';
-import { Monster } from "../helpers/Monster";
+import { Monster } from '../helpers/Monster';
 
 const id = 'amazon';
 
@@ -20,7 +20,7 @@ class _ extends Monster {
             fight.onEnded(table);
         }
     }
-    
+
     badThing(player, table) {
         var hadClass = false;
         player.wielded.map(x => {
@@ -33,7 +33,7 @@ class _ extends Monster {
             player.decreaseLevel(3);
         }
     }
-    
+
     getAttackFor(players) {
         return 8;
     }

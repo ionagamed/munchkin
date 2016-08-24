@@ -1,33 +1,34 @@
 import { Card } from '../../../Card';
+import { Monster } from "../helpers/Monster";
 
 const id = 'undead_horse';
 
-class undead_horse extends Card {
+class undead_horse extends Monster {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.undead = true;
+        this.treasure = 4;
     }
     
-    onEscape(player, dice, table) {
-        if (dice >= 5)
-            return true;
-        player.level -= 2;
+    badThing(player, table) {
+        player.decreaseLevel(2);
     }
+    
     getAttackFor(players) {
-        var isdwarf = false;
+        var isDwarf = false;
         players.map(x => {
             if(x.hasRaceDisadvantages('dwarf')) 
-                isdwarf = true;
-            if(isdwarf)
-                return 9;
+                isDwarf = true;
+        });
+        if (isDwarf) {
+            return 9;
+        } else {
             return 4;
-        })
-    }
-    get treasureCount() {
-        return 4;
+        }
     }
 }
 Card.cards[id] = new undead_horse();

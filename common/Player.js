@@ -5,7 +5,7 @@
 import { Card } from './Card';    
     
 export class Player {
-    constructor() {
+    constructor(name) {
         /**
          * An array of cards which are in player's hand (not on the table)
          *
@@ -34,7 +34,7 @@ export class Player {
          *
          * @type {string}
          */
-        this.name = '';
+        this.name = name;
 
         /**
          * Player level
@@ -49,6 +49,13 @@ export class Player {
          * @type {string}
          */
         this.sex = 'male';
+
+        /**
+         * Player's death status
+         *
+         * @type bool
+         */
+        this.dead = true;
     }
     
     /**
@@ -65,14 +72,19 @@ export class Player {
      * Wield a card
      * Returns true on success
      * 
-     * @param card string
-     * @param table Table
+     * @param {string} card 
+     * @param {Table} table 
      * 
      * @returns boolean
      */
     wield(card, table) {
-        if (Card.byId(card).canBeWielded(this, table)) {
-            this.wielded.push(card);
+        const cheat = this.wielded.indexOf('cheat');
+        if (Card.byId(card).canBeWielded(this, table) || (cheat < this.wielded.length - 1 && this.wielded[cheat + 1] == 'cheat_free_helper')) {
+            if (cheat >= 0 && cheat < this.wielded.length - 1 && this.wielded[cheat + 1] == 'cheat_free_helper') {
+                this.wielded.splice(cheat + 1, 1, card);
+            } else {
+                this.wielded.push(card);
+            }
             Card.byId(card).onWielded(this, table);
             this.updateConstraints(table);
             return true;
@@ -82,8 +94,8 @@ export class Player {
     /**
      * Unwield a card
      * 
-     * @param card string
-     * @param table Table
+     * @param {string} card 
+     * @param {Table} table 
      */
     unwield(card, table) {
         var idx = this.wielded.indexOf(card);
@@ -92,6 +104,7 @@ export class Player {
                 idx--;
                 this.wielded.splice(idx, 1);
                 Card.byId('cheat').onUnwielded(this, table);
+                table.discard('cheat');
             }
         }
         this.wielded.splice(idx, 1);
@@ -121,11 +134,12 @@ export class Player {
      * @param table
      */
     updateConstraints(table) {
+        console.log(this.wielded);
         for (let i in this.wielded) {
             if (this.wielded.hasOwnProperty(i)) {
                 const id = this.wielded[i];
                 if (!Card.byId(id).canBeHeld(this, table) && !(i > 0 && Card.byId(this.wielded[i - 1]).type == 'cheat')) {
-                    this.unwield(id);
+                    this.unwield(id, table);
                     if (Card.byId(id).kind == 'treasure') {
                         this.belt.push(id);
                     } else {
@@ -207,7 +221,7 @@ export class Player {
      * @param r
      */
     hasRaceDisadvantages(r) {
-        const has = this.hasCardWielded(c);
+        const has = this.hasCardWielded(r);
         const sm = this.hasCardWielded('half-breed');
         const races = this.wielded.filter(x => Card.byId(x).type == 'race').length;
         return has && !(sm && races == 1);
@@ -224,18 +238,23 @@ export class Player {
             types.filter(x => x == '2-handed').length * 2;
     }
 
+
+    /**
+     * Makes the player DEEEEEEEAD
+     * 
+     * @param {Table} table
+     */
     die(table) {
-        this.wilded.map(x => {
-                if(Card.byId(x).type != 'race' && Card.byId(x).type != 'class' && Card.byId(x).type != 'super_munchkin' && Card.byId(x).type != 'half-breed')
-                    this.unwield(x, table);
-            });
-        this.hand.map(x => {
-            this.unwield(x, table);
+        this.wielded.map(x => {
+            if (Card.byId(x).type != 'race' && Card.byId(x).type != 'class' && Card.byId(x).type != 'super_munchkin' && Card.byId(x).type != 'half-breed') {
+                this.unwield(x, table);
+                table.discard(x);
+            }
         });
-        this.belt.map(x => {
-            this.unwield(x, table);
-        });
-        this.dead = true;
+        this.hand.map(table.discard);
+        this.hand = [];
+        this.belt.map(table.discard);
+        this.belt = [];
     }
 
     /**
