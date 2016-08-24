@@ -1,0 +1,19 @@
+import { Card } from '../../../Card';
+import { Class } from "../helpers/Class";
+
+const id = 'thief';
+
+class Thief extends Race {
+    constructor() {
+        super();
+        this.id = id;
+        this.pack = 'pack1';
+        this.kind = 'door';
+        this.type = 'race';
+        this.wieldable = true;
+    }
+    //TODO: function;
+}
+Card.cards[id + '_1'] = new Thief();
+Card.cards[id + '_2'] = new Thief();
+Card.cards[id + '_3'] = new Thief();

@@ -16,22 +16,6 @@ class Warrior extends Class {
         this.type = 'class';
         this.wieldable = true;
     }
-
-    canBeWielded(player, table) {
-        if (player.hasCardWielded('super_munchkin')) {
-            return player.cardsOfTypeWielded('class') < 2;
-        } else {
-            return player.cardsOfTypeWielded('class') < 1;
-        }
-    }
-
-    canBeHeld(player, table) {
-        if (player.hasCardWielded('super_munchkin')) {
-            return player.cardsOfTypeWielded('class') <= 2;
-        } else {
-            return player.cardsOfTypeWielded('class') <= 1;
-        }
-    }
     
     getAttackFor(player) {
         return 1;
