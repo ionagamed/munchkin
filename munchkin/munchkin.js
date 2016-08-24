@@ -12,19 +12,21 @@ import dice from '../common/dice.js';
 import './test.js';
 import './action.js';
 import './events.js';
-import './load.js';
+import { load, create_lower, create_info, create_cards, create_buttons } from './load.js';
+
+export var game,
+    ccount = 14, cards = [], openChat, closeChat,
+    paper, keyboard, scale, down_lower, upper_lower,
+    level, power, antipower, monster, cobble, grass, knight,
+    buttonAttack, buttonSmivka,
+    table = new Table();
 
 $(function () {
-    var game = new Phaser.Game('100', '100', Phaser.AUTO, '', {
+    game = new Phaser.Game('100', '100', Phaser.AUTO, '', {
         preload: preload,
         create: create,
         update: update
     });
-    var ccount = 14, cards = [], openChat, closeChat;
-    var paper, keyboard, scale, down_lower, upper_lower;
-    var level, power, antipower, monster, cobble, grass, knight;
-    var buttonAttack, buttonSmivka;
-    var table = new Table();
 
     function preload() {
         for (let i in packs.pack1.doors) {
@@ -42,7 +44,6 @@ $(function () {
         create_lower();
         create_info();
         create_cards();
-        create_chat();
         create_buttons();
         
     }

@@ -1,7 +1,9 @@
-function actionAttack() {
+import * as global from './munchkin.js'
+
+export function actionAttack() {
 
 }
 
-function actionSmivka() {
+export function actionSmivka() {
 
 }
