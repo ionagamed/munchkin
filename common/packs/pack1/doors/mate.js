@@ -11,8 +11,13 @@ class out_to_lunch extends Card {
         this.kind = 'door';
         this.type = 'out_to_lunch';
     }
-    
-    Fight.monsters.push()
-    
+    onCast(source, destination, table) {
+        for(let i of table.fight.monsters) {
+            if (i.monster == destination) {
+                table.fight.monsters.push(i);
+                break;
+            }
+        }
+    }
 }
 Card.cards[id] = new out_to_lunch();

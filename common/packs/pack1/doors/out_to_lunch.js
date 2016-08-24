@@ -12,9 +12,11 @@ class out_to_lunch extends Card {
         this.type = 'out_to_lunch';
     }
     
-    Fight.monsters.map( x => {
-        table.discard(x.monster); 
-    });
-    
+    onCast(source, destination, table) {
+        table.fight.monsters.map( x => {
+            table.discard(x.monster); 
+        });
+        table.fight.monsters = [];
+    }
 }
 Card.cards[id] = new out_to_lunch();
