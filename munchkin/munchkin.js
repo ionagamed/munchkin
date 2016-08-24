@@ -67,5 +67,12 @@ $(function () {
     
     function update() {
        //create_cards();
+       document.ws.onmessage = function(data){
+            const msg = JSON.parse(data.data);
+            if (msg.event == "gotCards") {
+                player.hand = player.hand.concat(msg.data.cards);
+                console.log(player);
+            }
+        };
     }
 });
