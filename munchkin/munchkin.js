@@ -68,10 +68,7 @@ $(function () {
                 player.hand = player.hand.concat(msg.data.cards);
                 create_cards();
                 level.text = "Your Level = " + player.level;
-                console.log(player);
-                console.log(msg);
-                console.log(cards[0]);
-                console.log(Card.byId(cards[0]));
+                //console.log(Card.byId(cards[0]));
             }
         };
     }
