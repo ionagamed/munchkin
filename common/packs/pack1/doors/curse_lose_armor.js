@@ -20,7 +20,7 @@ class CurseLoseArmor extends Curse {
     onCast(source, dest, table) {
         for (let i of dest.wielded) {
             if (Card.byId(i).type === 'armor') {
-                dest.unwield(i);
+                dest.unwield(i, table);
                 table.discard(i);
             }
         }

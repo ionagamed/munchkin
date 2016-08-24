@@ -25,7 +25,7 @@ class GelatinousOctahedron extends Monster {
     badThing(player, table) {
         player.wielded.map(x => {
             if (Card.byId(x).big) {
-                player.unwield(x);
+                player.unwield(x, table);
                 table.discard(x);
             }
         });

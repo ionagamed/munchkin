@@ -1,26 +1,21 @@
 import { Card } from '../../../Card';
-import dice from '../../../dice';
-import { Monster } from '../helpers/Monster';
+import { Monster } from "../helpers/Monster";
 
-const id = '3872_orcs';
+const id = 'undead_horse';
 
-class a3872_orcs extends Monster {
+class undead_horse extends Monster {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
-        this.treasure = 3;
+        this.undead = true;
+        this.treasure = 4;
     }
     
     badThing(player, table) {
-        var d = dice();
-        if (d <= 2) {
-            player.die(table);
-        } else {
-            player.decreaseLevel(d);
-        }
+        player.decreaseLevel(2);
     }
     
     getAttackFor(players) {
@@ -29,9 +24,11 @@ class a3872_orcs extends Monster {
             if(x.hasRaceDisadvantages('dwarf')) 
                 isDwarf = true;
         });
-        if (isDwarf)
-            return 16;
-        return 10;
+        if (isDwarf) {
+            return 9;
+        } else {
+            return 4;
+        }
     }
 }
-Card.cards[id] = new a3872_orcs();
+Card.cards[id] = new undead_horse();

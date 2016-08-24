@@ -8,21 +8,21 @@ var packs = {
             'gelatinous_octahedron',//
             'ghoulfiends',//do not use item
             'harpies',//
-            'hippogriff',
-            'insurance_salesman',
-            '3872_orcs',//death
-            'amazon',
-            'bigfoot',
-            'bullrog',//level += 2, death
+            'hippogriff',//*
+            'insurance_salesman',//*
+            '3872_orcs',//
+            'amazon',// TODO: remake amazon
+            'bigfoot',//
+            'bullrog',//
             'crabs',//
-            'curse_lose_small_item_1',
-            'curse_lose_small_item_2',
+            'curse_lose_small_item_1',//*
+            'curse_lose_small_item_2',//*
             'curse_lose_armor',//
             'curse_lose_footgear',//
             'curse_lose_headgear',//
-            'wizard_1',
-            'curse_change_class',
-            'curse_change_race',
+            'wizard_1',//*
+            'curse_change_class',//
+            'curse_change_race',//
             'curse_change_sex',
             'curse_chicken',
             'halfling_1',
@@ -35,9 +35,9 @@ var packs = {
             'illusion',
             'mate',
             'out_to_lunch',
-            'squidzilla',//level += 2, death
-            'stoned_golem',
-            'tongue_demon',
+            'squidzilla',//
+            'stoned_golem',//*
+            'tongue_demon',//*
             'undead_horse',//
             'horror',
             'ancient',
@@ -55,11 +55,11 @@ var packs = {
             'cleric_3',
             'dwarf_1',
             'dwarf_2',
-            'plutonium_dragon',//level += 2, death
+            'plutonium_dragon',//
             'potted_plant',//
-            'pukachu',
-            'shrieking_geek',
-            'snails_on_speed',
+            'pukachu',//
+            'shrieking_geek',//
+            'snails_on_speed',//*
             'dwarf_3',
             'elf_1',
             'elf_2',    
@@ -68,8 +68,8 @@ var packs = {
             'king_tut',//looseall item
             'lame_goblin',//
             'large_angry_chicken',
-            'lawyers',
-            'leperchaun',
+            'lawyers',//*
+            'leperchaun',//*
             'drooling_slime',//
             'face_sucker',//
             'floating_nose',
@@ -96,7 +96,7 @@ var packs = {
             'wandering_monster_2',
             'wandering_monster_3',
             'wannabe_vampire',
-            'wight_brothers',//lv+2
+            'wight_brothers',//
             'cheat',
             'divine_intervention',
             'half-breed_2'

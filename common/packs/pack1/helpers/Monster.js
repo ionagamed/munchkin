@@ -38,7 +38,7 @@ export class Monster extends Card {
             state: 'fighting',
             modifiers: []
         });
-        table.fight.players.push({
+        table.fight.monsters.push({
             monster: this.id,
             modifiers: []
         });

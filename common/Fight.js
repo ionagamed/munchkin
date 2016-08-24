@@ -24,6 +24,13 @@ export class Fight {
          * @type [Object]
          */
         this.players = [];
+
+        /**
+         * The player, who started the fight
+         * 
+         * @type {Player}
+         */
+        this.mainPlayer = null;
         
         /**
          * The monster side of a fight
