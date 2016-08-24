@@ -12,10 +12,10 @@ class pukachu extends Card {
     }
     
     onEscape(player, dice, table) {
-        if (dise >= 5)
+        if (dice >= 5)
             return true;
         player.hand.map(x => {
-           unwield(x, table);
+            player.unwield(x, table);
         });
     }
     

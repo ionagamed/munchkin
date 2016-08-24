@@ -13,6 +13,7 @@ class ghoulfiends extends Card {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.treasure = 2;
     }
     
     onEscape(player, dice, table) {
@@ -34,10 +35,6 @@ class ghoulfiends extends Card {
     
     getAttackFor(players) {
         return 8;
-    }
-    
-    get treasureCount() {
-        return 2;
     }
 }
 Card.cards[id] = new ghoulfiends();

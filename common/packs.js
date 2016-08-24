@@ -6,12 +6,12 @@ var packs = {
     pack1: {
         doors: [
             'gelatinous_octahedron',//
-            'ghoulfiends',//do not use item
+            'ghoulfiends',//HARD
             'harpies',//
             'hippogriff',//*
             'insurance_salesman',//*
             '3872_orcs',//
-            'amazon',// TODO: remake amazon
+            'amazon',//
             'bigfoot',//
             'bullrog',//
             'crabs',//
@@ -24,7 +24,7 @@ var packs = {
             'curse_change_class',//
             'curse_change_race',//
             'curse_change_sex',
-            'curse_chicken',
+            'curse_chicken',//
             'halfling_1',
             'halfling_2',
             'thief_1',
@@ -34,7 +34,7 @@ var packs = {
             'help_me_out_here',
             'illusion',
             'mate',
-            'out_to_lunch',
+            'out_to_lunch',//?
             'squidzilla',//
             'stoned_golem',//*
             'tongue_demon',//*
@@ -47,9 +47,9 @@ var packs = {
             'intelligent',
             'maul_rat',//
             'mr_bones',//
-            'net_troll',
-            'pit_bull',
-            'platycore',
+            'net_troll',//*
+            'pit_bull',//*
+            'platycore',//*
             'cleric_1',
             'cleric_2',
             'cleric_3',
@@ -75,23 +75,23 @@ var packs = {
             'floating_nose',
             'flying_frogs',//
             'gazebo',//TODO: button off
-            'curse_lose_two_cards',
-            'curse_lose_class',
+            'curse_lose_two_cards',//*
+            'curse_lose_class',//*
             'curse_lose_race',//
             'curse_malign_mirror',
             'truly_obnoxious_curse',//
             'curse_duck_of_doom',//
             'curse_income_tax',
-            'curse_lose_big_item',
+            'curse_lose_big_item',//*   
             'curse_lose_level_1',//
             'curse_lose_level_2',//
-            'warrior_1',
-            'warrior_2',
-            'warrior_3',
-            'wizard_2',
-            'wizard_3',
-            'super_munchkin_1',
-            'super_munchkin_2',
+            'warrior_1',//
+            'warrior_2',//
+            'warrior_3',//
+            'wizard_2',//
+            'wizard_3',//
+            'super_munchkin_1',//
+            'super_munchkin_2',//
             'wandering_monster_1',
             'wandering_monster_2',
             'wandering_monster_3',
@@ -99,7 +99,7 @@ var packs = {
             'wight_brothers',//
             'cheat',
             'divine_intervention',
-            'half-breed_2'
+            'half-breed_2'//
         ],
         treasure: [
             'magic_lamp',

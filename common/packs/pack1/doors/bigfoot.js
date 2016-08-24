@@ -15,8 +15,9 @@ class bigfoot extends Card {
         if (dice >= 5)
             return true;
         player.wielded.map(x => {
-            if (Card.byId(x).type == 'headgear')
-                unwield(x, table);
+            if (Card.byId(x).type == 'headgear' || i == 'curse_chicken')
+                player.unwield(x, table);
+                table.discard(x);
             });
     }
     getAttackFor(players) {

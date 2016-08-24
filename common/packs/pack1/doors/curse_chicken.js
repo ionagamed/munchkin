@@ -1,4 +1,3 @@
-.type == 'headgear
 import { Card } from '../../../Card';
 import { Player } from '../../../Player';
 
