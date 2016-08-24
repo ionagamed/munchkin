@@ -60,12 +60,8 @@ $(function () {
     function create() {
         create_lower();
         create_info();
-        create_cards();
+        //create_cards();
         create_buttons();
-    }
-    
-    function update() {
-        level.text = "Your Level = ";
         document.ws.onmessage = function(data){
             const msg = JSON.parse(data.data);
             if (msg.event == "gotCards") {
@@ -75,9 +71,13 @@ $(function () {
                 console.log(player);
                 console.log(msg);
                 console.log(cards[0]);
-                Card.byId(cards[0]);
-                player.wild(cards[0], table);
+                console.log(Card.byId(cards[0]));
+                //player.wild(cards[0], table);
             }
         };
+    }
+    
+    function update() {
+        
     }
 });

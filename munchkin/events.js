@@ -1,4 +1,5 @@
 import * as global from './munchkin.js'
+import { Card } from '../common/Card';
 
 export function over(obj)
 {
@@ -19,5 +20,8 @@ export function out(obj)
 }
 export function down(obj)
 {
-    
+    obj = Card.byId(obj);
+    if (obj.wieldable) {
+        console.log('1ol');
+    }
 }
