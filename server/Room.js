@@ -24,8 +24,8 @@ function sendEvent(client, event, data) {
 }
 /**
  * Events:
- *  'table'
- *      data table table in the room
+ *  'room'
+ *      data room filtered room
  *
  *  'gotCards'
  *      data:
@@ -109,7 +109,7 @@ function setCommandSet(ws, set, env) {
         try {
             var msg = JSON.parse(data.data);
             env.room = Room.byId(env.roomId);
-            env.table = env.table;
+            env.table = env.room.table;
             env.player = env.table.players[ws.playerId];
             set[msg.cmd](msg.data, env);
         } catch (err) {
@@ -387,11 +387,12 @@ Room.clientCommands['start'] = (data, env) => {
 };
 
 /**
- * 'tableRequest' command:
+ * 'roomRequest' command:
  * forces server to send table in the room
  */
-Room.clientCommands['tableRequest'] = (data, env) => {
-    sendEvent(env.client, 'table', env.table);
+Room.clientCommands['roomRequest'] = (data, env) => {
+    //TODO: remove hands from response
+    sendEvent(env.client, 'room', {owner: env.room.owner, table: env.table});
 };
 
 /**
@@ -422,7 +423,8 @@ Room.playerCommands['resurrect'] = (data, env) => {
         .concat(env.room.doorDeck.splice(0, DOOR_BEGIN_COUNT))
         .concat(env.room.treasureDeck.splice(0, TREASURE_BEGIN_COUNT));
     env.player.hand.map(cardId => {
-        Card.byId(cardId).onReceived(env.player, 'deck', env.table);
+        const card = Card.byId(cardId);
+        if(card) card.onReceived(env.player, 'deck', env.table);
         env.player.onCardReceived(cardId, 'deck');
     });
     sendEvent(env.client, 'gotCards', {
@@ -534,18 +536,19 @@ Room.playerCommands['lootTheRoom'] = (data, env) => {
  */
 
 Room.playerCommands['wieldCard'] = (data, env) => {
-    var card = Card.byId(data.card);
+    const cardId = data.card
+    const card = Card.byId(cardId);
     if(phase(env.player, env.table, 'hand') ||
        phase(env.player, env.table, 'drop')) return;
 
     if(card.canBeWielded(card, env.table)) {
         env.room.dispatch('wieldedCard', {
             who: env.player.name,
-            card: card.id
+            card: cardId
         });
-        env.player.wield(card.id, env.table);
+        env.player.wield(cardId, env.table);
         card.onWielded(env.player, env.table);
-        remove_first(card.id, env.player.hand);
+        remove_first(cardId, env.player.hand);
     }
 };
 
@@ -557,16 +560,17 @@ Room.playerCommands['wieldCard'] = (data, env) => {
  *  unwield the card
  */
 Room.playerCommands['unwieldCard'] = (data, env) => {
-    var card = Card.byId(data.card);
+    const cardId = data.card
+    const card = Card.byId(cardId);
     if(phase(env.player, env.table, 'hand') ||
        phase(env.player, env.table, 'drop')) return;
-    if(env.player.hand.indexOf(card.id)) {
-        env.player.unwield(card.id);
+    if(env.player.hand.indexOf(cardId)) {
+        env.player.unwield(cardId);
         env.room.dispatch('unwieldedCard', {
             who: env.player.name,
-            card: card.id
+            card: cardId
         });
-        env.player.belt.push(card.id);
+        env.player.belt.push(cardId);
     }
 };
 
@@ -578,23 +582,24 @@ Room.playerCommands['unwieldCard'] = (data, env) => {
  * use card
  */
 Room.playerCommands['useCard'] = (data, env) => {
-    var card = Card.byId(data.card);
+    const cardId = data.card
+    const card = Card.byId(cardId);
     if(!phase(env.player, env.table, 'open')) return;
     if(!card.canBeUsed(env.player, env.table)) return;
     env.room.dispatch('usedCard', {
         who: env.player.name,
-        card: card.id
+        card: cardId
     });
     env.table.phase = (card.type == 'monster' ? 'hand' : 'closed');
     if(card.onUsed(env.player, env.table)) {
         env.dispatch('lostCard', {
             who: env.player.name,
-            card: card.id
+            card: cardId
         });
-        remove_first(card.id, env.player.hand);
+        remove_first(cardId, env.player.hand);
         card.onDiscarded(env.table);
-        env.table.discard(card.id);
-        env.room.dispatch('discardedCard', card.id);
+        env.table.discard(cardId);
+        env.room.dispatch('discardedCard', cardId);
     }
     env.room.dispatch('changedPhase', env.table.phase);
 };
@@ -608,24 +613,25 @@ Room.playerCommands['useCard'] = (data, env) => {
  */
 
 Room.playerCommands['castCard'] = (data, env) => {
-    var card = Card.byId(data.card);
+    const cardId = data.card
+    const card = Card.byId(cardId);
     var on = env.table.players.find(player => player.name == data.on);
     if(!phase(env.player, env.table, 'open')) return;
     if(!card.canBeCast(env.player, on, env.table)) return;
     env.room.dispatch('castedCard', {
         who: env.player.name,
         on: on.name,
-        card: card.id
+        card: cardId
     });
     if(card.onCast(env.player, on, env.table)) {
         env.dispatch('lostCard', {
             who: env.player.name,
-            card: card.id
+            card: cardId
         });
-        remove_first(card.id, env.player.hand);
-        env.room.dispatch('discardedCard', card.id);
+        remove_first(cardId, env.player.hand);
+        env.room.dispatch('discardedCard', cardId);
         card.onDiscarded(env.table);
-        env.table.discard(card.id);
+        env.table.discard(cardId);
     }
 };
 
@@ -636,11 +642,11 @@ Room.playerCommands['castCard'] = (data, env) => {
  */
 Room.playerCommands['moveToBelt'] = (data, env) => {
     var card = Card.byId(data.card);
-    if(remove_first(card.id, env.player.hand)) {
-        env.player.belt.push(card.id);
+    if(remove_first(cardId, env.player.hand)) {
+        env.player.belt.push(cardId);
         env.room.dispatch('movedToBelt', {
             who: env.player.name,
-            card: card.id
+            card: cardId
         });
     }
 };
@@ -686,11 +692,11 @@ Room.playerCommands['sendChatMessage'] = (data, env) => {
  */
 Room.playerCommands['getCardFromPlayer'] = (data, env) => {
     //TODO: add security check
-    var fromPlayer = env.table.players.find(player => player.name == data.from);
-    var card = getCardFromPlayer(env.room, fromPlayer, data.cardPos);
-    env.player.hand.push(card.id);
-    card.onReceived(env.player, fromPlayer, env.table);
-    env.player.onCardReceived(card.id, env.player);
+    const fromPlayer = env.table.players.find(player => player.name == data.from);
+    const cardId = getCardFromPlayer(env.room, fromPlayer, data.cardPos);
+    env.player.hand.push(cardId);
+    Card.byId(cardId).onReceived(env.player, fromPlayer, env.table);
+    env.player.onCardReceived(cardId, env.player);
 
 };
 
@@ -704,8 +710,8 @@ Room.playerCommands['dropPlayerCard'] = (data, env) => {
     //TODO: add security check
     var card = getCardFromPlayer(env.room, env.table.players.find(player => player.name == data.who), data.cardPos);
     card.onDiscarded(env.table);
-    env.room.dispatch('discardedCard', card.id);
-    env.table.discard(card.id);
+    env.room.dispatch('discardedCard', cardId);
+    env.table.discard(cardId);
 };
 
 
