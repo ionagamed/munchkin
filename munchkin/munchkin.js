@@ -21,9 +21,11 @@ export var game,
     paper, keyboard, scale, down_lower, upper_lower,
     level = {}, power, antipower, monster, cobble, grass, knight,
     buttonAttack, buttonSmivka,
-    player = new Player(), table = new Table(),
     nickname = 'DAr', room_name = 'keklol', server_addr = 'localhost:3031',
+    player = new Player(nickname), table = new Table(),
     connected = false, mainshadow;
+table.players.push(player);
+
 $(function () {
     game = new Phaser.Game('100', '100', Phaser.AUTO, '', {
         preload: preload,
@@ -51,6 +53,5 @@ $(function () {
     }
     
     function update() {
-        
     }
 });
