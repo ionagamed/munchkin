@@ -189,7 +189,9 @@ for (let i of packs.pack1.doors) {
         i = i.substring(0, i.length - 2);
     try {
         require('./packs/pack1/doors/' + i);
+        console.log('yes: ' + cp);
     } catch (e) {
+        console.log('no: ' + cp);
         packs.pack1.doors[cp] = 'AaA_' + packs.pack1.doors[cp];
     }
 }

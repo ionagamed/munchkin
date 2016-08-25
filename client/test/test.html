@@ -47,6 +47,19 @@
       <div class='col-lg-6'>
         <div id='players'></div>
       </div>
+      <div class='col-lg-6'>
+        <div id='table'>
+          <ul>
+            <li>
+              сброс:
+              <ul>
+                <li>двери: <span class='discardedDoors'></span></li>
+                <li>сокровища: <span class='discardedDoors'></span></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -57,5 +70,11 @@
   <div class='doors'></div>
   <div class='treasure'></div>
 </div>
+<script>
+  $(function () {
+    $('#username').val((Math.random().toString(36)+'00000000000000000').slice(2, 7));
+    $('#room').val((+(new Date())).toString().substring(0, 9));
+  })
+</script>
 </body>
 </html>

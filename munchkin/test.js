@@ -12,6 +12,7 @@ import packs from '../logic/packs.js';
 import { registerLoginHooks } from './test/login';
 import { registerPlayerHooks } from './test/player';
 import { updateView } from './test/updateView';
+import { registerUIHooks } from './test/ui';
 
 const UPDATE_DELAY = 2000;
 
@@ -60,6 +61,7 @@ function game(playerName) {
         if (!document.stopViewUpdate) {
             updateView(player, table);
             registerPlayerHooks();
+            registerUIHooks();
         }
         setTimeout(__f, UPDATE_DELAY);
     };

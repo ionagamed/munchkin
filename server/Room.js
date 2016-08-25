@@ -340,8 +340,8 @@ export class Room {
      */
     start() {
         this.decks.map(deckName => {
-            this.doorDeck = this.doorDeck.concat(packs[deckName].doors);
-            this.treasureDeck = this.treasureDeck.concat(packs[deckName].treasure);
+            this.doorDeck = this.doorDeck.concat(packs[deckName].doors.filter(x => x.substring(0, 4) != 'AaA_'));
+            this.treasureDeck = this.treasureDeck.concat(packs[deckName].treasure.filter(x => x.substring(0, 4) != 'AaA_'));
         });
         var r = new Random();
         r.shuffle(this.doorDeck);

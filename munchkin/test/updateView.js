@@ -9,43 +9,10 @@ import packs from '../../logic/packs';
 
 import _t from './translate';
 
-function idToInt(id) {
-    if (Card.byId(id).kind == 'door') {
-        return packs.pack1.doors.indexOf(id);
-    } else {
-        return packs.pack1.treasure.indexOf(id);
-    }
-}
-function _l(c, x) {
-    if (c.kind == 'door') {
-        return `<a class="itemId" data-uri="/packs/pack1/img/doors-${idToInt(x)}.png">${_t(x)}</a>`;
-    } else {
-        return `<a class="itemId" data-uri="/packs/pack1/img/treasure-${idToInt(x)}.png">${_t(x)}</a>`;
-    }
-}
-
-function __l(x) {
-    const c = Card.byId(x);
-    if (c.kind == 'door') {
-        return '/packs/pack1/img/doors-' + idToInt(x) + '.png';
-    } else {
-        return '/packs/pack1/img/treasure-' + idToInt(x) + '.png';
-    }
-}
-
 export function updateView(player, table) {
     let updateClasses = () => {
         table.players = table.players.map(x => Object.assign(new Player(), x));
     };
-    
-    var _d = $('.doors');
-    for (let i of [].concat(packs.pack1.doors).sort()) {
-        _d.append(`<img width="165" height="257" src="${__l(i)}">`);
-    }
-    _d = $('.treasure');
-    for (let i of [].concat(packs.pack1.treasure).sort()) {
-        _d.append(`<img width="165" height="257" src="${__l(i)}">`);
-    }
     
     let updatePlayer = (_player) => {
         let content = `<div class="list-group-item" data-player="${_player.name}">`;
@@ -57,7 +24,7 @@ export function updateView(player, table) {
         _player.hand.map(x => {
             const c = Card.byId(x);
             var t = [];
-            t.push(_l(c, x));
+            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a>`);
             if (c.getAttackFor && c.getAttackFor(player) != 0) {
                 t.push(`<b>+${c.getAttackFor(_player)}</b>`);
             }
@@ -89,7 +56,7 @@ export function updateView(player, table) {
         _player.belt.map(x => {
             const c = Card.byId(x);
             var t = [];
-            t.push(_l(c, x));
+            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a>`);
             if (c.getAttackFor && c.getAttackFor(player) != 0) {
                 t.push(`<b>+${c.getAttackFor(_player)}</b>`);
             }
@@ -121,7 +88,7 @@ export function updateView(player, table) {
         _player.wielded.map(x => {
             const c = Card.byId(x);
             var t = [];
-            t.push(_l(c, x));
+            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a>`);
             if (c.getAttackFor && c.getAttackFor(player) != 0) {
                 t.push(`<b>+${c.getAttackFor(_player)}</b>`);
             }
@@ -169,6 +136,21 @@ export function updateView(player, table) {
         }
     };
     
+    let updateDiscard = () => {
+        if (table.discardedDoors.length > 0) {
+            const id = table.discardedDoors[table.discardedDoors.length - 1];
+            $('.discardedDoors').html(`<li><a class='itemId' id=${id}>${_t(id)}</a>, ...</li>`)
+        }
+        if (table.discardedTreasure.length > 0) {
+            const id = table.discardedTreasure[table.discardedTreasure.length - 1];
+            $('.discardedTreasure').html(`<li><a class='itemId' id=${id}>${_t(id)}</a>, ...</li>`)
+        }
+    };
+    let updateTable = () => {
+        updateDiscard();
+    };
+    
     updateClasses();
     updatePlayers();
+    updateTable();
 }
