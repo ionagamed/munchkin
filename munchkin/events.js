@@ -1,6 +1,8 @@
-import * as global from './munchkin.js';
 import { Card } from '../logic/Card';
 import { Player } from '../logic/Player';
+import * as global from './munchkin.js';
+import server from '../logic/Server';
+import { load, create_lower, create_info, create_cards, create_buttons } from './load.js';
 
 export function over(obj)
 {
@@ -23,7 +25,29 @@ export function down(obj)
 {
     var oo = Card.byId(obj.key.substr(6));  
     if (oo.canBeWielded(global.player, global.table)){
-        global.player.wield(obj.key.substr(6), global.table);
+        /*global.player.wield(obj.key.substr(6), global.table);
         console.log(global.player);
+        global.cards[i].splise();
+        global.player.hand[i].splise();
+        global.cards[global.player.hand.length - 1] = undefined;
+        create_crads();*/
     }
+}
+
+export function sever_connected() {
+    global.connected = true;
+}
+
+export function startGame() {
+    while(!global.connected);
+    server.player = global.player;
+    server.table = global.table;
+    server.play();
+    server.start();
+    server.resurrect();
+    create_cards();
+    console.log(global.player);
+    global.mainshadow.visible = false;
+    global.buttonStartGame.visible = false;
+    create_cards();
 }
