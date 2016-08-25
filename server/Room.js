@@ -658,6 +658,19 @@ Room.playerCommands['castCard'] = (data, env) => {
 };
 
 /**
+ * 'callSpecialAbility' command:
+ *  data:
+ *      card {string} id of the card
+ *      ability {string} name of ability
+ *      args {object}
+ */
+
+Room.playerCommands['callSpecialAbility'] = (data, env) => {
+    const cardId = data.card;
+    Card.byId(cardId).callSpecialAbility(data.ability, data.args);
+}
+
+/**
  * 'moveToBelt' command:
  *  data:
  *      card string card id
