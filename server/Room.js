@@ -100,6 +100,8 @@ function sendEvent(client, event, data) {
  *  'addedToBelt'
  *      who string
  *      card string
+ *  'newPlayer'
+ *      data string name of player
  */
 
 
@@ -268,6 +270,7 @@ export class Room {
         if(this.table.players.length < MAX_PLAYERS) {
             var player = new Player(client.userName);
             client.playerId = this.table.players.push(player) - 1;
+            this.dispatch('newPlayer', player.name);
             setCommandSet(client, Room.playerCommands, {roomId: this.id, client: client});
             return 'Success';
         } else {
