@@ -16,10 +16,6 @@ class ghoulfiends extends Card {
         this.treasure = 2;
     }
     
-    /*
-     TODO: do not use item
-     */
-    
     badThing(player, table) {
         var m = 50;
         table.players.map(x => {

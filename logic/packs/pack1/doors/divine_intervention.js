@@ -21,7 +21,7 @@ class _ extends Card {
                 x.level++;
             }
         });
-        player.hand = player.hand.filter(x => x == 'divine_intervention');
+        player.hand = player.hand.filter(x => x != 'divine_intervention');
     }
 }
 Card.cards[id] = new _();

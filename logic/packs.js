@@ -184,11 +184,14 @@ export default packs;
 
 for (let i of packs.pack1.doors) {
     // TODO: bad solution
+    var cp = i;
     if (i.substring(i.length - 2, i.length - 1) == '_')
         i = i.substring(0, i.length - 2);
     try {
         require('./packs/pack1/doors/' + i);
-    } catch (e) {}
+    } catch (e) {
+        packs.pack1.doors[cp] = 'AaA_' + packs.pack1.doors[cp];
+    }
 }
 for (let i of packs.pack1.treasure) {
     // TODO: bad solution
@@ -196,5 +199,7 @@ for (let i of packs.pack1.treasure) {
         i = i.substring(0, i.length - 2);
     try {
         require('./packs/pack1/treasure/' + i);
-    } catch (e) {}
+    } catch (e) {
+        packs.pack1.treasure[cp] = 'AaA_' + packs.pack1.treasure[cp];
+    }
 }
