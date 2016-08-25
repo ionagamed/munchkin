@@ -234,11 +234,12 @@ export class Room {
         this.doorDeck = [];
         this.treasureDeck = [];
 
-        decks.map(deckName => {
-            this.doorDeck = this.doorDeck.concat(packs[deckName].doors.filter(x => x.substring(0, 4) != 'AaA_'));
-            this.treasureDeck = this.treasureDeck.concat(packs[deckName].treasure.filter(x => x.substring(0, 4) != 'AaA_'));
-        });
-
+        /**
+         * Array of chosen decks
+         *
+         * @type {[string]}
+         */
+        this.decks = decks;
     }
     /**
      * Connect client to the room
@@ -338,6 +339,10 @@ export class Room {
      * Start game
      */
     start() {
+        this.decks.map(deckName => {
+            this.doorDeck = this.doorDeck.concat(packs[deckName].doors);
+            this.treasureDeck = this.treasureDeck.concat(packs[deckName].treasure);
+        });
         var r = new Random();
         r.shuffle(this.doorDeck);
         r.shuffle(this.treasureDeck);
