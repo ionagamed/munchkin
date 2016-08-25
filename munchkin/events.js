@@ -1,6 +1,6 @@
-import { Card } from '../common/Card';
+import { Card } from '../logic/Card';
+import { Player } from '../logic/Player';
 import * as global from './munchkin.js';
-import { Player } from '../common/Player';
 import { load, create_lower, create_info, create_cards, create_buttons } from './load.js';
 
 export function over(obj)
@@ -27,7 +27,7 @@ export function down(obj)
         global.player.wield(obj.key.substr(6), global.table);
         console.log(global.player);
         global.cards[i].splise();
-        global.player.hand[];
+        global.player.hand[i].splise();
         global.cards[global.player.hand.length - 1] = undefined;
         create_crads();
     }
