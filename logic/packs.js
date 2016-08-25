@@ -30,7 +30,7 @@ var packs = {
             'thief_1',
             'thief_2',
             'thief_3',
-            'half-breed_2',
+            'half-breed_1',
             'help_me_out_here',
             'illusion',
             'mate',
