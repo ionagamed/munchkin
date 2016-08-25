@@ -135,7 +135,6 @@ export class Player {
      * @param table
      */
     updateConstraints(table) {
-        console.log(this.wielded);
         for (let i in this.wielded) {
             if (this.wielded.hasOwnProperty(i)) {
                 const id = this.wielded[i];
