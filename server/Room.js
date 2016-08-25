@@ -639,10 +639,11 @@ Room.playerCommands['useCard'] = (data, env) => {
 Room.playerCommands['castCard'] = (data, env) => {
     const cardId = data.card;
     const card = Card.byId(cardId);
+    var on;
     if(type == 'player')
-        const on = env.table.players.find(player => player.name == data.on);
+        on = env.table.players.find(player => player.name == data.on);
     else
-        const on = cardId;
+        on = cardId;
     if(!phase(env.player, env.table, 'open')) return;
     if(!card.canBeCast(env.player, on, env.table)) return;
     env.room.dispatch('castedCard', {
