@@ -50,7 +50,7 @@ $(function () {
         create_info();
         create_buttons();
     }
-    
+    document.create = create_cards;
     var s = 0;
     function update() {
         if(s == 30)
@@ -59,6 +59,5 @@ $(function () {
             s = 0; 
             create_cards();
         }else s++;
-        //console.log(player);
     }
 });

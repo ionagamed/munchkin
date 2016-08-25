@@ -72,20 +72,21 @@ export function create_info() {
 
 export function create_cards() {
 	for (var i = 0; i < global.player.hand.length; i++) {
-        global.cards[i] = global.game.add.image(0, 0, 'pack1_' +global.player.hand[i]);//'doors'+i);
-        global.cards[i].anchor.setTo(0.5, 0.5);
-        global.cards[i].height = global.game.height * 0.25;
-        global.cards[i].width =global.cards[i].height /1028*661;
-        global.cards[i].y = global.game.height - global.cards[i].height/2;
-        global.cards[i].iter = i;
-        global.cards[i].inputEnabled = true;
-        global.cards[i].events.onInputOver.add(over);
-        global.cards[i].events.onInputDown.add(down);
-        global.cards[i].events.onInputOut.add(out);
-        if(global.ccount * global.cards[i].width < global.game.width)
-            global.cards[i].x = global.cards[i].width/2 + i * global.cglobal.ards[i].width;
-        if(global.ccount * global.cards[i].width > global.game.width)
-            global.cards[i].x = global.cards[i].width/2 +  i * global.cards[i].width * global.game.width / (global.ccount*global.cards[i].width);
+        global.player.image = global.player.image || [];
+        global.player.image[i] = global.game.add.image(0, 0, 'pack1_' +global.player.hand[i]);//'doors'+i);
+        global.player.image[i].anchor.setTo(0.5, 0.5);
+        global.player.image[i].height = global.game.height * 0.25;
+        global.player.image[i].width =global.player.image[i].height /1028*661;
+        global.player.image[i].y = global.game.height - global.player.image[i].height/2;
+        global.player.image[i].iter = i;
+        global.player.image[i].inputEnabled = true;
+        global.player.image[i].events.onInputOver.add(over);
+        global.player.image[i].events.onInputDown.add(down);
+        global.player.image[i].events.onInputOut.add(out);
+        if(global.ccount * global.player.image[i].width < global.game.width)
+            global.player.image[i].x = global.player.image[i].width/2 + i * global.cglobal.ards[i].width;
+        if(global.ccount * global.player.image[i].width > global.game.width)
+            global.player.image[i].x = global.player.image[i].width/2 +  i * global.player.image[i].width * global.game.width / (global.ccount*global.player.image[i].width);
     }
 }
 
