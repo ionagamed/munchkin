@@ -84,7 +84,7 @@ export class Monster extends Card {
      * 
      * @param {[Player]} players
      */
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         
     }
 

@@ -64,7 +64,7 @@ export class Fight {
     getMonstersAttack() {
         var ret = 0;
         this.monsters.map(x => {
-            ret += Card.byId(x.monster).getAttackFor(this.players);
+            ret += Card.byId(x.monster).getAttackAgainst(this.players);
             x.modifiers.map(y => {
                 ret += Card.byId(y).getModFor(x.monster);
             });

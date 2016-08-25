@@ -55,7 +55,7 @@ $(function () {
     function update() {
         if(s == 30)
         {
-            server.roomRequest(); 
+            // server.roomRequest(); 
             s = 0; 
             create_cards();
         }else s++;

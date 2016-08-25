@@ -3,6 +3,9 @@
  */
 
 import { Card } from '../../logic/Card';
+import { Player } from '../../logic/Player';
+
+import packs from '../../logic/packs';
 
 function idToInt(id) {
     if (Card.byId(id).kind == 'door') {
@@ -31,6 +34,10 @@ function __l(x) {
 import _t from './translate';
 
 export function updateView(player, table) {
+    let updateClasses = () => {
+        table.players = table.players.map(x => Object.assign(new Player(), x));
+    };
+    
     let updatePlayer = (player) => {
         let content = `<div class="list-group-item" data-player="${player.name}">`;
         content += player.name;
@@ -136,9 +143,10 @@ export function updateView(player, table) {
         for (let i = idx; passed < table.players.length; i++) {
             const item = table.players[i % table.players.length];
             updatePlayer(item);
+            passed++;
         }
     };
     
-    
+    updateClasses();
     updatePlayers();
 }
