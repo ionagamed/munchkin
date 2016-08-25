@@ -5,7 +5,7 @@
 import { Card } from '../logic/Card';
 import { Player } from '../logic/Player';
 import { Table } from '../logic/Table';
-import server from '../logic/Server'
+import server from '../logic/Server';
 
 import packs from '../logic/packs.js';
 import dice from '../logic/dice.js';
@@ -23,7 +23,7 @@ export var game,
     buttonAttack, buttonSmivka,
     player = new Player(), table = new Table(),
     nickname = 'DAr', room_name = 'keklol', server_addr = 'localhost:3031',
-    connected = false;
+    connected = false, mainshadow;
 
 $(function () {
     game = new Phaser.Game('100', '100', Phaser.AUTO, '', {

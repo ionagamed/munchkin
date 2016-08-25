@@ -1,6 +1,7 @@
 import { Card } from '../logic/Card';
 import { Player } from '../logic/Player';
 import * as global from './munchkin.js';
+import server from '../logic/Server';
 import { load, create_lower, create_info, create_cards, create_buttons } from './load.js';
 
 export function over(obj)
@@ -39,10 +40,13 @@ export function sever_connected() {
 
 export function startGame() {
     while(!global.connected);
-    global.server.player = global.player;
-    global.server.play();
-    global.server.start();
-    global.server.resurrect();
+    server.play();
+    server.start();
+    server.resurrect();
+    server.player = global.player;
+    server.table = global.table;
     create_cards();
-    console.log(player);
+    console.log(global.player);
+    global.mainshadow.visible = false;
+    global.buttonStartGame.visible = false;
 }
