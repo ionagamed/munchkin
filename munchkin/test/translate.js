@@ -81,6 +81,15 @@ const translationMapping = {
     
     'male': 'мужской',
     'female': 'женский',
+    
+    'monster': 'монстр',
+    'curse': 'проклятие',
+    '1-handed': 'одноручное',
+    '2-handed': 'двуручное',
+    'armor': 'броник',
+    'headgear': 'головняк',
+    'footgear': 'обувка',
+    'modifier': 'модификатор',
 };
 
 export default function (x) {

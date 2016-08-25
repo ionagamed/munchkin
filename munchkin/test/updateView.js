@@ -24,7 +24,7 @@ export function updateView(player, table) {
         _player.hand.map(x => {
             const c = Card.byId(x);
             var t = [];
-            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a>`);
+            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a><br>`);
             if (c.getAttackFor && c.getAttackFor(player) != 0) {
                 t.push(`<b>+${c.getAttackFor(_player)}</b>`);
             }
@@ -34,8 +34,8 @@ export function updateView(player, table) {
             if (c.price) {
                 t.push(`${c.price} голдов`);
             }
-            t.push(_t(c.type));
             if (player.name == _player.name) {
+                t.push(_t(c.type));
                 if (c.wieldable) {
                     t.push(`<a class="wield">надеть</a>`);
                 }
@@ -56,7 +56,7 @@ export function updateView(player, table) {
         _player.belt.map(x => {
             const c = Card.byId(x);
             var t = [];
-            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a>`);
+            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a><br>`);
             if (c.getAttackFor && c.getAttackFor(player) != 0) {
                 t.push(`<b>+${c.getAttackFor(_player)}</b>`);
             }
@@ -66,8 +66,8 @@ export function updateView(player, table) {
             if (c.price) {
                 t.push(`${c.price} голдов`);
             }
-            t.push(_t(c.type));
             if (_player.name == player.name) {
+                t.push(_t(c.type));
                 if (c.wieldable) {
                     t.push(`<a class="wield">надеть</a>`);
                 }
@@ -88,7 +88,7 @@ export function updateView(player, table) {
         _player.wielded.map(x => {
             const c = Card.byId(x);
             var t = [];
-            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a>`);
+            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a><br>`);
             if (c.getAttackFor && c.getAttackFor(player) != 0) {
                 t.push(`<b>+${c.getAttackFor(_player)}</b>`);
             }
@@ -98,8 +98,8 @@ export function updateView(player, table) {
             if (c.price) {
                 t.push(`${c.price} голдов`);
             }
-            t.push(_t(c.type));
             if (_player.name == player.name) {
+                t.push(_t(c.type));
                 if (c.wieldable) {
                     t.push(`<a class="unwield">снять</a>`);
                 }

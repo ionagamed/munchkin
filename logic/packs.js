@@ -180,11 +180,11 @@ var packs = {
         ]
     }
 };
-export default packs;
 
-for (let i of packs.pack1.doors) {
+for (let idx in packs.pack1.doors) {
     // TODO: bad solution
-    var cp = i;
+    let i = packs.pack1.doors[idx];
+    let cp = idx;
     if (i.substring(i.length - 2, i.length - 1) == '_')
         i = i.substring(0, i.length - 2);
     try {
@@ -195,8 +195,10 @@ for (let i of packs.pack1.doors) {
         packs.pack1.doors[cp] = 'AaA_' + packs.pack1.doors[cp];
     }
 }
-for (let i of packs.pack1.treasure) {
+for (let idx in packs.pack1.treasure) {
     // TODO: bad solution
+    let i = packs.pack1.treasure[idx];
+    let cp = idx;
     if (i.substring(i.length - 2, i.length - 1) == '_')
         i = i.substring(0, i.length - 2);
     try {
@@ -205,3 +207,5 @@ for (let i of packs.pack1.treasure) {
         packs.pack1.treasure[cp] = 'AaA_' + packs.pack1.treasure[cp];
     }
 }
+
+export default packs;

@@ -1,7 +1,6 @@
 import { Card } from '../../../Card';
-import { Figth } from '../../../Fight';
 
-const id = 'out_to_lunch';
+const id = 'mate';
 
 class out_to_lunch extends Card {
     constructor() {
@@ -9,7 +8,7 @@ class out_to_lunch extends Card {
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'door';
-        this.type = 'out_to_lunch';
+        this.type = 'mate';
     }
     onCast(source, destination, table) {
         for(let i of table.fight.monsters) {
