@@ -183,7 +183,7 @@ function getCardFromPlayer(room, player, cardPos) {
  * @returns {bool} success status
  */
 function getCardFromPlayerById(player, id) {
-    if(remove_first(env.player.belt, id) || remove_first(env.player.hand, id)) {
+    if(remove_first(player.belt, id) || remove_first(player.hand, id)) {
         this.dispatch('lostCard', {
             who: player.name,
             card: id
@@ -588,8 +588,8 @@ Room.playerCommands['unwieldCard'] = (data, env) => {
             who: env.player.name,
             card: cardId
         });
-        env.player.unwield(cardId)
-        card.onUnwielded(env.player, env.table);
+        env.player.unwield(cardId);
+        Card.byId(cardId).onUnwielded(env.player, env.table);
         if(Card.byId(cardId).kind === 'door') {
             env.table.discard(cardId);
             env.room.dispatch('discardedCard', cardId);
@@ -640,7 +640,7 @@ Room.playerCommands['castCard'] = (data, env) => {
     const cardId = data.card;
     const card = Card.byId(cardId);
     var on;
-    if(type == 'player')
+    if(data.type == 'player')
         on = env.table.players.find(player => player.name == data.on);
     else
         on = cardId;
@@ -669,7 +669,7 @@ Room.playerCommands['castCard'] = (data, env) => {
 Room.playerCommands['callSpecialAbility'] = (data, env) => {
     const cardId = data.card;
     Card.byId(cardId).callSpecialAbility(data.ability, data.args);
-}
+};
 
 /**
  * 'moveToBelt' command:
@@ -761,7 +761,7 @@ Room.playerCommands['discard'] = (data, env) => {
     Card.byId(cardId).onDiscarded(env.table);
     env.room.dispatch('discardedCard', cardId);
     env.table.discard(cardId);
-}
+};
 
 
 /**
