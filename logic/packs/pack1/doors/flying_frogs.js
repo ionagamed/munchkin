@@ -19,7 +19,7 @@ class flying_frogs extends Monster {
     badThing(player, table) {
         player.decreaseLevel(2);
     }
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 2;
     }
 }

@@ -34,7 +34,7 @@ class _ extends Monster {
         }
     }
 
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 8;
     }
 }

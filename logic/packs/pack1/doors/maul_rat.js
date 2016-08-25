@@ -17,7 +17,7 @@ class maul_rat extends Monster {
         player.decreaseLevel(1);
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         var isCleric = false;
         players.map(x => {
             if(x.hasClassDisadvantages('cleric')) 

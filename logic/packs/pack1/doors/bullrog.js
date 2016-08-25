@@ -23,7 +23,7 @@ class bullrog extends Card {
         player.die(table);
     }
 
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 18;
     }
 }

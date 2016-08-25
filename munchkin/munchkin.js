@@ -56,7 +56,7 @@ $(function () {
     function update() {
         if(s >= 30 && connected)
         {
-            server.roomRequest(); 
+            // server.roomRequest(); 
             s = 0; 
             console.log(player);
             //create_cards();

@@ -19,7 +19,7 @@ class shrieking_geek extends Monster {
         });
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         var isWarrior = false;
         players.map(x => {
             if(x.hasClassDisadvantages('warrior')) 

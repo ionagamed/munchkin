@@ -15,7 +15,7 @@ class potted_plant extends Card {
         return true;
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 1;
     }
     

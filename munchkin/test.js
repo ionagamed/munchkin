@@ -13,21 +13,43 @@ import { registerLoginHooks } from './test/login';
 import { updateView } from './test/updateView';
 
 $(function () {
-    $('.state-game').hide();
+    $('.state-game,.state-wait').hide();
     registerLoginHooks((name, room, ip) => {
-        Server.connect(name, room, ip);
-        $('.state-login').hide();
-        $('.state-game').show();
-        game(name);
+        Server.onGameStarted = gameBegan(name);
+        Server.connect(name, room, ip, () => {
+            $('.state-login').hide();
+            $('.state-wait').show();
+            wait(name);
+            Server.play();
+        });
     });
 });
 
+function gameBegan(playerName) {
+    return function () {
+        $('.state-wait').hide();
+        $('.state-game').show();
+        console.log('ffs');
+        console.log('ffs 2');
+        game(playerName);
+    }
+}
+
+function wait(playerName) {
+    $('#startGame').click(e => {
+        Server.start();
+        setTimeout(() => {
+            Server.resurrect();
+        }, 100);
+    });
+}
 
 function game(playerName) {
     let player = new Player(playerName);
     let table = new Table();
     Server.player = player;
     Server.table = table;
+    table.players.push(player);
 
     const __r = function () {
         Server.roomRequest();
@@ -36,9 +58,10 @@ function game(playerName) {
     setTimeout(__r, 500);
 
     const __f = function () {
-        updateView();
+        updateView(player, table);
         setTimeout(__f, 500);
     };
+    __f();
 }
 
 function neverCalled() {

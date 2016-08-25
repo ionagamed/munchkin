@@ -18,7 +18,7 @@ class crabs extends Card {
                 player.unwield(x, table);
         });
     }
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 1;
     }
 }

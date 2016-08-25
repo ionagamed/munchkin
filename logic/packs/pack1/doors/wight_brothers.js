@@ -26,7 +26,7 @@ class flying_frogs extends Monster {
         player.level = 1;
     }
 
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 16;
     }
 }

@@ -100,6 +100,8 @@ function sendEvent(client, event, data) {
  *  'addedToBelt'
  *      who string
  *      card string
+ *  'newPlayer'
+ *      data string name of player
  */
 
 
@@ -231,10 +233,6 @@ export class Room {
         this.doorDeck = [];
         this.treasureDeck = [];
 
-        decks.map(deckName => {
-            this.doorDeck = this.doorDeck.concat(packs[deckName].doors);
-            this.treasureDeck = this.treasureDeck.concat(packs[deckName].treasure);
-        });
 
     }
     /**
@@ -268,6 +266,7 @@ export class Room {
         if(this.table.players.length < MAX_PLAYERS) {
             var player = new Player(client.userName);
             client.playerId = this.table.players.push(player) - 1;
+            this.dispatch('newPlayer', player.name);
             setCommandSet(client, Room.playerCommands, {roomId: this.id, client: client});
             return 'Success';
         } else {
@@ -334,6 +333,10 @@ export class Room {
      * Start game
      */
     start() {
+        this.decks.map(deckName => {
+            this.doorDeck = this.doorDeck.concat(packs[deckName].doors);
+            this.treasureDeck = this.treasureDeck.concat(packs[deckName].treasure);
+        });
         var r = new Random();
         r.shuffle(this.doorDeck);
         r.shuffle(this.treasureDeck);
@@ -409,18 +412,28 @@ Room.clientCommands['start'] = (data, env) => {
 };
 
 function sanitizePlayer(player) {
-    player.hand = player.hand.map(cardId => {
+    let _player = Object.assign({}, player);
+    _player.hand = _player.hand.map(cardId => {
         return Card.byId(cardId).kind;
     });
-    return player;
+    return _player;
 }
+var __ = 10;
 /**
  * 'roomRequest' command:
  * forces server to send room
  */
 Room.clientCommands['roomRequest'] = (data, env) => {
     var sanitizedTable = {};
+    if (__) {
+        console.log('env: ', env);
+    }
     Object.assign(sanitizedTable, env.table);
+    if (__) {
+        console.log(sanitizedTable);
+        console.log('-------------');
+        __--;
+    }
     sanitizedTable.players = sanitizedTable.players.map(player => {
         if(env.player && player.name == env.player.name) return player;
         return sanitizePlayer(player);
@@ -432,7 +445,7 @@ Room.clientCommands['roomRequest'] = (data, env) => {
 };
 
 /**
- * Commands that could be send by player
+ * Commands that could be sent by player
  *
  * @type {function(object, object)}
  */

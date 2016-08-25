@@ -22,7 +22,7 @@ class bigfoot extends Monster {
         });
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         var level = 12;
         players.map(x => {
             if (x.hasRaceDisadvantages('halfling') || x.hasRaceDisadvantages('dwarf'))
