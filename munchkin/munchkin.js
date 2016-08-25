@@ -24,7 +24,6 @@ export var game,
     nickname = 'DAr', room_name = 'keklol', server_addr = 'localhost:3031',
     player = new Player(nickname), table = new Table(),
     connected = false, mainshadow;
-table.players.push(player);
 
 $(function () {
     game = new Phaser.Game('100', '100', Phaser.AUTO, '', {
@@ -52,6 +51,14 @@ $(function () {
         create_buttons();
     }
     
+    var s = 0;
     function update() {
+        if(s == 30)
+        {
+            server.roomRequest(); 
+            s = 0; 
+            create_cards();
+        }else s++;
+        //console.log(player);
     }
 });

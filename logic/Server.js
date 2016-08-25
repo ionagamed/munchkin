@@ -314,6 +314,6 @@ class Server {
         });
     }
 }
-
-export default new Server();
+var x = new Server();
+export default x;
 
