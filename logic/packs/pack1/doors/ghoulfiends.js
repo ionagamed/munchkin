@@ -30,7 +30,7 @@ class ghoulfiends extends Card {
             player.level = m;
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 8;
     }
 }

@@ -22,7 +22,7 @@ class flying_frogs extends Monster {
             }
         });
     }
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         var isElf = false;
         players.map(x => {
             if(x.hasRaceDisadvantages('elf')) 

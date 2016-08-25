@@ -23,7 +23,7 @@ class a3872_orcs extends Monster {
         }
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         var isDwarf = false;
         players.map(x => {
             if(x.hasRaceDisadvantages('dwarf')) 

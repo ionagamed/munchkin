@@ -24,7 +24,7 @@ class drooling_slime extends Monster {
         if (!hadFootgear)
             player.decreaseLevel(1);
     }
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         var isElf = false;
         players.map(x => {
             if(x.hasRaceDisadvantages('elf')) 

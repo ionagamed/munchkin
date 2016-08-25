@@ -17,7 +17,7 @@ class _ extends Monster {
         player.decreaseLevel(3);
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 8;
     }
     

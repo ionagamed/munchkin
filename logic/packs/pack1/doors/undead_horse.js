@@ -18,7 +18,7 @@ class undead_horse extends Monster {
         player.decreaseLevel(2);
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         var isDwarf = false;
         players.map(x => {
             if(x.hasRaceDisadvantages('dwarf')) 

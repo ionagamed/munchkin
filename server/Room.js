@@ -412,18 +412,28 @@ Room.clientCommands['start'] = (data, env) => {
 };
 
 function sanitizePlayer(player) {
-    player.hand = player.hand.map(cardId => {
+    let _player = Object.assign({}, player);
+    _player.hand = _player.hand.map(cardId => {
         return Card.byId(cardId).kind;
     });
-    return player;
+    return _player;
 }
+var __ = 10;
 /**
  * 'roomRequest' command:
  * forces server to send room
  */
 Room.clientCommands['roomRequest'] = (data, env) => {
     var sanitizedTable = {};
+    if (__) {
+        console.log('env: ', env);
+    }
     Object.assign(sanitizedTable, env.table);
+    if (__) {
+        console.log(sanitizedTable);
+        console.log('-------------');
+        __--;
+    }
     sanitizedTable.players = sanitizedTable.players.map(player => {
         if(env.player && player.name == env.player.name) return player;
         return sanitizePlayer(player);
@@ -435,7 +445,7 @@ Room.clientCommands['roomRequest'] = (data, env) => {
 };
 
 /**
- * Commands that could be send by player
+ * Commands that could be sent by player
  *
  * @type {function(object, object)}
  */

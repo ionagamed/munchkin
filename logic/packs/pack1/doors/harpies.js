@@ -17,7 +17,7 @@ class harpies extends Monster {
         player.decreaseLevel(2);
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         var isWizard = false;
         players.map(x => {
             if(x.hasClassDisadvantages('wizard')) 

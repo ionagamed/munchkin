@@ -25,7 +25,7 @@ class horror extends Monster {
         }
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         var isWarrior = false;
         players.map(x => {
             if(x.hasRaceDisadvantages('warrior')) 

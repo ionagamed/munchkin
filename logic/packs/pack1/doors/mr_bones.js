@@ -23,7 +23,7 @@ class mr_bones extends Monster {
         player.decreaseLevel(2);
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 2;
     }
 }

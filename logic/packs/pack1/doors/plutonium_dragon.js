@@ -25,7 +25,7 @@ class plutonium_dragon extends Monster {
         player.die(table);
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 20;
     }
 }
