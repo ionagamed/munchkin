@@ -455,7 +455,14 @@ Room.playerCommands['resurrect'] = (data, env) => {
  *  from integer id of monster from who player is escaping
  */
 Room.playerCommands['escape'] = (data, env) => {
-    env.table.fight.monsters[data.from].onEscape(env.player, dice(), env.table);
+    let d = dice();
+    env.player.wielded.map(x => {
+        const c = Card.byId(x);
+        if (c.onEscape) {
+            d = c.onEscape(env.player, d, env.table);
+        }
+    });
+    env.table.fight.monsters[data.from].onEscape(env.player, d, env.table);
 };
 
 /**
@@ -548,7 +555,7 @@ Room.playerCommands['wieldCard'] = (data, env) => {
     if(phase(env.player, env.table, 'hand') ||
        phase(env.player, env.table, 'drop')) return;
 
-    if(card.canBeWielded(card, env.table)) {
+    if(card.canBeWielded(env.player, env.table)) {
         env.room.dispatch('wieldedCard', {
             who: env.player.name,
             card: cardId

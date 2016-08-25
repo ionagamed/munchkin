@@ -5,7 +5,7 @@
 import { Player } from '../logic/Player';
 import { Table } from '../logic/Table';
 import { Card } from '../logic/Card';
-import { Fight } from '../logic/Fight';
+import Server from '../logic/Server';
 
 import packs from '../logic/packs.js';
 
@@ -34,10 +34,13 @@ function __l(x) {
 }
 
 $(function () {
+    console.log(Server);
     const player = new Player();
     var table = new Table();
     table.players.push(player);
     table.phase = 'open';
+    Server.player = player;
+    Server.table = table;
     
     const updateView = function () {
         $('.player .player-info').html('player: <b>+' + player.getAttack() + '</b>');
@@ -149,25 +152,13 @@ $(function () {
         updateView();
     };
     const rebindHooks = function () {
-        $('.player .addButton').click(e => {
-            add();
-            return false;
-        });
         $('.player .hand .wield').click(e => {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
-            console.log(id);
-            if (player.wield(id, table)) {
-                player.hand.splice(player.hand.indexOf(id), 1);
-            }
-            updateView();
+            Server.wieldCard(id);
             return false;
         });
         $('.player .belt .wield').click(e => {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
-            console.log(id);
-            if (player.wield(id, table)) {
-                player.belt.splice(player.belt.indexOf(id), 1);
-            }
             updateView();
             return false;
         });
@@ -205,7 +196,8 @@ $(function () {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
             player.unwield(id, table);
             player.belt.push(id);
-            updateView();
+            updateView();            console.log(id);
+            
             return false;
         });
         
@@ -232,12 +224,6 @@ $(function () {
         });
     };
     
-    $('.player .add').keypress(e => {
-        if (e.which == 13) {
-            add();
-            return false;
-        }
-    });
     $('#id').keypress(e => {
         if (e.which == 13) {
             $('#img').html('<img width="330" height="524" src="' + __l($('#id').val()) + '">');
@@ -245,25 +231,21 @@ $(function () {
     });
     
     $('.connectButton').click(e => {
-        document.ws = new WebSocket('ws://' + $('#ip').val() + '/?userName=' + $('#username').val() + '&room=abacaba');
-        document.ws.onmessage = function (data) {
-            const d = JSON.parse(data.data);
-            if (d.event == 'gotCards') {
-                player.hand = player.hand.concat(d.data.cards);
-                console.log(d);
-            }
-        };
-        document.ws.onopen = function () {
-            document.ws.send(JSON.stringify({cmd: 'play'}));
+        player.name = $('#username').val();
+        Server.connect($('#username').val(), $('#ip').val(), 'abacaba', () => {
+            Server.play();
             setTimeout(() => {
-                document.ws.send(JSON.stringify({cmd: 'start'}));
-                setTimeout(() => {
-                    document.ws.send(JSON.stringify({cmd: 'resurrect'}));
-                    setTimeout(updateView, 1000);
-                }, 1000);
+                Server.start()
             }, 1000);
-        };
+            setTimeout(() => {
+                Server.resurrect()
+            }, 2000);
+        });
     });
     
-    updateView();
+    const __f = function () {
+        updateView();
+        setTimeout(__f, 500);
+    };
+    __f();
 });
