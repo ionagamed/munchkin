@@ -40,13 +40,14 @@ export function sever_connected() {
 
 export function startGame() {
     while(!global.connected);
+    server.player = global.player;
+    server.table = global.table;
     server.play();
     server.start();
     server.resurrect();
-    server.player = global.player;
-    server.table = global.table;
     create_cards();
     console.log(global.player);
     global.mainshadow.visible = false;
     global.buttonStartGame.visible = false;
+    create_cards();
 }
