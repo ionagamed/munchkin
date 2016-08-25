@@ -9,31 +9,34 @@ import Server from '../logic/Server';
 
 import packs from '../logic/packs.js';
 
-function idToInt(id) {
-    if (Card.byId(id).kind == 'door') {
-        return packs.pack1.doors.indexOf(id);
-    } else {
-        return packs.pack1.treasure.indexOf(id);
-    }
-}
-function _l(c, x) {
-    if (c.kind == 'door') {
-        return '<a href="/packs/pack1/img/doors-' + idToInt(x) + '.png">' + x + '</a>';
-    } else {
-        return '<a href="/packs/pack1/img/treasure-' + idToInt(x) + '.png">' + x + '</a>';
-    }
-}
-
-function __l(x) {
-    const c = Card.byId(x);
-    if (c.kind == 'door') {
-        return '/packs/pack1/img/doors-' + idToInt(x) + '.png';
-    } else {
-        return '/packs/pack1/img/treasure-' + idToInt(x) + '.png';
-    }
-}
+import { registerLoginHooks } from './test/login';
+import { updateView } from './test/updateView';
 
 $(function () {
+    $('.state-game').hide();
+    registerLoginHooks((name, room, ip) => {
+        Server.connect(name, room, ip);
+        $('.state-login').hide();
+        $('.state-game').show();
+        game(name);
+    });
+});
+
+
+function game(playerName) {
+    let player = new Player(playerName);
+    let table = new Table();
+    Server.player = player;
+    Server.table = table;
+    Server.roomRequest();
+    
+    const __f = function () {
+        updateView();
+        setTimeout(__f, 500);
+    };
+}
+
+function neverCalled() {
     console.log(Server);
     const player = new Player();
     var table = new Table();
@@ -231,16 +234,21 @@ $(function () {
     });
     
     $('.connectButton').click(e => {
-        player.name = $('#username').val();
-        Server.connect($('#username').val(), $('#ip').val(), 'abacaba', () => {
-            Server.play();
-            setTimeout(() => {
-                Server.start()
-            }, 1000);
-            setTimeout(() => {
-                Server.resurrect()
-            }, 2000);
-        });
+        const username = $('#username').val();
+        player.name = username;
+        Server.connect(username, $('#ip').val(), 'abacaba');
+    });
+    $('.playButton').click(e => {
+        Server.play();
+    });
+    $('.startButton').click(e => {
+        Server.start();
+    });
+    $('.roomRequestButton').click(e => {
+        Server.roomRequest();
+    });
+    $('.resurrectButton').click(e => {
+        Server.resurrect();
     });
     
     const __f = function () {
@@ -248,4 +256,4 @@ $(function () {
         setTimeout(__f, 500);
     };
     __f();
-});
+}

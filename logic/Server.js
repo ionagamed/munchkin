@@ -35,7 +35,6 @@ class Server {
      * @param {function} [callback] called when the server is ready to receive
      */
      connect(name, addr, room, callback) {
-        callback = callback || function () {};
         this.websocket = new WebSocket(`ws://${addr}/?userName=${name}&room=${room}`);
         this.websocket.onopen = callback;
         var self = this;
@@ -64,7 +63,7 @@ class Server {
                 break;
             case 'gotSomeCards':
                 this.table.players.map(x => {
-                    if (x.name == msg.data.who) {
+                    if (x.name == msg.data.who && x.name != this.player.name) {
                         for (let i = 0; i < msg.data.amount; i++) {
                             x.hand.push('blank');
                         }
@@ -81,9 +80,17 @@ class Server {
                 });
                 break;
             case 'unwieldedCard':
-                this.table.player.map(x => {
+                this.table.players.map(x => {
                     if (x.name == msg.data.who) {
                         x.unwield(msg.data.card, this.table);
+                    }
+                });
+                break;
+            case 'room':
+                Object.assign(this.table, msg.data.table);
+                this.table.players.map(x => {
+                    if (x.name == this.player.name) {
+                        Object.assign(this.player, x);
                     }
                 });
                 break;
