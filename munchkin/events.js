@@ -24,11 +24,25 @@ export function down(obj)
 {
     var oo = Card.byId(obj.key.substr(6));  
     if (oo.canBeWielded(global.player, global.table)){
-        global.player.wield(obj.key.substr(6), global.table);
+        /*global.player.wield(obj.key.substr(6), global.table);
         console.log(global.player);
         global.cards[i].splise();
         global.player.hand[i].splise();
         global.cards[global.player.hand.length - 1] = undefined;
-        create_crads();
+        create_crads();*/
     }
+}
+
+export function sever_connected() {
+    global.connected = true;
+}
+
+export function startGame() {
+    while(!global.connected);
+    global.server.player = global.player;
+    global.server.play();
+    global.server.start();
+    global.server.resurrect();
+    create_cards();
+    console.log(player);
 }

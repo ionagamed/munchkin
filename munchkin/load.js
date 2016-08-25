@@ -1,6 +1,6 @@
 import * as global from './munchkin.js'
 import { actionAttack, actionSmivka } from './action.js'
-import { over, out, down } from './events.js'
+import { over, out, down, sever_connected, startGame } from './events.js'
 
 export function load() {
 	global.game.load.image('down_lower', 'img/back_lower.jpg');
@@ -15,6 +15,7 @@ export function load() {
     global.keyboard = Phaser.Keyboard(global.game);
     global.game.load.image('knife', 'img/knife.png');
     global.game.load.image('nosok', 'img/nosok.png');
+    global.game.load.image('startgame', 'img/startgame.png');
 }
 
 export function create_lower() {
@@ -96,4 +97,6 @@ export function create_buttons() {
     global.buttonSmivka.visible = false;
     global.buttonSmivka.anchor.setTo(0.5, 0.5);
 
+    global.buttonStartGame = global.game.add.button(global.game.world.centerX, global.game.world.centerY, 'startgame', startGame);
+    global.buttonStartGame.anchor.setTo(0.5, 0.5);
 }
