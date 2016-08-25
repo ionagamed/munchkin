@@ -245,6 +245,13 @@ export class Room {
      */
     connect(client) {
         setCommandSet(client, Room.spectatorCommands, {roomId: this.id, client: client});
+        console.log(`${client.userName} connected to room ${this.id}`);
+        client.on('close', code => {
+            console.log(`${client.userName} disconnected from room ${this.id}`);
+            if(client.userName == this.owner) {
+                this.destroy();
+            }
+        });
         return this.clients.push(client) - 1;
     }
 
@@ -284,7 +291,11 @@ export class Room {
      * Destroy room
      */
     destroy() {
+        this.clients.map(ws => {
+            ws.close();
+        });
         Room.rooms[this.id] = undefined;
+        console.log(`Room ${this.id} was destroyed`);
     }
 
     /**
