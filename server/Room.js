@@ -233,7 +233,12 @@ export class Room {
         this.doorDeck = [];
         this.treasureDeck = [];
 
-
+        /**
+         * Array of chosen decks
+         *
+         * @type {[string]}
+         */
+        this.decks = decks;
     }
     /**
      * Connect client to the room
