@@ -31,8 +31,9 @@ function game(playerName) {
 
     const __r = function () {
         Server.roomRequest();
-        setTimout(__r, )
+        setTimeout(__r, 500);
     };
+    setTimeout(__r, 500);
 
     const __f = function () {
         updateView();
