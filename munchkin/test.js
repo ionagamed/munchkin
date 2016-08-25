@@ -28,8 +28,12 @@ function game(playerName) {
     let table = new Table();
     Server.player = player;
     Server.table = table;
-    Server.roomRequest();
-    
+
+    const __r = function () {
+        Server.roomRequest();
+        setTimout(__r, )
+    };
+
     const __f = function () {
         updateView();
         setTimeout(__f, 500);
