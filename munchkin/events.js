@@ -1,8 +1,8 @@
+import server from '../logic/Server';
 import { Card } from '../logic/Card';
+import { Table } from '../logic/Table';
 import { Player } from '../logic/Player';
 import * as global from './munchkin.js';
-import server from '../logic/Server';
-import { Table } from '../logic/Table';
 import { load, create_lower, create_info, create_cards, create_buttons } from './load.js';
 
 export function over(obj){

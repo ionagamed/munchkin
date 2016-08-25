@@ -2,6 +2,8 @@
  * Created by ionagamed on 8/24/16.
  */
 import { Player } from './Player';
+import { create_cards } from '../munchkin/load.js'
+import { player } from '../munchkin/munchkin.js'
 
 class Server {
     constructor() {
@@ -60,6 +62,10 @@ class Server {
                         x.hand = x.hand.concat(msg.data.cards);
                     }
                 });
+                create_cards();
+                console.log('<==');
+                console.log(player);
+                console.log('==>');
                 break;
             case 'gotSomeCards':
                 this.table.players.map(x => {

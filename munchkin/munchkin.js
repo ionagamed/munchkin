@@ -25,6 +25,7 @@ export var game,
     player = new Player(nickname), table = new Table(),
     connected = false, mainshadow;
 
+
 $(function () {
     game = new Phaser.Game('100', '100', Phaser.AUTO, '', {
         preload: preload,
@@ -50,14 +51,15 @@ $(function () {
         create_info();
         create_buttons();
     }
-    document.create = create_cards;
+
     var s = 0;
     function update() {
-        if(s == 30)
+        if(s >= 30 && connected)
         {
             server.roomRequest(); 
             s = 0; 
-            create_cards();
+            console.log(player);
+            //create_cards();
         }else s++;
     }
 });
