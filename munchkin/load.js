@@ -1,5 +1,5 @@
 import * as global from './munchkin.js'
-import { actionAttack, actionSmivka } from './action.js'
+import { actionAttack, actionSmivka, actionCube, actionSell} from './action.js'
 import { over, out, down, sever_connected, startGame } from './events.js'
 
 export function load() {
@@ -17,6 +17,8 @@ export function load() {
     global.game.load.image('nosok', 'img/nosok.png');
     global.game.load.image('startgame', 'img/startgame.png');
     global.game.load.image('mainshadow', 'img/mainshadow.png');
+    global.game.load.image('Cube','img/Cube.png');
+    global.game.load.image('sell','img/sell.png');
 }
 
 export function create_lower() {
@@ -97,6 +99,16 @@ export function create_buttons() {
     global.buttonSmivka = global.game.add.button(0, 0, 'nosok', actionSmivka);
     global.buttonSmivka.visible = false;
     global.buttonSmivka.anchor.setTo(0.5, 0.5);
+    
+    global.buttonCube = global.game.add.button(global.game.width * 0.775,400, 'Cube', actionCube);
+    global.buttonCube.height = global.cobble.height/1.5;
+    global.buttonCube.width = global.cobble.width/2;
+    global.buttonCube.y = global.cobble.y*1.35;
+    
+    global.buttonSell = global.game.add.button(global.game.width * 0.775, 400, 'sell', actionSell);
+    global.buttonSell.height = global.buttonCube.height; 
+    global.buttonSell.width = global.buttonCube.width * 2;
+    global.buttonSell.y = global.buttonCube.y*1.35;
 
     global.mainshadow = global.game.add.image(global.game.world.centerX, global.game.world.centerY,'mainshadow');
     global.mainshadow.anchor.setTo(0.5, 0.5);

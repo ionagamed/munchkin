@@ -24,7 +24,6 @@ export var game,
     player = new Player(), table = new Table(),
     nickname = 'DAr', room_name = 'keklol', server_addr = 'localhost:3031',
     connected = false, mainshadow;
-
 $(function () {
     game = new Phaser.Game('100', '100', Phaser.AUTO, '', {
         preload: preload,
