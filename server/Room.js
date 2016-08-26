@@ -108,6 +108,8 @@ function sendEvent(client, event, data) {
  *   'won'
  *      data:
  *          who {[string]} array of players
+ *   'discardCleared'
+ *      data 'door'|'treasure'
  */
 
 
@@ -247,6 +249,8 @@ export class Room {
          * @type {[string]}
          */
         this.decks = decks;
+
+        this.random = new Random();
     }
     /**
      * Connect client to the room
@@ -337,8 +341,20 @@ export class Room {
     getCards(type, amount) {
         switch (type) {
             case 'door':
+                if(this.doorDeck.length < amount) {
+                    this.random.shuffle(this.table.discardedDoors);
+                    this.doorDeck = this.doorDeck.concat(this.table.discardedDoors);
+                    this.table.discardedDoors = [];
+                    this.dispatch('discardCleared', 'door');
+                }
                 return this.doorDeck.splice(0, amount);
             case 'treasure':
+                if(this.treasureDeck.length < amount) {
+                    this.random.shuffle(this.table.discardedTreasure);
+                    this.doorDeck = this.doorDeck.concat(this.table.discardedTreasure);
+                    this.table.discardedTreasure = [];
+                    this.dispatch('discardCleared', 'treasure');
+                }
                 return this.treasureDeck.splice(0, amount);
         }
     }
@@ -350,9 +366,8 @@ export class Room {
             this.doorDeck = this.doorDeck.concat(packs[deckName].doors.filter(x => x.indexOf('AaA_') < 0));
             this.treasureDeck = this.treasureDeck.concat(packs[deckName].treasure.filter(x => x.indexOf('AaA_') < 0));
         });
-        var r = new Random();
-        r.shuffle(this.doorDeck);
-        r.shuffle(this.treasureDeck);
+        this.random.shuffle(this.doorDeck);
+        this.random.shuffle(this.treasureDeck);
         this.table.playing = true;
         this.dispatch('gameStarted');
     }
@@ -374,9 +389,9 @@ Room.giveCards = function(source, to, cardIds, room, method) {
     var cards = cardIds.map(cardId => {
         switch(cardId) {
             case 'door':
-                return room.doorDeck.splice(0, 1)[0];
+                return room.getCards('door', 1);
             case 'treasure':
-                return room.treasureDeck.splice(0, 1)[0];
+                return room.getCards('treasure', 1);
             default:
                 return cardId;
         }
@@ -472,8 +487,8 @@ Room.playerCommands['resurrect'] = (data, env) => {
     if(!env.player.dead) return;
     if(!env.table.playing) return;
     // env.player.hand = []
-    //     .concat(env.room.doorDeck.splice(0, DOOR_BEGIN_COUNT))
-    //     .concat(env.room.treasureDeck.splice(0, TREASURE_BEGIN_COUNT));
+    //     .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
+    //     .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
     env.player.hand = ['mr_bones'];
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
@@ -523,7 +538,7 @@ Room.playerCommands['winGame'] = (data, env) => {
  */
 Room.playerCommands['kickDoor'] = (data, env) => {
     if(!phase(env.player, env.table, 'begin')) return;
-    var doorCardId = env.room.doorDeck.splice(0, 1)[0];
+    var doorCardId = env.room.getCards('door', 1);
     var doorCard = Card.byId(doorCardId);
     env.room.dispatch('kickedDoor', {
         card: doorCard,
@@ -575,7 +590,7 @@ Room.playerCommands['kickDoor'] = (data, env) => {
 
 Room.playerCommands['lootTheRoom'] = (data, env) => {
     if(!phase(env.player, env.table, 'open')) return;
-    var doorCardId = env.room.doorDeck.splice(0, 1)[0];
+    var doorCardId = env.room.getCards('door', 1);
     var doorCard = Card.byId(doorCardId);
     env.player.hand.push(doorCardId);
     doorCard.onReceived(env.player, 'looting', env.table);
