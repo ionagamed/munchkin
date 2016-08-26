@@ -38,6 +38,13 @@ export class Fight {
          * @type [Object]
          */
         this.monsters = [];
+
+        /**
+         * Timestamp, when the fight began
+         * 
+         * @type {number}
+         */
+        this.beganAt = 0;
     }
 
     /**
@@ -64,7 +71,9 @@ export class Fight {
     getMonstersAttack() {
         var ret = 0;
         this.monsters.map(x => {
-            ret += Card.byId(x.monster).getAttackAgainst(this.players);
+            ret += Card.byId(x.monster).getAttackAgainst(this.players.map(x => {
+                return x.player;
+            }));
             x.modifiers.map(y => {
                 ret += Card.byId(y).getModFor(x.monster);
             });
@@ -78,6 +87,7 @@ export class Fight {
      * @param {Table} table
      */
     onBegan(table) {
+        this.beganAt = +(new Date());
         this.players.map(x => {
             x.player.wielded.map(x => {
                 const c = Card.byId(x);

@@ -56,6 +56,13 @@ export class Table {
          * @type {string}
          */
         this.phase = 'begin';
+
+        /**
+         * Id of the recently kicked door
+         * 
+         * @type {string}
+         */
+        this.recentDoor = '';
     }
 
     /**

@@ -53,21 +53,21 @@ function game(playerName) {
     Server.table = table;
     table.players.push(player);
 
-    const __r = function () {
-        if (!document.stopReload) Server.roomRequest();
-        setTimeout(__r, UPDATE_DELAY);
-    };
-    setTimeout(__r, UPDATE_DELAY);
-
     const __f = function () {
         if (!document.stopViewUpdate) {
             updateView(player, table);
             registerPlayerHooks();
             registerUIHooks();
         }
-        setTimeout(__f, UPDATE_DELAY);
     };
-    __f();
+    const __r = function () {
+        if (!document.stopReload) {
+            Server.roomRequestCallback = __f;
+            Server.roomRequest();
+        }
+        setTimeout(__r, UPDATE_DELAY);
+    };
+    __r();
 }
 
 function neverCalled() {

@@ -15,7 +15,6 @@ class _ extends Item {
         this.kind = 'treasure';
         this.type = 'title';
         this.wieldable = true;
-        this.price = -1;
     }
 
     getAttackFor(player) {

@@ -3,8 +3,8 @@
  */
 import { Player } from './Player';
 import { create_cards } from '../munchkin/load.js'
-import { player } from '../munchkin/munchkin.js'
 import { Fight } from './Fight';
+import { Table } from './Table';
 
 class Server {
     constructor() {
@@ -34,12 +34,12 @@ class Server {
      * This function does the convertion to object instances
      */
     sanitizeClasses() {
-        this.player = Object.assign(new Player(), this.player);
         this.table.players = this.table.players.map(x => Object.assign(new Player(), x));
         if (this.table.fight) {
             this.table.fight = Object.assign(new Fight(), this.table.fight);
             this.table.fight.players.map(x => {
                 x.player = Object.assign(new Player(), x.player);
+                return x;
             });
         }
     }
@@ -116,7 +116,10 @@ class Server {
                         Object.assign(this.player, x);
                     }
                 });
-                this.sanitizeClasses();
+                if (this.roomRequestCallback) {
+                    this.sanitizeClasses();
+                    this.roomRequestCallback();
+                }
                 break;
             case 'gameStarted':
                 if (this.onGameStarted) {
@@ -124,7 +127,11 @@ class Server {
                 }
                 create_cards();
                 break;
+            case 'kickedDoor':
+                this.table.recentDoor = msg.data.card.id;
+                break;
         }
+        this.sanitizeClasses();
     }
     
     _send(obj) {
@@ -341,6 +348,24 @@ class Server {
             data: {
                 card: card
             }
+        });
+    }
+
+    /**
+     * Ends the current turn
+     */
+    endTurn() {
+        this._send({
+            cmd: 'endTurn'
+        });
+    }
+
+    /**
+     * Try to win the current fight
+     */
+    winFight() {
+        this._send({
+            cmd: 'winFight'
         });
     }
 }

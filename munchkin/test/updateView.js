@@ -16,12 +16,12 @@ export function updateView(player, table) {
         content += _player.name;
         content += ` | пол: ${_t(_player.sex)}`;
         content += ` | уровень: ${_player.level} | сила: <b>${_player.getAttack()}</b>`;
-        content += '<ul>';
-        content += '<li>рука:<ul>';
+        content += '<br><ul>';
+        content += '<li>рука:<ul class="list-group">';
         _player.hand.map(x => {
             const c = Card.byId(x);
             var t = [];
-            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a><br>`);
+            t.push(`${_t(x)}<br>`);
             if (c.getAttackFor && c.getAttackFor(player) != 0) {
                 t.push(`<b>+${c.getAttackFor(_player)}</b>`);
             }
@@ -47,13 +47,13 @@ export function updateView(player, table) {
                 }
                 t.push(`<a class="discard">в сброс</a>`);
             }
-            content += `<li data-id="${x}">${t.join(' | ')}</li>`;
+            content += `<li class='list-group-item itemId' data-id="${x}">${t.join(' | ')}</li>`;
         });
-        content += '</ul></li><li>пояс:<ul>';
+        content += '</ul></li><li>пояс:<ul class="list-group">';
         _player.belt.map(x => {
             const c = Card.byId(x);
             var t = [];
-            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a><br>`);
+            t.push(`${_t(x)}<br>`);
             if (c.getAttackFor && c.getAttackFor(player) != 0) {
                 t.push(`<b>+${c.getAttackFor(_player)}</b>`);
             }
@@ -79,13 +79,13 @@ export function updateView(player, table) {
                 }
                 t.push(`<a class="discard">в сброс</a>`);
             }
-            content += `<li data-id="${x}">${t.join(' | ')}</li>`;
+            content += `<li class='list-group-item itemId' data-id="${x}">${t.join(' | ')}</li>`;
         });
-        content += '</ul></li><li>стол:<ul>';
+        content += '</ul></li><li>стол:<ul class="list-group">';
         _player.wielded.map(x => {
             const c = Card.byId(x);
             var t = [];
-            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a><br>`);
+            t.push(`${_t(x)}<br>`);
             if (c.getAttackFor && c.getAttackFor(player) != 0) {
                 t.push(`<b>+${c.getAttackFor(_player)}</b>`);
             }
@@ -111,7 +111,7 @@ export function updateView(player, table) {
                 }
                 t.push(`<a class="discard">в сброс</a>`);
             }
-            content += `<li data-id="${x}">${t.join(' | ')}</li>`;
+            content += `<li class='list-group-item itemId' data-id="${x}">${t.join(' | ')}</li>`;
         });
         content += '</ul></li></ul>';
         content += `<div class='btn-group'>`;
@@ -119,7 +119,7 @@ export function updateView(player, table) {
             if (table.phase == 'begin') {
                 content += `<button class='btn btn-primary kickDoor'>Пнуть дверь</button>`;
             }
-            if (table.phase == 'open') {
+            if (table.phase == 'open' && table.fight == null) {
                 content += `<button class='btn btn-primary closeDoor'>Почистить нычки</button>`
             }
             if (table.phase != 'begin') {
@@ -155,9 +155,19 @@ export function updateView(player, table) {
         if (!table.fight) {
             fightEl.html('на данный момент все спокойно');
         } else {
-            let content = `<ul><li>монстры: | атака: <b>${table.fight.getMonstersAttack()}</b><ul>`;
+            let content = '';
+            if (table.fight.getWinningSide() == 'players') {
+                if (+(new Date()) - table.fight.beganAt < 5) {
+                    content += ` | осталось ${+(new Date()) - table.fight.beganAt} секунд`;
+                } else {
+                    content += ` | <a href='#' class='winFight'>выиграть</a>`;
+                }
+            } else {
+                content += ` | <a href='#' class='escape'>смывка</a>`;
+            }
+            content += `<ul><li>монстры: | атака: <b>${table.fight.getMonstersAttack()}</b><ul>`;
             table.fight.monsters.map(x => {
-                content += `<li><a class='itemId' data-id='${x.monster}'>${_t(x.monster)}</a> | атака: <b>${x.monster.getAttackAgainst(table.fight.players)}</b>`;
+                content += `<li><a class='itemId' data-id='${x.monster}'>${_t(x.monster)}</a> | атака: <b>${Card.byId(x.monster).getAttackAgainst(table.fight.players.map(y => y.player))}</b>`;
                 content += `<ul>`;
                 x.modifiers.map(y => {
                     content += `<li><a class='itemId' data-id='${y}'>${_t(y)}</a></li>`;
@@ -176,22 +186,30 @@ export function updateView(player, table) {
             fightEl.html(content);
         }
     };
-    
+    let updateKickedDoor = () => {
+        if (table.recentDoor) {
+            $('.recentDoor').html(`<a class='itemId' data-id='${table.recentDoor}'>${_t(table.recentDoor)}</a>`);
+        }
+    };
     let updateDiscard = () => {
         if (table.discardedDoors.length > 0) {
             const id = table.discardedDoors[table.discardedDoors.length - 1];
-            $('.discardedDoors').html(`<a class='itemId' id=${id}>${_t(id)}</a>, ...`)
+            $('.discardedDoors').html(`<a class='itemId' id='${id}'>${_t(id)}</a>, ...`)
         }
         if (table.discardedTreasure.length > 0) {
             const id = table.discardedTreasure[table.discardedTreasure.length - 1];
-            $('.discardedTreasure').html(`<a class='itemId' id=${id}>${_t(id)}</a>, ...`)
+            $('.discardedTreasure').html(`<a class='itemId' id='${id}'>${_t(id)}</a>, ...`)
         }
     };
     let updateTable = () => {
         updateDiscard();
+        updateKickedDoor();
         updateFight();
     };
     
+    if (table.fight) {
+        console.log(table.fight.players[0].player.hasRaceAdvantages);
+    }
     updatePlayers();
     updateTable();
 }
