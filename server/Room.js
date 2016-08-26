@@ -202,6 +202,18 @@ function getCardFromPlayerById(player, id, env) {
         });
         return true;
     }
+    if (remove_first(id, player.wielded)) {
+        Card.byId(id).onUnwielded(player, env.table);
+        env.room.dispatch('unwieldedCard', {
+            who: player.name,
+            card: id
+        });
+        env.room.dispatch('lostCard', {
+            who: player.name,
+            card: id
+        });
+        return true;
+    }
     return false;
 }
 
