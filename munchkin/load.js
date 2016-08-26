@@ -17,9 +17,9 @@ export function load() {
     global.game.load.image('nosok', 'img/nosok.png');
     global.game.load.image('startgame', 'img/startgame.png');
     global.game.load.image('mainshadow', 'img/mainshadow.png');
-    global.game.load.image('Cube','img/Cube.png');
-    global.game.load.image('sell','img/sell.png');
-    global.game.load.image('buttonUse','img/buttonUse.png')
+    global.game.load.image('buttonWield', 'img/buttonWield.png');
+    global.game.load.image('buttonUse', 'img/buttonUse.png');
+    global.game.load.image('buttonCast', 'img/buttonCast.png');
 }
 
 export function create_lower() {
@@ -78,12 +78,23 @@ export function create_info() {
 }
 
 export function create_cards() {
+    if(global.create_cards_on == true)
 	for (var i = 0; i < global.player.hand.length; i++) {
+<<<<<<< HEAD
         global.cards[i] = global.game.add.image(0, 0, 'pack1_' +global.player.hand[i]);//'doors'+i);
         global.cards[i].anchor.setTo(0.5, 0.5);
         global.cards[i].height = global.game.height * 0.25;
         global.cards[i].width =global.cards[i].height /1028*661;
         global.cards[i].y = global.game.height - global.cards[i].height/2;
+=======
+        if(global.cards[i] != undefined) global.cards[i].destroy();
+        global.cards[i] = global.game.add.image(0, 0, 'pack1_'+ global.player.hand[i]);
+        global.cards[i].anchor.setTo(0.5, 0);
+        global.cards[i].height = global.game.height - global.upper_lower.height;
+        global.cards[i].width = global.cards[i].height / 1028 * 661;
+        global.cards[i].y = global.upper_lower.height;
+        global.cards[i].x = global.cards[i].width / 2 + global.cards[i].width * i; 
+>>>>>>> 17d6010fe99ca43058de59592076cf567070e510
         global.cards[i].iter = i;
         global.cards[i].inputEnabled = true;
         global.cards[i].events.onInputOver.add(over);

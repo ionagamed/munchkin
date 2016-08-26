@@ -64,6 +64,7 @@ class Server {
                         x.hand = x.hand.concat(msg.data.cards);
                     }
                 });
+                create_cards();
                 break;
             case 'gotSomeCards':
                 this.table.players.map(x => {
@@ -82,6 +83,7 @@ class Server {
                         x.belt = x.belt.filter(x => x != msg.data.card);
                     }
                 });
+                create_cards();
                 break;
             case 'unwieldedCard':
                 this.table.players.map(x => {
@@ -89,6 +91,7 @@ class Server {
                         x.unwield(msg.data.card, this.table);
                     }
                 });
+                create_cards();
                 break;
             case 'room':
                 Object.assign(this.table, msg.data.table);
@@ -102,6 +105,7 @@ class Server {
                 if (this.onGameStarted) {
                     this.onGameStarted();
                 }
+                create_cards();
                 break;
         }
     }
