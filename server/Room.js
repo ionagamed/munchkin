@@ -579,6 +579,8 @@ Room.playerCommands['lootTheRoom'] = (data, env) => {
 Room.playerCommands['endTurn'] = (data, env) => {
     if(env.table.fight != null || phase(env.player, env.table, 'begin')) return;
     if(env.table.players[env.table.turn].name != env.player.name) return;
+    //TODO: dwarf test
+    if(env.player.hand.length > 5) return;
 
     env.table.nextTurn();
     env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
