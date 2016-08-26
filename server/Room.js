@@ -489,7 +489,7 @@ Room.playerCommands['resurrect'] = (data, env) => {
     // env.player.hand = []
     //     .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
     //     .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
-    env.player.hand = ['mr_bones'];
+    env.player.hand = ['3872_orcs'];
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
         if(card) card.onReceived(env.player, 'deck', env.table);
@@ -522,14 +522,13 @@ Room.playerCommands['escape'] = (data, env) => {
 };
 
 /**
- * 'win' command:
+ * 'winGame' command:
  */
 
-Room.playerCommands['win'] = (data, env) => {
-    if(env.table.fight.getWinningSide() != 'players') return;
-    env.table.fight.onEnded(env.table);
-    env.room.dispatch('won', {
-        who: env.table.fight.players
+Room.playerCommands['winGame'] = (data, env) => {
+    if (env.player.level < 10) return;
+    env.room.dispatch('wonGame', {
+        who: env.player
     });
 };
 

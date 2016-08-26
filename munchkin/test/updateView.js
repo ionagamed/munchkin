@@ -188,11 +188,11 @@ export function updateView(player, table) {
     let updateDiscard = () => {
         if (table.discardedDoors.length > 0) {
             const id = table.discardedDoors[table.discardedDoors.length - 1];
-            $('.discardedDoors').html(`<a class='itemId' id='${id}'>${_t(id)}</a>, ...`)
+            $('.discardedDoors').html(`<a class='itemId' data-id='${id}'>${_t(id)}</a>, ...`)
         }
         if (table.discardedTreasure.length > 0) {
             const id = table.discardedTreasure[table.discardedTreasure.length - 1];
-            $('.discardedTreasure').html(`<a class='itemId' id='${id}'>${_t(id)}</a>, ...`)
+            $('.discardedTreasure').html(`<a class='itemId' data-id='${id}'>${_t(id)}</a>, ...`)
         }
     };
     let updateTable = () => {
