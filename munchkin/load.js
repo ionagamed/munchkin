@@ -17,6 +17,9 @@ export function load() {
     global.game.load.image('nosok', 'img/nosok.png');
     global.game.load.image('startgame', 'img/startgame.png');
     global.game.load.image('mainshadow', 'img/mainshadow.png');
+    global.game.load.image('buttonWield', 'img/buttonWield.png');
+    global.game.load.image('buttonUse', 'img/buttonUse.png');
+    global.game.load.image('buttonCast', 'img/buttonCast.png');
 }
 
 export function create_lower() {
@@ -71,7 +74,9 @@ export function create_info() {
 }
 
 export function create_cards() {
+    if(global.create_cards_on == true)
 	for (var i = 0; i < global.player.hand.length; i++) {
+        if(global.cards[i] != undefined) global.cards[i].destroy();
         global.cards[i] = global.game.add.image(0, 0, 'pack1_'+ global.player.hand[i]);
         global.cards[i].anchor.setTo(0.5, 0);
         global.cards[i].height = global.game.height - global.upper_lower.height;
@@ -84,10 +89,6 @@ export function create_cards() {
         global.cards[i].events.onInputDown.add(down);
         global.cards[i].events.onInputOut.add(out);
     }
-}
-
-export function destroy_cards() {
-    for (var i = 0; i < global.player.hand.length; i++)global.cards[i].destroy();
 }
 
 export function create_buttons() {

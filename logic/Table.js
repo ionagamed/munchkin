@@ -85,6 +85,7 @@ export class Table {
      */
     nextTurn() {
         this.turn = (this.turn + 1) % this.players.length;
+        this.phase = 'begin';
     }
 }
 
