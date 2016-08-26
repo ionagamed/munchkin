@@ -1,6 +1,6 @@
 import * as global from './munchkin.js'
 import { actionAttack, actionSmivka } from './action.js'
-import { over, out, down, sever_connected, startGame } from './events.js'
+import { over, out, down, server_connected, startGame } from './events.js'
 
 export function load() {
 	global.game.load.image('down_lower', 'img/back_lower.jpg');
@@ -71,23 +71,23 @@ export function create_info() {
 }
 
 export function create_cards() {
-    console.log(global.player.hand.length);
 	for (var i = 0; i < global.player.hand.length; i++) {
-        global.cards[i] = global.game.add.image(0, 0, 'pack1_' +global.player.hand[i]);//'doors'+i);
-        global.cards[i].anchor.setTo(0.5, 0.5);
-        global.cards[i].height = global.game.height * 0.25;
-        global.cards[i].width =global.cards[i].height /1028*661;
-        global.cards[i].y = global.game.height - global.cards[i].height/2;
+        global.cards[i] = global.game.add.image(0, 0, 'pack1_'+ global.player.hand[i]);
+        global.cards[i].anchor.setTo(0.5, 0);
+        global.cards[i].height = global.game.height - global.upper_lower.height;
+        global.cards[i].width = global.cards[i].height / 1028 * 661;
+        global.cards[i].y = global.upper_lower.height;
+        global.cards[i].x = global.cards[i].width / 2 + global.cards[i].width * i; 
         global.cards[i].iter = i;
         global.cards[i].inputEnabled = true;
         global.cards[i].events.onInputOver.add(over);
         global.cards[i].events.onInputDown.add(down);
         global.cards[i].events.onInputOut.add(out);
-        if(global.ccount * global.cards[i].width < global.game.width)
-            global.cards[i].x = global.cards[i].width/2 + i * global.cglobal.ards[i].width;
-        if(global.ccount * global.cards[i].width > global.game.width)
-            global.cards[i].x = global.cards[i].width/2 +  i * global.cards[i].width * global.game.width / (global.ccount*global.cards[i].width);
     }
+}
+
+export function destroy_cards() {
+    for (var i = 0; i < global.player.hand.length; i++)global.cards[i].destroy();
 }
 
 export function create_buttons() {

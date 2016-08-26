@@ -64,10 +64,6 @@ class Server {
                         x.hand = x.hand.concat(msg.data.cards);
                     }
                 });
-                create_cards();
-                console.log('<==');
-                console.log(player);
-                console.log('==>');
                 break;
             case 'gotSomeCards':
                 this.table.players.map(x => {
