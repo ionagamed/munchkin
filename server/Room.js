@@ -507,14 +507,13 @@ Room.playerCommands['escape'] = (data, env) => {
 };
 
 /**
- * 'win' command:
+ * 'winGame' command:
  */
 
-Room.playerCommands['win'] = (data, env) => {
-    if(env.table.fight.getWinningSide() != 'players') return;
-    env.table.fight.onEnded(env.table);
-    env.room.dispatch('won', {
-        who: env.table.fight.players
+Room.playerCommands['winGame'] = (data, env) => {
+    if (env.player.level < 10) return;
+    env.room.dispatch('wonGame', {
+        who: env.player
     });
 };
 

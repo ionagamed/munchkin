@@ -23,15 +23,16 @@ function __l(x) {
 }
 
 export function registerUIHooks() {
-    $('.itemId').unbind('mouseover').unbind('mouseout').hover(
-        e => {
+    $('.itemId')
+        .unbind('mouseenter')
+        .unbind('mouseleave')
+        .mouseenter(function (e) {
             $('.popup').removeClass('hidden');
-            $('.popup-image').attr('src', `${__l($(e.target).data('id'))}`);
-        },
-        e => {
+            $('.popup-image').attr('src', `${__l($(this).data('id'))}`);
+        })
+        .mouseleave(function (e) {
             $('.popup').addClass('hidden');
-        }
-    );
+        });
     
     $('.winFight').unbind('click').click(e => {
         Server.winFight();
