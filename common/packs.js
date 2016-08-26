@@ -33,8 +33,8 @@ var packs = {
             'half-breed_2',
             'help_me_out_here',
             'illusion',
-            'mate',
-            'out_to_lunch',//?
+            'mate',//
+            'out_to_lunch',//
             'squidzilla',//
             'stoned_golem',//*
             'tongue_demon',//*
