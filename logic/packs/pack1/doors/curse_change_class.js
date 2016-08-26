@@ -30,6 +30,7 @@ class curse_change_class extends Curse {
                 }
             }
         }
+        return true;
     }
 }
 Card.cards[id] = new curse_change_class();

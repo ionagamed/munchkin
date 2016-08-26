@@ -18,6 +18,7 @@ class _ extends Curse {
                 dest.unwield(x, table);
             } 
         });
+        return true;
     }
 } 
 Card.cards[id] = new _();

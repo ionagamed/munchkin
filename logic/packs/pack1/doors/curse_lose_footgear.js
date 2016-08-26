@@ -19,6 +19,7 @@ class CurseLoseFootgear extends Curse {
                 table.discard(i);
             }
         }
+        return true;
     }
 }
 Card.cards[id] = new CurseLoseFootgear();

@@ -30,6 +30,7 @@ class _ extends Curse {
                 }
             }
         }
+        return true;
     }
 }
 Card.cards[id] = new _();

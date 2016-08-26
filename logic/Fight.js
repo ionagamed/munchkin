@@ -108,6 +108,9 @@ export class Fight {
                 c.onFightEnded(this, table);
             });
         });
+        this.monsters.map(x => {
+            Card.byId(x.monster).onFightEnded(this, table);
+        });
         this.players.map(x => {
             x.modifiers.map(y => {
                 table.discard(y);
