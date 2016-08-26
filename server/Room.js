@@ -401,9 +401,9 @@ Room.giveCards = function(source, to, cardIds, room, method) {
     var cards = cardIds.map(cardId => {
         switch(cardId) {
             case 'door':
-                return room.getCards('door', 1);
+                return room.getCards('door', 1)[0];
             case 'treasure':
-                return room.getCards('treasure', 1);
+                return room.getCards('treasure', 1)[0];
             default:
                 return cardId;
         }
@@ -499,8 +499,8 @@ Room.playerCommands['resurrect'] = (data, env) => {
     if(!env.player.dead) return;
     if(!env.table.playing) return;
     // env.player.hand = []
-    //     .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
-    //     .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
+    //     .concat(env.room.getCards('door', DOOR_BEGIN_COUNT)[0])
+    //     .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT)[0]);
     env.player.hand = ['3872_orcs'];
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
@@ -602,7 +602,7 @@ Room.playerCommands['kickDoor'] = (data, env) => {
 
 Room.playerCommands['lootTheRoom'] = (data, env) => {
     if(!phase(env.player, env.table, 'open')) return;
-    var doorCardId = env.room.getCards('door', 1);
+    var doorCardId = env.room.getCards('door', 1)[0];
     var doorCard = Card.byId(doorCardId);
     env.player.hand.push(doorCardId);
     doorCard.onReceived(env.player, 'looting', env.table);
