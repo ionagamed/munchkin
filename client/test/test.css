@@ -7,7 +7,7 @@ a {
 }
 
 .popup {
-    position: absolute;
+    position: fixed;
     top: 70px;
     right: 70px;
 }
