@@ -116,7 +116,7 @@ const translationMapping = {
     'flaming_poison_potion': 'Зелье Пламенной Отравы',
     'freezing_explosive_potion': 'Заморажтвающие Взрывное Зелье',
     'magic_missile': 'Магичиская Ракета',
-    'pantyhose_of_giant_strength': 'Колготки Виликанской Силы',
+    'pantyhose_of_giant_strength': 'Колготки Великанской Силы',
     'pointy_hat_of_power': 'Остроконечная Шляпа Могущества',
     'rapier_of_unfairness': 'Рапира Такнечестности',
     'rat_on_a_stick': 'Крыса на палочке',
