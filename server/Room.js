@@ -105,6 +105,9 @@ function sendEvent(client, event, data) {
  *      data:
  *          turn {integer} current turn
  *          phase {string} current phase
+ *   'won'
+ *      data:
+ *          who {[string]} array of players
  */
 
 
@@ -508,6 +511,9 @@ Room.playerCommands['escape'] = (data, env) => {
 Room.playerCommands['win'] = (data, env) => {
     if(env.table.fight.getWinningSide() != 'players') return;
     env.table.fight.onEnded(env.table);
+    env.room.dispatch('won', {
+        who: env.table.fight.players
+    });
 };
 
 /**
