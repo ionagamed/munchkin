@@ -8,6 +8,7 @@ import Random from 'random-js';
 const MAX_PLAYERS = 6;
 const TREASURE_BEGIN_COUNT = 4;
 const DOOR_BEGIN_COUNT = 4;
+const DEBUG = true;
 
 /**
  * Helper to send event to client
@@ -114,6 +115,7 @@ function sendEvent(client, event, data) {
  */
 function setCommandSet(ws, set, env) {
     ws.onmessage = data => {
+        if (DEBUG) console.log(data.data);
         try {
             var msg = JSON.parse(data.data);
             env.room = Room.byId(env.roomId);
@@ -340,8 +342,6 @@ export class Room {
      */
     start() {
         this.decks.map(deckName => {
-            console.log(packs[deckName].doors.filter(x => x.indexOf('AaA_') < 0));
-            console.log(packs[deckName].doors);
             this.doorDeck = this.doorDeck.concat(packs[deckName].doors.filter(x => x.indexOf('AaA_') < 0));
             this.treasureDeck = this.treasureDeck.concat(packs[deckName].treasure.filter(x => x.indexOf('AaA_') < 0));
         });
@@ -503,8 +503,12 @@ Room.playerCommands['escape'] = (data, env) => {
  *  kicks door
  */
 Room.playerCommands['kickDoor'] = (data, env) => {
-    if(!phase(env.player, env.table, 'begin')) return;
-    var doorCardId = env.room.doorDeck.splice(0, 1);
+    if(!phase(env.player, env.table, 'begin')) {
+        console.log(env.player);
+        console.log(env.table);
+        return;
+    }
+    var doorCardId = env.room.doorDeck.splice(0, 1)[0];
     var doorCard = Card.byId(doorCardId);
     env.room.dispatch('kickedDoor', {
         card: doorCard,
@@ -555,7 +559,7 @@ Room.playerCommands['kickDoor'] = (data, env) => {
 
 Room.playerCommands['lootTheRoom'] = (data, env) => {
     if(!phase(env.player, env.table, 'open')) return;
-    var doorCardId = env.room.doorDeck.splice(0, 1);
+    var doorCardId = env.room.doorDeck.splice(0, 1)[0];
     var doorCard = Card.byId(doorCardId);
     env.player.hand.push(doorCardId);
     doorCard.onReceived(env.player, 'looting', env.table);
