@@ -53,7 +53,7 @@ class Server {
      */
      _onMessage(data) {
         const msg = JSON.parse(data.data);
-        if (true || msg.event != 'room') {
+        if (msg.event != 'room') {
             console.log(msg);
         }
         // TODO: add handling

@@ -7,30 +7,6 @@ import { Player } from '../../logic/Player';
 
 import packs from '../../logic/packs';
 
-function idToInt(id) {
-    if (Card.byId(id).kind == 'door') {
-        return packs.pack1.doors.indexOf(id);
-    } else {
-        return packs.pack1.treasure.indexOf(id);
-    }
-}
-function _l(c, x) {
-    if (c.kind == 'door') {
-        return '<a href="/packs/pack1/img/doors-' + idToInt(x) + '.png">' + x + '</a>';
-    } else {
-        return '<a href="/packs/pack1/img/treasure-' + idToInt(x) + '.png">' + x + '</a>';
-    }
-}
-
-function __l(x) {
-    const c = Card.byId(x);
-    if (c.kind == 'door') {
-        return '/packs/pack1/img/doors-' + idToInt(x) + '.png';
-    } else {
-        return '/packs/pack1/img/treasure-' + idToInt(x) + '.png';
-    }
-}
-
 import _t from './translate';
 
 export function updateView(player, table) {
@@ -38,94 +14,107 @@ export function updateView(player, table) {
         table.players = table.players.map(x => Object.assign(new Player(), x));
     };
     
-    let updatePlayer = (player) => {
-        let content = `<div class="list-group-item" data-player="${player.name}">`;
-        content += player.name;
-        content += ` | уровень: ${player.level} | сила: <b>${player.getAttack()}</b>`;
+    let updatePlayer = (_player) => {
+        let content = `<div class="list-group-item" data-player="${_player.name}">`;
+        content += _player.name;
+        content += ` | пол: ${_t(_player.sex)}`;
+        content += ` | уровень: ${_player.level} | сила: <b>${_player.getAttack()}</b>`;
         content += '<ul>';
         content += '<li>рука:<ul>';
-        player.hand.map(x => {
+        _player.hand.map(x => {
             const c = Card.byId(x);
             var t = [];
-            t.push(_l(c, x));
-            if (c.getAttackFor) {
-                t.push(`<b>+${c.getAttackFor(player)}</b>`);
+            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a><br>`);
+            if (c.getAttackFor && c.getAttackFor(player) != 0) {
+                t.push(`<b>+${c.getAttackFor(_player)}</b>`);
             }
             if (c.big) {
-                t.push('болшая');
+                t.push('большая');
             }
             if (c.price) {
                 t.push(`${c.price} голдов`);
             }
-            t.push(_t(c.type));
-            if (c.wieldable) {
-                t.push(`<a class="wield">одеть</a>`);
+            if (player.name == _player.name) {
+                t.push(_t(c.type));
+                if (c.wieldable) {
+                    t.push(`<a class="wield">надеть</a>`);
+                }
+                if (c.usable) {
+                    t.push(`<a class="use">использовать</a>`);
+                }
+                if (c.castable) {
+                    t.push(`<a class="cast">кастануть</a>`);
+                }
+                if (c.price && c.price >= 0) {
+                    t.push(`<a class="toBelt">в пояс</a>`);
+                }
+                t.push(`<a class="discard">в сброс</a>`);
             }
-            if (c.usable) {
-                t.push(`<a class="use">использовать</a>`);
-            }
-            if (c.castable) {
-                t.push(`<a class="cast">кастануть</a>`);
-            }
-            t.push(`<a class="toBelt">в пояс</a>`);
-            t.push(`<a class="discard">в сброс</a>`);
-            content += `<li>${t.join(' | ')}</li>`;
+            content += `<li data-id="${x}">${t.join(' | ')}</li>`;
         });
         content += '</ul></li><li>пояс:<ul>';
-        player.belt.map(x => {
+        _player.belt.map(x => {
             const c = Card.byId(x);
             var t = [];
-            t.push(_l(c, x));
-            if (c.getAttackFor) {
-                t.push(`<b>+${c.getAttackFor(player)}</b>`);
+            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a><br>`);
+            if (c.getAttackFor && c.getAttackFor(player) != 0) {
+                t.push(`<b>+${c.getAttackFor(_player)}</b>`);
             }
             if (c.big) {
-                t.push('болшая');
+                t.push('большая');
             }
             if (c.price) {
                 t.push(`${c.price} голдов`);
             }
-            t.push(_t(c.type));
-            if (c.wieldable) {
-                t.push(`<a class="wield">одеть</a>`);
+            if (_player.name == player.name) {
+                t.push(_t(c.type));
+                if (c.wieldable) {
+                    t.push(`<a class="wield">надеть</a>`);
+                }
+                if (c.usable) {
+                    t.push(`<a class="use">использовать</a>`);
+                }
+                if (c.castable) {
+                    t.push(`<a class="cast">кастануть</a>`);
+                }
+                if (c.price && c.price >= 0) {
+                    t.push(`<a class="toBelt">в пояс</a>`);
+                }
+                t.push(`<a class="discard">в сброс</a>`);
             }
-            if (c.usable) {
-                t.push(`<a class="use">использовать</a>`);
-            }
-            if (c.castable) {
-                t.push(`<a class="cast">кастануть</a>`);
-            }
-            t.push(`<a class="toBelt">в пояс</a>`);
-            t.push(`<a class="discard">в сброс</a>`);
-            content += `<li>${t.join(' | ')}</li>`;
+            content += `<li data-id="${x}">${t.join(' | ')}</li>`;
         });
         content += '</ul></li><li>стол:<ul>';
-        player.wielded.map(x => {
+        _player.wielded.map(x => {
             const c = Card.byId(x);
             var t = [];
-            t.push(_l(c, x));
-            if (c.getAttackFor) {
-                t.push(`<b>+${c.getAttackFor(player)}</b>`);
+            t.push(`<a class='itemId' data-id='${x}'>${_t(x)}</a><br>`);
+            if (c.getAttackFor && c.getAttackFor(player) != 0) {
+                t.push(`<b>+${c.getAttackFor(_player)}</b>`);
             }
             if (c.big) {
-                t.push('болшая');
+                t.push('большая');
             }
             if (c.price) {
                 t.push(`${c.price} голдов`);
             }
-            t.push(_t(c.type));
-            if (c.wieldable) {
-                t.push(`<a class="unwield">снять</a>`);
+            if (_player.name == player.name) {
+                t.push(_t(c.type));
+                if (c.wieldable) {
+                    t.push(`<a class="unwield">снять</a>`);
+                }
+                if (c.usable) {
+                    t.push(`<a class="use">использовать</a>`);
+                }
+                if (c.castable) {
+                    t.push(`<a class="cast">кастануть</a>`);
+                }
+                if (c.price && c.price >= 0) {
+                    t.push(`<a class="toBelt">в пояс</a>`);
+                }
+                t.push(`<a class="discard">в сброс</a>`);
             }
-            if (c.usable) {
-                t.push(`<a class="use">использовать</a>`);
-            }
-            if (c.castable) {
-                t.push(`<a class="cast">кастануть</a>`);
-            }
-            t.push(`<a class="toBelt">в пояс</a>`);
-            t.push(`<a class="discard">в сброс</a>`);
-            content += `<li>${t.join(' | ')}</li>`;
+            content += `<li data-id="${x}">${t.join(' | ')}</li>`;
         });
         content += '</ul></li></ul></div>';
         $('#players-list').append(content);
@@ -147,6 +136,21 @@ export function updateView(player, table) {
         }
     };
     
+    let updateDiscard = () => {
+        if (table.discardedDoors.length > 0) {
+            const id = table.discardedDoors[table.discardedDoors.length - 1];
+            $('.discardedDoors').html(`<li><a class='itemId' id=${id}>${_t(id)}</a>, ...</li>`)
+        }
+        if (table.discardedTreasure.length > 0) {
+            const id = table.discardedTreasure[table.discardedTreasure.length - 1];
+            $('.discardedTreasure').html(`<li><a class='itemId' id=${id}>${_t(id)}</a>, ...</li>`)
+        }
+    };
+    let updateTable = () => {
+        updateDiscard();
+    };
+    
     updateClasses();
     updatePlayers();
+    updateTable();
 }

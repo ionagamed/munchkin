@@ -5,3 +5,13 @@ a:hover {
 a {
     text-decoration: none;
 }
+
+.popup {
+    position: absolute;
+    top: 70px;
+    right: 70px;
+}
+
+.hidden {
+    display: none;
+}
