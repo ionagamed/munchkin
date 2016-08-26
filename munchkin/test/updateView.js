@@ -4,16 +4,13 @@
 
 import { Card } from '../../logic/Card';
 import { Player } from '../../logic/Player';
+import { Fight } from '../../logic/Fight';
 
 import packs from '../../logic/packs';
 
 import _t from './translate';
 
 export function updateView(player, table) {
-    let updateClasses = () => {
-        table.players = table.players.map(x => Object.assign(new Player(), x));
-    };
-    
     let updatePlayer = (_player) => {
         let content = `<div class="list-group-item" data-player="${_player.name}">`;
         content += _player.name;
@@ -116,7 +113,24 @@ export function updateView(player, table) {
             }
             content += `<li data-id="${x}">${t.join(' | ')}</li>`;
         });
-        content += '</ul></li></ul></div>';
+        content += '</ul></li></ul>';
+        content += `<div class='btn-group'>`;
+        if (table.players[table.turn].name == player.name && player.name == _player.name) {
+            if (table.phase == 'begin') {
+                content += `<button class='btn btn-primary kickDoor'>Пнуть дверь</button>`;
+            }
+            if (table.phase == 'open') {
+                content += `<button class='btn btn-primary closeDoor'>Почистить нычки</button>`
+            }
+            if (table.phase != 'begin') {
+                if (table.fight == null) {
+                    content += `<button class='btn btn-primary endTurn'>Закончить ход</button>`;
+                } else {
+                    content += `<button class='btn btn-primary disabled'>Нельзя закончить ход</button>`
+                }
+            }
+        }
+        content += '</div></div>';
         $('#players-list').append(content);
     };
     let updatePlayers = () => {
@@ -136,21 +150,48 @@ export function updateView(player, table) {
         }
     };
     
+    let updateFight = () => {
+        const fightEl = $('.fight');
+        if (!table.fight) {
+            fightEl.html('на данный момент все спокойно');
+        } else {
+            let content = `<ul><li>монстры: | атака: <b>${table.fight.getMonstersAttack()}</b><ul>`;
+            table.fight.monsters.map(x => {
+                content += `<li><a class='itemId' data-id='${x.monster}'>${_t(x.monster)}</a> | атака: <b>${x.monster.getAttackAgainst(table.fight.players)}</b>`;
+                content += `<ul>`;
+                x.modifiers.map(y => {
+                    content += `<li><a class='itemId' data-id='${y}'>${_t(y)}</a></li>`;
+                });
+                content += `</ul></li>`;
+            });
+            content += `</ul></li><li>игроки: | атака: <b>${table.fight.getPlayersAttack()}</b><ul>`;
+            table.fight.players.map(x => {
+                content += `<li>${x.player.name} | атака: <b>${x.player.getAttack()}</b><ul>`;
+                x.modifiers.map(y => {
+                    content += `<li><a class='itemId' data-id='${y}'>${_t(y)}</a></li>`;
+                });
+                content += `</ul></li>`;
+            });
+            content += '</ul></li></ul>';
+            fightEl.html(content);
+        }
+    };
+    
     let updateDiscard = () => {
         if (table.discardedDoors.length > 0) {
             const id = table.discardedDoors[table.discardedDoors.length - 1];
-            $('.discardedDoors').html(`<li><a class='itemId' id=${id}>${_t(id)}</a>, ...</li>`)
+            $('.discardedDoors').html(`<a class='itemId' id=${id}>${_t(id)}</a>, ...`)
         }
         if (table.discardedTreasure.length > 0) {
             const id = table.discardedTreasure[table.discardedTreasure.length - 1];
-            $('.discardedTreasure').html(`<li><a class='itemId' id=${id}>${_t(id)}</a>, ...</li>`)
+            $('.discardedTreasure').html(`<a class='itemId' id=${id}>${_t(id)}</a>, ...`)
         }
     };
     let updateTable = () => {
         updateDiscard();
+        updateFight();
     };
     
-    updateClasses();
     updatePlayers();
     updateTable();
 }

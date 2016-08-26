@@ -1,8 +1,9 @@
 import { Card } from '../../../Card';
+import { Monster } from '../helpers/Monster';
 
 const id = 'bullrog';
 
-class bullrog extends Card {
+class bullrog extends Monster {
     constructor() {
         super();
         this.id = id;
