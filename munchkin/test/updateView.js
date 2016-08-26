@@ -74,9 +74,6 @@ export function updateView(player, table) {
                 if (c.castable) {
                     t.push(`<a class="cast">кастануть</a>`);
                 }
-                if (c.price && c.price >= 0) {
-                    t.push(`<a class="toBelt">в пояс</a>`);
-                }
                 t.push(`<a class="discard">в сброс</a>`);
             }
             content += `<li class='list-group-item itemId' data-id="${x}">${t.join(' | ')}</li>`;
@@ -105,9 +102,6 @@ export function updateView(player, table) {
                 }
                 if (c.castable) {
                     t.push(`<a class="cast">кастануть</a>`);
-                }
-                if (c.price && c.price >= 0) {
-                    t.push(`<a class="toBelt">в пояс</a>`);
                 }
                 t.push(`<a class="discard">в сброс</a>`);
             }

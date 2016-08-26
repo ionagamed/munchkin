@@ -22,6 +22,7 @@ class _ extends Card {
             }
         });
         player.hand = player.hand.filter(x => x != 'divine_intervention');
+        table.discardedDoors.push(id);
     }
 }
 Card.cards[id] = new _();
