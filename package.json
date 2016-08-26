@@ -4,7 +4,9 @@
   "description": "SIC parallel p project 2016",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "grunt",
+    "start": "node_modules/babel-cli/bin/babel-node.js server/index.js"
   },
   "repository": {
     "type": "git",

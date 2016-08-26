@@ -2,42 +2,80 @@
  * Created by ionagamed on 8/14/16.
  */
 
-import { Player } from '../common/Player';
-import { Table } from '../common/Table';
-import { Card } from '../common/Card';
-import { Fight } from '../common/Fight';
+import { Player } from '../logic/Player';
+import { Table } from '../logic/Table';
+import { Card } from '../logic/Card';
+import Server from '../logic/Server';
 
-import packs from '../common/packs.js';
+import packs from '../logic/packs.js';
 
-function idToInt(id) {
-    if (Card.byId(id).kind == 'door') {
-        return packs.pack1.doors.indexOf(id);
-    } else {
-        return packs.pack1.treasure.indexOf(id);
-    }
-}
-function _l(c, x) {
-    if (c.kind == 'door') {
-        return '<a href="/packs/pack1/img/doors-' + idToInt(x) + '.png">' + x + '</a>';
-    } else {
-        return '<a href="/packs/pack1/img/treasure-' + idToInt(x) + '.png">' + x + '</a>';
-    }
-}
+import { registerLoginHooks } from './test/login';
+import { registerPlayerHooks } from './test/player';
+import { updateView } from './test/updateView';
+import { registerUIHooks } from './test/ui';
 
-function __l(x) {
-    const c = Card.byId(x);
-    if (c.kind == 'door') {
-        return '/packs/pack1/img/doors-' + idToInt(x) + '.png';
-    } else {
-        return '/packs/pack1/img/treasure-' + idToInt(x) + '.png';
-    }
-}
+const UPDATE_DELAY = 2000;
 
 $(function () {
+    $('.state-game,.state-wait').hide();
+    registerLoginHooks((name, room, ip) => {
+        Server.onGameStarted = gameBegan(name);
+        Server.connect(name, room, ip, () => {
+            $('.state-login').hide();
+            $('.state-wait').show();
+            wait(name);
+            Server.play();
+        });
+    });
+});
+
+function gameBegan(playerName) {
+    return function () {
+        $('.state-wait').hide();
+        $('.state-game').show();
+        Server.resurrect();
+        game(playerName);
+    }
+}
+
+function wait(playerName) {
+    $('#startGame').click(e => {
+        Server.start();
+    });
+}
+
+function game(playerName) {
+    let player = new Player(playerName);
+    let table = new Table();
+    Server.player = player;
+    Server.table = table;
+    table.players.push(player);
+
+    const __r = function () {
+        if (!document.stopReload) Server.roomRequest();
+        setTimeout(__r, UPDATE_DELAY);
+    };
+    setTimeout(__r, UPDATE_DELAY);
+
+    const __f = function () {
+        if (!document.stopViewUpdate) {
+            updateView(player, table);
+            registerPlayerHooks();
+            registerUIHooks();
+        }
+        setTimeout(__f, UPDATE_DELAY);
+    };
+    __f();
+}
+
+function neverCalled() {
+    console.log(Server);
     const player = new Player();
     var table = new Table();
     table.players.push(player);
     table.phase = 'open';
+    Server.player = player;
+    Server.table = table;
     
     const updateView = function () {
         $('.player .player-info').html('player: <b>+' + player.getAttack() + '</b>');
@@ -149,25 +187,13 @@ $(function () {
         updateView();
     };
     const rebindHooks = function () {
-        $('.player .addButton').click(e => {
-            add();
-            return false;
-        });
         $('.player .hand .wield').click(e => {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
-            console.log(id);
-            if (player.wield(id, table)) {
-                player.hand.splice(player.hand.indexOf(id), 1);
-            }
-            updateView();
+            Server.wieldCard(id);
             return false;
         });
         $('.player .belt .wield').click(e => {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
-            console.log(id);
-            if (player.wield(id, table)) {
-                player.belt.splice(player.belt.indexOf(id), 1);
-            }
             updateView();
             return false;
         });
@@ -205,7 +231,8 @@ $(function () {
             const id = /<a.*?>(.*?)<\/a>/.exec($(e.target).closest('li').html())[1];
             player.unwield(id, table);
             player.belt.push(id);
-            updateView();
+            updateView();            console.log(id);
+            
             return false;
         });
         
@@ -232,17 +259,33 @@ $(function () {
         });
     };
     
-    $('.player .add').keypress(e => {
-        if (e.which == 13) {
-            add();
-            return false;
-        }
-    });
     $('#id').keypress(e => {
         if (e.which == 13) {
             $('#img').html('<img width="330" height="524" src="' + __l($('#id').val()) + '">');
         }
     });
     
-    updateView();
-});
+    $('.connectButton').click(e => {
+        const username = $('#username').val();
+        player.name = username;
+        Server.connect(username, $('#ip').val(), 'abacaba');
+    });
+    $('.playButton').click(e => {
+        Server.play();
+    });
+    $('.startButton').click(e => {
+        Server.start();
+    });
+    $('.roomRequestButton').click(e => {
+        Server.roomRequest();
+    });
+    $('.resurrectButton').click(e => {
+        Server.resurrect();
+    });
+    
+    const __f = function () {
+        updateView();
+        setTimeout(__f, 500);
+    };
+    __f();
+}
