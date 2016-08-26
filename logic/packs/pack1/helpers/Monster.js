@@ -31,6 +31,10 @@ export class Monster extends Card {
         return table.currentPlayer().name == player.name && table.phase == 'open' && table.fight == null;
     }
     
+    onDealtOpen(player, table) {
+        this.onUsed(player, table);
+    }
+    
     onUsed(player, table) {
         table.fight = new Fight();
         table.fight.players.push({
@@ -42,6 +46,7 @@ export class Monster extends Card {
             monster: this.id,
             modifiers: []
         });
+        table.fight.onBegan(table);
     }
 
     /**

@@ -505,11 +505,7 @@ Room.playerCommands['escape'] = (data, env) => {
  *  kicks door
  */
 Room.playerCommands['kickDoor'] = (data, env) => {
-    if(!phase(env.player, env.table, 'begin')) {
-        console.log(env.player);
-        console.log(env.table);
-        return;
-    }
+    if(!phase(env.player, env.table, 'begin')) return;
     var doorCardId = env.room.doorDeck.splice(0, 1)[0];
     var doorCard = Card.byId(doorCardId);
     env.room.dispatch('kickedDoor', {
@@ -523,10 +519,11 @@ Room.playerCommands['kickDoor'] = (data, env) => {
                 card: doorCardId
             });
             doorCard.onDealtOpen(env.player, env.table);
-            env.table.discard(doorCardId);
-            env.room.dispatch('discardedCard', doorCardId);
-            doorCard.onDiscarded(env.table);
-            env.table.phase = 'closed';
+            // env.table.discard(doorCardId);
+            // env.room.dispatch('discardedCard', doorCardId);
+            // doorCard.onDiscarded(env.table);
+            // env.table.phase = 'closed';
+            env.table.phase = 'open';
             break;
         case 'curse':
             env.room.dispatch('castedCard', {
@@ -534,12 +531,12 @@ Room.playerCommands['kickDoor'] = (data, env) => {
                 on: env.player.name,
                 card: doorCardId
             });
-            if(doorCard.onCast('deck', env.player, env.table)) {
+            if (doorCard.onCast('deck', env.player, env.table)) {
                 env.table.discard(doorCardId);
                 env.room.dispatch('discardedCard', doorCardId);
                 doorCard.onDiscarded(env.table);
-                env.table.phase = 'open';
             }
+            env.table.phase = 'open';
             break;
         default:
             env.room.dispatch('gotCards', {
@@ -575,7 +572,7 @@ Room.playerCommands['lootTheRoom'] = (data, env) => {
         who: env.player.name,
         amount: 1,
     });
-    env.player.phase = 'closed';
+    env.table.phase = 'closed';
     env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
 };
 
@@ -585,6 +582,15 @@ Room.playerCommands['endTurn'] = (data, env) => {
 
     env.table.nextTurn();
     env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
+};
+
+Room.playerCommands['winFight'] = (data, env) => {
+    if (env.table.fight == null) return;
+    if (env.table.fight.players[0].name != env.player.name) return;
+
+    if (+(new Date()) - env.table.fight.beganAt > 5) {
+        env.room.dispatch('wonFight');
+    }
 };
 
 /**
