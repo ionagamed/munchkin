@@ -10,7 +10,7 @@ const translationMapping = {
     'insurance_salesman': 'Страховой Агент',
     '3872_orcs': '3872 орка',
     'amazon': 'Амазонка',
-    'bigfoot': 'bigfoot',
+    'bigfoot': 'Бигфут',
     'bullrog': 'Бульрог',
     'crabs': 'Типа Вошки',
     'curse_lose_small_item': 'Невелика Потеря',
