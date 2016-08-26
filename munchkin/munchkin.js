@@ -23,7 +23,7 @@ export var game,
     buttonAttack, buttonSmivka, 
     nickname = 'DAr', room_name = 'keklol', server_addr = 'localhost:3031',
     player = new Player(nickname), table = new Table(),
-    connected = false, mainshadow;
+    connected = false, mainshadow, create_cards_on = true;
 
 
 $(function () {
@@ -52,7 +52,7 @@ $(function () {
         create_buttons();
     }
 
-    var s = 0, l = true;
+    var s = 0, l = 0, f = 1;
     function update() {
         //console.log(connected);
         if(s == 30)
