@@ -1,6 +1,7 @@
-import * as global from './munchkin.js'
-import { actionAttack, actionSmivka, actionCube, actionSell} from './action.js'
-import { over, out, down, sever_connected, startGame } from './events.js'
+import * as global from './munchkin.js';
+import { actionAttack, actionSmivka } from './action.js';
+import { over, out, down, server_connected, startGame } from './events.js';
+import { wield, use, cast } from './events.js';
 
 export function load() {
 	global.game.load.image('down_lower', 'img/back_lower.jpg');
@@ -49,7 +50,7 @@ export function create_info() {
     global.knight.y = 65 + global.knight.height/2;
     global.knight.x = global.knight.x - global.knight.width/5;
     global.power = global.game.add.text(global.game.width * global.scale, 400, '', {font: "Pixeled", fontSize: global.game.height*0.11+"px", fill: "#FF6836"});   
-    global.power.power = global.player.getAttack();;
+    global.power.power = global.player.getAttack();
     global.power.text =  global.power.power;
     global.power.y = global.grass.y;
     global.power.anchor.setTo(0.5, 0.5);
@@ -66,7 +67,7 @@ export function create_info() {
     global.monster.anchor.setTo(0.5, 0.5);
     global.monster.x = global.monster.x - global.monster.width / 2.7;
     global.antipower = global.game.add.text(global.game.width * global.scale, 400, '', {font: "Pixeled", fontSize: global.game.height*0.11+"px", fill: "#FFBAA3"}); 
-    global.antipower.antipower =  99;
+    global.antipower.antipower =  '--';
     global.antipower.anchor.setTo(0.5, 0.5);
     global.antipower.text = global.antipower.antipower;
     global.antipower.y = global.monster.y;
@@ -80,13 +81,11 @@ export function create_info() {
 export function create_cards() {
     if(global.create_cards_on == true)
 	for (var i = 0; i < global.player.hand.length; i++) {
-<<<<<<< HEAD
         global.cards[i] = global.game.add.image(0, 0, 'pack1_' +global.player.hand[i]);//'doors'+i);
         global.cards[i].anchor.setTo(0.5, 0.5);
         global.cards[i].height = global.game.height * 0.25;
         global.cards[i].width =global.cards[i].height /1028*661;
         global.cards[i].y = global.game.height - global.cards[i].height/2;
-=======
         if(global.cards[i] != undefined) global.cards[i].destroy();
         global.cards[i] = global.game.add.image(0, 0, 'pack1_'+ global.player.hand[i]);
         global.cards[i].anchor.setTo(0.5, 0);
@@ -94,7 +93,6 @@ export function create_cards() {
         global.cards[i].width = global.cards[i].height / 1028 * 661;
         global.cards[i].y = global.upper_lower.height;
         global.cards[i].x = global.cards[i].width / 2 + global.cards[i].width * i; 
->>>>>>> 17d6010fe99ca43058de59592076cf567070e510
         global.cards[i].iter = i;
         global.cards[i].inputEnabled = true;
         global.cards[i].events.onInputOver.add(over);
@@ -133,4 +131,17 @@ export function create_buttons() {
     global.buttonStartGame = global.game.add.button(global.game.world.centerX, global.game.world.centerY, 'startgame', startGame);
     global.buttonStartGame.anchor.setTo(0.5, 0.5);
     global.buttonStartGame.bringToTop();
+
+    global.buttonExit = global.game.add.button(global.game.world.centerX, global.game.world.centerY,'mainshadow', startExit);
+    global.buttonExit.anchor.setTo(0.5, 0.5);
+    global.buttonExit.visible = false;
+}
+
+function startExit() {
+    global.create_cards_on = false;
+    global.buttonExit.visible = false;
+    if (wield != undefined) wield.destroy();
+    if (use != undefined) use.destroy();
+    if (cast != undefined) cast.destroy();
+    global.create_cards_on = true;
 }

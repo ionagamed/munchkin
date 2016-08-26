@@ -9,7 +9,7 @@ class Thief extends Class {
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'door';
-        this.type = 'race';
+        this.type = 'class';
         this.wieldable = true;
     }
     //TODO: function;

@@ -23,7 +23,8 @@ export var game,
     buttonAttack, buttonSmivka, 
     nickname = 'DAr', room_name = 'keklol', server_addr = 'localhost:3031',
     player = new Player(nickname), table = new Table(),
-    connected = false, mainshadow, create_cards_on = true;
+    connected = false, mainshadow, create_cards_on = true,
+    buttonExit;
 
 
 $(function () {
