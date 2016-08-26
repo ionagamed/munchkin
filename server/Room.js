@@ -550,7 +550,7 @@ Room.playerCommands['winGame'] = (data, env) => {
  */
 Room.playerCommands['kickDoor'] = (data, env) => {
     if(!phase(env.player, env.table, 'begin')) return;
-    var doorCardId = env.room.getCards('door', 1);
+    var doorCardId = env.room.getCards('door', 1)[0];
     var doorCard = Card.byId(doorCardId);
     env.room.dispatch('kickedDoor', {
         card: doorCard,

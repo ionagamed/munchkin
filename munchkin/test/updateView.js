@@ -75,7 +75,11 @@ export function updateView(player, table) {
             }
             if (table.phase != 'begin') {
                 if (table.fight == null) {
-                    content += `<button class='btn btn-primary endTurn'>Закончить ход</button>`;
+                    if ((player.hasClassAdvantages('dwarf') && player.hand.length > 6) || player.hand.length > 5) {
+                        content += `<button class='btn btn-primary disabled'>Нельзя закончить ход</button>`
+                    } else {
+                        content += `<button class='btn btn-primary endTurn'>Закончить ход</button>`;
+                    }
                 } else {
                     content += `<button class='btn btn-primary disabled'>Нельзя закончить ход</button>`
                 }
