@@ -183,7 +183,7 @@ function getCardFromPlayer(room, player, cardPos) {
 
 /**
  * Get card from player and send lostCard event
- * 
+ *
  * @param player {Player} player from who we get card
  * @param id {string} card id
  * @param {Object} env
@@ -493,11 +493,21 @@ Room.playerCommands['resurrect'] = (data, env) => {
 
 /**
  * 'escape' command:
- * data:
- *  from integer id of monster from who player is escaping
+ *  data:
+ *      from integer id of monster from who player is escaping
  */
 Room.playerCommands['escape'] = (data, env) => {
+    if(env.table.fight.getWinningSize() != 'monsters') return;
     env.table.fight.monsters[data.from].onEscape(env.player, dice(), env.table);
+};
+
+/**
+ * 'win' command:
+ */
+
+Room.playerCommands['win'] = (data, env) => {
+    if(env.table.fight.getWinningSize() != 'players') return;
+    env.table.fight.onEnded(env.table);
 };
 
 /**
@@ -579,6 +589,8 @@ Room.playerCommands['lootTheRoom'] = (data, env) => {
 Room.playerCommands['endTurn'] = (data, env) => {
     if(env.table.fight != null || phase(env.player, env.table, 'begin')) return;
     if(env.table.players[env.table.turn].name != env.player.name) return;
+    //TODO: dwarf test
+    if(env.player.hand.length > 5) return;
 
     env.table.nextTurn();
     env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
@@ -673,7 +685,7 @@ Room.playerCommands['useCard'] = (data, env) => {
 /**
  * 'castCard' command:
  *      data: object
- *          on object 
+ *          on object
  *              type 'monster'|'player'
  *              name player on who card will be casted
  *          card string card that will be casted
