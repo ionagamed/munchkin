@@ -1,6 +1,7 @@
-import * as global from './munchkin.js'
-import { actionAttack, actionSmivka } from './action.js'
-import { over, out, down, server_connected, startGame } from './events.js'
+import * as global from './munchkin.js';
+import { actionAttack, actionSmivka } from './action.js';
+import { over, out, down, server_connected, startGame } from './events.js';
+import { wield, use, cast } from './events.js';
 
 export function load() {
 	global.game.load.image('down_lower', 'img/back_lower.jpg');
@@ -49,7 +50,7 @@ export function create_info() {
     global.knight.y = 65 + global.knight.height/2;
     global.knight.x = global.knight.x - global.knight.width/5;
     global.power = global.game.add.text(global.game.width * global.scale, 400, '', {font: "Pixeled", fontSize: global.game.height*0.11+"px", fill: "#FF6836"});   
-    global.power.power = global.player.getAttack();;
+    global.power.power = global.player.getAttack();
     global.power.text =  global.power.power;
     global.power.y = global.grass.y;
     global.power.anchor.setTo(0.5, 0.5);
@@ -66,7 +67,7 @@ export function create_info() {
     global.monster.anchor.setTo(0.5, 0.5);
     global.monster.x = global.monster.x - global.monster.width / 2.7;
     global.antipower = global.game.add.text(global.game.width * global.scale, 400, '', {font: "Pixeled", fontSize: global.game.height*0.11+"px", fill: "#FFBAA3"}); 
-    global.antipower.antipower =  99;
+    global.antipower.antipower =  '--';
     global.antipower.anchor.setTo(0.5, 0.5);
     global.antipower.text = global.antipower.antipower;
     global.antipower.y = global.monster.y;
@@ -106,4 +107,17 @@ export function create_buttons() {
     global.buttonStartGame = global.game.add.button(global.game.world.centerX, global.game.world.centerY, 'startgame', startGame);
     global.buttonStartGame.anchor.setTo(0.5, 0.5);
     global.buttonStartGame.bringToTop();
+
+    global.buttonExit = global.game.add.button(global.game.world.centerX, global.game.world.centerY,'mainshadow', startExit);
+    global.buttonExit.anchor.setTo(0.5, 0.5);
+    global.buttonExit.visible = false;
+}
+
+function startExit() {
+    global.create_cards_on = false;
+    global.buttonExit.visible = false;
+    if (wield != undefined) wield.destroy();
+    if (use != undefined) use.destroy();
+    if (cast != undefined) cast.destroy();
+    global.create_cards_on = true;
 }
