@@ -7,6 +7,8 @@ import { Table } from '../logic/Table';
 import { Card } from '../logic/Card';
 import Server from '../logic/Server';
 
+document.server = Server;
+
 import packs from '../logic/packs.js';
 
 import { registerLoginHooks } from './test/login';
