@@ -497,7 +497,7 @@ Room.playerCommands['resurrect'] = (data, env) => {
  *      from integer id of monster from who player is escaping
  */
 Room.playerCommands['escape'] = (data, env) => {
-    if(env.table.fight.getWinningSize() != 'monsters') return;
+    if(env.table.fight.getWinningSide() != 'monsters') return;
     env.table.fight.monsters[data.from].onEscape(env.player, dice(), env.table);
 };
 
@@ -506,7 +506,7 @@ Room.playerCommands['escape'] = (data, env) => {
  */
 
 Room.playerCommands['win'] = (data, env) => {
-    if(env.table.fight.getWinningSize() != 'players') return;
+    if(env.table.fight.getWinningSide() != 'players') return;
     env.table.fight.onEnded(env.table);
 };
 
