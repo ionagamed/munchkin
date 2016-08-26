@@ -91,9 +91,6 @@ function sendEvent(client, event, data) {
  *          who string player who lost the card
  *          card cardPos position of the card
  *
- *  'changedPhase'
- *      data string current phase
- *
  *  'discardedCard'
  *      data string id of the card
  *
@@ -102,6 +99,11 @@ function sendEvent(client, event, data) {
  *      card string
  *  'newPlayer'
  *      data string name of player
+ *
+ *  'turn'
+ *      data:
+ *          turn {integer} current turn
+ *          phase {string} current phase
  */
 
 
@@ -550,7 +552,7 @@ Room.playerCommands['kickDoor'] = (data, env) => {
             env.player.onCardReceived(doorCardId, 'deck');
             env.table.phase = 'open';
     }
-    env.room.dispatch('changedPhase', env.table.phase);
+    env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
 };
 
 Room.playerCommands['lootTheRoom'] = (data, env) => {
@@ -570,7 +572,15 @@ Room.playerCommands['lootTheRoom'] = (data, env) => {
         amount: 1,
     });
     env.player.phase = 'closed';
-    env.room.dispatch('changedPhase', env.table.phase);
+    env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
+};
+
+Room.playerCommands['endTurn'] = (data, env) => {
+    if(env.table.fight != null || phase(env.player, env.table, 'begin')) return;
+    if(env.table.players[env.table.turn].name != env.player.name) return;
+
+    env.table.nextTurn();
+    env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
 };
 
 /**
@@ -647,7 +657,7 @@ Room.playerCommands['useCard'] = (data, env) => {
         env.table.discard(cardId);
         env.room.dispatch('discardedCard', cardId);
     }
-    env.room.dispatch('changedPhase', env.table.phase);
+    env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
 };
 
 /**
