@@ -202,6 +202,18 @@ function getCardFromPlayerById(player, id, env) {
         });
         return true;
     }
+    if (remove_first(id, player.wielded)) {
+        Card.byId(id).onUnwielded(player, env.table);
+        env.room.dispatch('unwieldedCard', {
+            who: player.name,
+            card: id
+        });
+        env.room.dispatch('lostCard', {
+            who: player.name,
+            card: id
+        });
+        return true;
+    }
     return false;
 }
 
@@ -538,7 +550,7 @@ Room.playerCommands['winGame'] = (data, env) => {
  */
 Room.playerCommands['kickDoor'] = (data, env) => {
     if(!phase(env.player, env.table, 'begin')) return;
-    var doorCardId = env.room.getCards('door', 1);
+    var doorCardId = env.room.getCards('door', 1)[0];
     var doorCard = Card.byId(doorCardId);
     env.room.dispatch('kickedDoor', {
         card: doorCard,
@@ -611,8 +623,7 @@ Room.playerCommands['lootTheRoom'] = (data, env) => {
 Room.playerCommands['endTurn'] = (data, env) => {
     if(env.table.fight != null || phase(env.player, env.table, 'begin')) return;
     if(env.table.players[env.table.turn].name != env.player.name) return;
-    //TODO: dwarf test
-    if(env.player.hand.length > 5) return;
+    if(env.player.hand.length > (env.player.hasClassAdvantages('dwarf') ? 6 : 5)) return;
 
     env.table.nextTurn();
     env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});

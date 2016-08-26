@@ -27,13 +27,16 @@ export function registerUIHooks() {
         .unbind('mouseenter')
         .unbind('mouseleave')
         .mouseenter(function (e) {
-            $('.popup').removeClass('hidden');
+            const p = $('.popup');
+            p.removeClass('hidden');
+            p.css('top', $(this).offset().top + $(this).outerHeight());
+            p.css('left', $(this).offset().left);
             $('.popup-image').attr('src', `${__l($(this).data('id'))}`);
         })
         .mouseleave(function (e) {
             $('.popup').addClass('hidden');
         });
-    
+
     $('.winFight').unbind('click').click(e => {
         Server.winFight();
     });

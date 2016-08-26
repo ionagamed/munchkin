@@ -8,6 +8,8 @@ import { Fight } from '../../logic/Fight';
 
 import packs from '../../logic/packs';
 
+import item from './item';
+
 import _t from './translate';
 
 export function updateView(player, table) {
@@ -19,93 +21,48 @@ export function updateView(player, table) {
         content += '<br><ul>';
         content += '<li>рука:<ul class="list-group">';
         _player.hand.map(x => {
-            const c = Card.byId(x);
-            var t = [];
-            t.push(`${_t(x)}<br>`);
-            if (c.getAttackFor && c.getAttackFor(player) != 0) {
-                t.push(`<b>+${c.getAttackFor(_player)}</b>`);
-            }
-            if (c.big) {
-                t.push('большая');
-            }
-            if (c.price) {
-                t.push(`${c.price} голдов`);
-            }
-            if (player.name == _player.name) {
-                t.push(_t(c.type));
-                if (c.wieldable) {
-                    t.push(`<a class="wield">надеть</a>`);
-                }
-                if (c.usable) {
-                    t.push(`<a class="use">использовать</a>`);
-                }
-                if (c.castable) {
-                    t.push(`<a class="cast">кастануть</a>`);
-                }
-                if (c.price && c.price >= 0) {
-                    t.push(`<a class="toBelt">в пояс</a>`);
-                }
-                t.push(`<a class="discard">в сброс</a>`);
-            }
-            content += `<li class='list-group-item itemId' data-id="${x}">${t.join(' | ')}</li>`;
+            content += item(x, [
+                'name',
+                'attack',
+                'big',
+                'price',
+                'sell',
+                'type',
+                'wield',
+                'use',
+                'cast',
+                'discard'
+            ], player, _player);
         });
         content += '</ul></li><li>пояс:<ul class="list-group">';
         _player.belt.map(x => {
-            const c = Card.byId(x);
-            var t = [];
-            t.push(`${_t(x)}<br>`);
-            if (c.getAttackFor && c.getAttackFor(player) != 0) {
-                t.push(`<b>+${c.getAttackFor(_player)}</b>`);
-            }
-            if (c.big) {
-                t.push('большая');
-            }
-            if (c.price) {
-                t.push(`${c.price} голдов`);
-            }
-            if (_player.name == player.name) {
-                t.push(_t(c.type));
-                if (c.wieldable) {
-                    t.push(`<a class="wield">надеть</a>`);
-                }
-                if (c.usable) {
-                    t.push(`<a class="use">использовать</a>`);
-                }
-                if (c.castable) {
-                    t.push(`<a class="cast">кастануть</a>`);
-                }
-                t.push(`<a class="discard">в сброс</a>`);
-            }
-            content += `<li class='list-group-item itemId' data-id="${x}">${t.join(' | ')}</li>`;
+            content += item(x, [
+                'name',
+                'attack',
+                'big',
+                'price',
+                'sell',
+                'type',
+                'wield',
+                'use',
+                'cast',
+                'discard'
+            ], player, _player);
         });
         content += '</ul></li><li>стол:<ul class="list-group">';
         _player.wielded.map(x => {
-            const c = Card.byId(x);
-            var t = [];
-            t.push(`${_t(x)}<br>`);
-            if (c.getAttackFor && c.getAttackFor(player) != 0) {
-                t.push(`<b>+${c.getAttackFor(_player)}</b>`);
-            }
-            if (c.big) {
-                t.push('большая');
-            }
-            if (c.price) {
-                t.push(`${c.price} голдов`);
-            }
-            if (_player.name == player.name) {
-                t.push(_t(c.type));
-                if (c.wieldable) {
-                    t.push(`<a class="unwield">снять</a>`);
-                }
-                if (c.usable) {
-                    t.push(`<a class="use">использовать</a>`);
-                }
-                if (c.castable) {
-                    t.push(`<a class="cast">кастануть</a>`);
-                }
-                t.push(`<a class="discard">в сброс</a>`);
-            }
-            content += `<li class='list-group-item itemId' data-id="${x}">${t.join(' | ')}</li>`;
+            content += item(x, [
+                'name',
+                'attack',
+                'big',
+                'price',
+                'sell',
+                'type',
+                'unwield',
+                'use',
+                'cast',
+                'discard'
+            ], player, _player);
         });
         content += '</ul></li></ul>';
         content += `<div class='btn-group'>`;
@@ -118,7 +75,11 @@ export function updateView(player, table) {
             }
             if (table.phase != 'begin') {
                 if (table.fight == null) {
-                    content += `<button class='btn btn-primary endTurn'>Закончить ход</button>`;
+                    if ((player.hasClassAdvantages('dwarf') && player.hand.length > 6) || player.hand.length > 5) {
+                        content += `<button class='btn btn-primary disabled'>Нельзя закончить ход</button>`
+                    } else {
+                        content += `<button class='btn btn-primary endTurn'>Закончить ход</button>`;
+                    }
                 } else {
                     content += `<button class='btn btn-primary disabled'>Нельзя закончить ход</button>`
                 }
@@ -201,9 +162,6 @@ export function updateView(player, table) {
         updateFight();
     };
     
-    if (table.fight) {
-        console.log(table.fight.players[0].player.hasRaceAdvantages);
-    }
     updatePlayers();
     updateTable();
 }
