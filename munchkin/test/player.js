@@ -21,4 +21,13 @@ export function registerPlayerHooks() {
         const id = $(e.target).closest('li').data('id');
         Server.discard(id);
     });
+    $('.kickDoor').unbind('click').click(e => {
+        Server.kickDoor();
+    });
+    $('.closeDoor').unbind('click').click(e => {
+        Server.lootTheRoom();
+    });
+    $('.endTurn').unbind('click').click(e => {
+        Server.endTurn();
+    });
 }

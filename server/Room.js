@@ -8,6 +8,7 @@ import Random from 'random-js';
 const MAX_PLAYERS = 6;
 const TREASURE_BEGIN_COUNT = 4;
 const DOOR_BEGIN_COUNT = 4;
+const DEBUG = true;
 
 /**
  * Helper to send event to client
@@ -91,9 +92,6 @@ function sendEvent(client, event, data) {
  *          who string player who lost the card
  *          card cardPos position of the card
  *
- *  'changedPhase'
- *      data string current phase
- *
  *  'discardedCard'
  *      data string id of the card
  *
@@ -102,6 +100,11 @@ function sendEvent(client, event, data) {
  *      card string
  *  'newPlayer'
  *      data string name of player
+ *
+ *  'turn'
+ *      data:
+ *          turn {integer} current turn
+ *          phase {string} current phase
  */
 
 
@@ -114,6 +117,7 @@ function sendEvent(client, event, data) {
  */
 function setCommandSet(ws, set, env) {
     ws.onmessage = data => {
+        if (DEBUG) console.log(data.data);
         try {
             var msg = JSON.parse(data.data);
             env.room = Room.byId(env.roomId);
@@ -340,8 +344,6 @@ export class Room {
      */
     start() {
         this.decks.map(deckName => {
-            console.log(packs[deckName].doors.filter(x => x.indexOf('AaA_') < 0));
-            console.log(packs[deckName].doors);
             this.doorDeck = this.doorDeck.concat(packs[deckName].doors.filter(x => x.indexOf('AaA_') < 0));
             this.treasureDeck = this.treasureDeck.concat(packs[deckName].treasure.filter(x => x.indexOf('AaA_') < 0));
         });
@@ -503,8 +505,12 @@ Room.playerCommands['escape'] = (data, env) => {
  *  kicks door
  */
 Room.playerCommands['kickDoor'] = (data, env) => {
-    if(!phase(env.player, env.table, 'begin')) return;
-    var doorCardId = env.room.doorDeck.splice(0, 1);
+    if(!phase(env.player, env.table, 'begin')) {
+        console.log(env.player);
+        console.log(env.table);
+        return;
+    }
+    var doorCardId = env.room.doorDeck.splice(0, 1)[0];
     var doorCard = Card.byId(doorCardId);
     env.room.dispatch('kickedDoor', {
         card: doorCard,
@@ -550,12 +556,12 @@ Room.playerCommands['kickDoor'] = (data, env) => {
             env.player.onCardReceived(doorCardId, 'deck');
             env.table.phase = 'open';
     }
-    env.room.dispatch('changedPhase', env.table.phase);
+    env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
 };
 
 Room.playerCommands['lootTheRoom'] = (data, env) => {
     if(!phase(env.player, env.table, 'open')) return;
-    var doorCardId = env.room.doorDeck.splice(0, 1);
+    var doorCardId = env.room.doorDeck.splice(0, 1)[0];
     var doorCard = Card.byId(doorCardId);
     env.player.hand.push(doorCardId);
     doorCard.onReceived(env.player, 'looting', env.table);
@@ -570,7 +576,15 @@ Room.playerCommands['lootTheRoom'] = (data, env) => {
         amount: 1,
     });
     env.player.phase = 'closed';
-    env.room.dispatch('changedPhase', env.table.phase);
+    env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
+};
+
+Room.playerCommands['endTurn'] = (data, env) => {
+    if(env.table.fight != null || phase(env.player, env.table, 'begin')) return;
+    if(env.table.players[env.table.turn].name != env.player.name) return;
+
+    env.table.nextTurn();
+    env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
 };
 
 /**
@@ -647,7 +661,7 @@ Room.playerCommands['useCard'] = (data, env) => {
         env.table.discard(cardId);
         env.room.dispatch('discardedCard', cardId);
     }
-    env.room.dispatch('changedPhase', env.table.phase);
+    env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
 };
 
 /**

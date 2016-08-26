@@ -4,6 +4,7 @@
 import { Player } from './Player';
 import { create_cards } from '../munchkin/load.js'
 import { player } from '../munchkin/munchkin.js'
+import { Fight } from './Fight';
 
 class Server {
     constructor() {
@@ -26,6 +27,21 @@ class Server {
          * @type {Table}
          */
         this.table = null;
+    }
+
+    /**
+     * Data received from server is only data
+     * This function does the convertion to object instances
+     */
+    sanitizeClasses() {
+        this.player = Object.assign(new Player(), this.player);
+        this.table.players = this.table.players.map(x => Object.assign(new Player(), x));
+        if (this.table.fight) {
+            this.table.fight = Object.assign(new Fight(), this.table.fight);
+            this.table.fight.players.map(x => {
+                x.player = Object.assign(new Player(), x.player);
+            });
+        }
     }
 
     /**
@@ -64,6 +80,7 @@ class Server {
                         x.hand = x.hand.concat(msg.data.cards);
                     }
                 });
+                create_cards();
                 break;
             case 'gotSomeCards':
                 this.table.players.map(x => {
@@ -82,6 +99,7 @@ class Server {
                         x.belt = x.belt.filter(x => x != msg.data.card);
                     }
                 });
+                create_cards();
                 break;
             case 'unwieldedCard':
                 this.table.players.map(x => {
@@ -89,6 +107,7 @@ class Server {
                         x.unwield(msg.data.card, this.table);
                     }
                 });
+                create_cards();
                 break;
             case 'room':
                 Object.assign(this.table, msg.data.table);
@@ -97,11 +116,13 @@ class Server {
                         Object.assign(this.player, x);
                     }
                 });
+                this.sanitizeClasses();
                 break;
             case 'gameStarted':
                 if (this.onGameStarted) {
                     this.onGameStarted();
                 }
+                create_cards();
                 break;
         }
     }
