@@ -7,10 +7,11 @@
   <link rel='stylesheet' href='/lib/bootstrap/dist/css/bootstrap.min.css'>
   <script src='/lib/jquery/dist/jquery.min.js'></script>
   <script src='/munchkin.js'></script>
+  <link rel='stylesheet' href='test.css'>
 </head>
 <body>
+<br>
 <div class='container'>
-  <br>
   <div class='state-login'>
     <form id='loginForm'>
       <div class='form-group'>
@@ -22,19 +23,58 @@
         <input type='text' class='form-control' id='room' placeholder='room_1337'>
       </div>
       <div class='form-group'>
+        <label>Пол:</label>
+        <select id='sex' class='form-control'>
+          <option value='male'>Мужской</option>
+          <option value='female'>Женский</option>
+        </select>
+      </div>
+      <div class='form-group'>
         <label>Сервер:</label>
         <input type='text' class='form-control' id='server' placeholder='localhost:3031' value='localhost:3031'>
       </div>
       <button type='button' class='btn btn-primary loginButton'>Войти</button>
     </form>
   </div>
+  <div class='state-wait'>
+    <div class='players-wait'>
+
+    </div>
+    <button class='btn btn-primary' id='startGame'>Начать игру</button>
+  </div>
   <div class='state-game'>
     <div class='row'>
-      <div class='col-md-6'>
+      <div class='col-lg-6'>
         <div id='players'></div>
+      </div>
+      <div class='col-lg-6'>
+        <div id='table'>
+          <ul>
+            <li>
+              сброс:
+              <ul>
+                <li>двери: <span class='discardedDoors'></span></li>
+                <li>сокровища: <span class='discardedDoors'></span></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </div>
+<div class='hidden popup'>
+  <img class='popup-image' src='' width='330' height='514'>
+</div>
+<div>
+  <div class='doors'></div>
+  <div class='treasure'></div>
+</div>
+<script>
+  $(function () {
+    $('#username').val((Math.random().toString(36)+'00000000000000000').slice(2, 7));
+    $('#room').val((+(new Date())).toString().substring(0, 9));
+  })
+</script>
 </body>
 </html>

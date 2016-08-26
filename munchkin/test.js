@@ -10,35 +10,62 @@ import Server from '../logic/Server';
 import packs from '../logic/packs.js';
 
 import { registerLoginHooks } from './test/login';
+import { registerPlayerHooks } from './test/player';
 import { updateView } from './test/updateView';
+import { registerUIHooks } from './test/ui';
+
+const UPDATE_DELAY = 2000;
 
 $(function () {
-    $('.state-game').hide();
+    $('.state-game,.state-wait').hide();
     registerLoginHooks((name, room, ip) => {
-        Server.connect(name, room, ip);
-        $('.state-login').hide();
-        $('.state-game').show();
-        game(name);
+        Server.onGameStarted = gameBegan(name);
+        Server.connect(name, room, ip, () => {
+            $('.state-login').hide();
+            $('.state-wait').show();
+            wait(name);
+            Server.play();
+        });
     });
 });
 
+function gameBegan(playerName) {
+    return function () {
+        $('.state-wait').hide();
+        $('.state-game').show();
+        Server.resurrect();
+        game(playerName);
+    }
+}
+
+function wait(playerName) {
+    $('#startGame').click(e => {
+        Server.start();
+    });
+}
 
 function game(playerName) {
     let player = new Player(playerName);
     let table = new Table();
     Server.player = player;
     Server.table = table;
+    table.players.push(player);
 
     const __r = function () {
-        Server.roomRequest();
-        setTimeout(__r, 500);
+        if (!document.stopReload) Server.roomRequest();
+        setTimeout(__r, UPDATE_DELAY);
     };
-    setTimeout(__r, 500);
+    setTimeout(__r, UPDATE_DELAY);
 
     const __f = function () {
-        updateView();
-        setTimeout(__f, 500);
+        if (!document.stopViewUpdate) {
+            updateView(player, table);
+            registerPlayerHooks();
+            registerUIHooks();
+        }
+        setTimeout(__f, UPDATE_DELAY);
     };
+    __f();
 }
 
 function neverCalled() {

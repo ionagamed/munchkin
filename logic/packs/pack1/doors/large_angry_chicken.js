@@ -16,7 +16,7 @@ class _ extends Card {
         player.decreaseLevel(1);
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 2;
     }
     

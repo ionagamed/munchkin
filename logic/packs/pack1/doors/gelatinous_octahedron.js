@@ -43,7 +43,7 @@ class GelatinousOctahedron extends Monster {
         });
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 2;
     }
 }

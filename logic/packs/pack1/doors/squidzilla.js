@@ -24,7 +24,7 @@ class squidzilla extends Monster {
         player.die(table);
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         var isElf = false;
         players.map(x => {
             if(x.hasRaceDisadvantages('elf'))

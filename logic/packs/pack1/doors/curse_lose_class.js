@@ -1,7 +1,7 @@
 import { Card } from '../../../Card';
 import { Curse } from '../helpers/Curse';
 
-const id = 'curse_change_race';
+const id = 'curse_lose_class';
 
 class _ extends Curse {
     constructor() {

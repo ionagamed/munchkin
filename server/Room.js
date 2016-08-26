@@ -182,11 +182,12 @@ function getCardFromPlayer(room, player, cardPos) {
  * 
  * @param player {Player} player from who we get card
  * @param id {string} card id
- * @returns {bool} success status
+ * @param {Object} env
+ * @returns {boolean} success status
  */
-function getCardFromPlayerById(player, id) {
-    if(remove_first(player.belt, id) || remove_first(player.hand, id)) {
-        this.dispatch('lostCard', {
+function getCardFromPlayerById(player, id, env) {
+    if(remove_first(id, player.belt) || remove_first(id, player.hand)) {
+        env.room.dispatch('lostCard', {
             who: player.name,
             card: id
         });
@@ -233,11 +234,12 @@ export class Room {
         this.doorDeck = [];
         this.treasureDeck = [];
 
-        decks.map(deckName => {
-            this.doorDeck = this.doorDeck.concat(packs[deckName].doors);
-            this.treasureDeck = this.treasureDeck.concat(packs[deckName].treasure);
-        });
-
+        /**
+         * Array of chosen decks
+         *
+         * @type {[string]}
+         */
+        this.decks = decks;
     }
     /**
      * Connect client to the room
@@ -337,6 +339,12 @@ export class Room {
      * Start game
      */
     start() {
+        this.decks.map(deckName => {
+            console.log(packs[deckName].doors.filter(x => x.indexOf('AaA_') < 0));
+            console.log(packs[deckName].doors);
+            this.doorDeck = this.doorDeck.concat(packs[deckName].doors.filter(x => x.indexOf('AaA_') < 0));
+            this.treasureDeck = this.treasureDeck.concat(packs[deckName].treasure.filter(x => x.indexOf('AaA_') < 0));
+        });
         var r = new Random();
         r.shuffle(this.doorDeck);
         r.shuffle(this.treasureDeck);
@@ -412,10 +420,11 @@ Room.clientCommands['start'] = (data, env) => {
 };
 
 function sanitizePlayer(player) {
-    player.hand = player.hand.map(cardId => {
+    let _player = Object.assign({}, player);
+    _player.hand = _player.hand.map(cardId => {
         return Card.byId(cardId).kind;
     });
-    return player;
+    return _player;
 }
 /**
  * 'roomRequest' command:
@@ -435,7 +444,7 @@ Room.clientCommands['roomRequest'] = (data, env) => {
 };
 
 /**
- * Commands that could be send by player
+ * Commands that could be sent by player
  *
  * @type {function(object, object)}
  */
@@ -577,7 +586,7 @@ Room.playerCommands['wieldCard'] = (data, env) => {
     if(phase(env.player, env.table, 'hand') ||
        phase(env.player, env.table, 'drop')) return;
 
-    if(card.canBeWielded(card, env.table) && getCardFromPlayerById(env.player, cardId)) {
+    if(card.canBeWielded(env.player, env.table) && getCardFromPlayerById(env.player, cardId, env)) {
         env.room.dispatch('wieldedCard', {
             who: env.player.name,
             card: cardId
@@ -633,7 +642,7 @@ Room.playerCommands['useCard'] = (data, env) => {
         card: cardId
     });
     env.table.phase = (card.type == 'monster' ? 'hand' : 'closed');
-    if(getCardFromPlayerById(env.player, cardId) && card.onUsed(env.player, env.table)) {
+    if(getCardFromPlayerById(env.player, cardId, env) && card.onUsed(env.player, env.table)) {
         card.onDiscarded(env.table);
         env.table.discard(cardId);
         env.room.dispatch('discardedCard', cardId);
@@ -665,7 +674,7 @@ Room.playerCommands['castCard'] = (data, env) => {
         on: on.name,
         card: cardId
     });
-    if(getCardFromPlayerById(env.player, cardId) && card.onCast(env.player, on, env.table)) {
+    if(getCardFromPlayerById(env.player, cardId, env) && card.onCast(env.player, on, env.table)) {
         env.room.dispatch('discardedCard', cardId);
         card.onDiscarded(env.table);
         env.table.discard(cardId);
@@ -692,7 +701,7 @@ Room.playerCommands['callSpecialAbility'] = (data, env) => {
  */
 Room.playerCommands['moveToBelt'] = (data, env) => {
     const cardId = data.card;
-    if(getCardFromPlayerById(env.player, cardId)) {
+    if(getCardFromPlayerById(env.player, cardId, env)) {
         env.player.belt.push(cardId);
         env.room.dispatch('addedToBelt', {
             who: env.player.name,
@@ -771,7 +780,7 @@ Room.playerCommands['dropPlayerCard'] = (data, env) => {
  */
 Room.playerCommands['discard'] = (data, env) => {
     const cardId = data.card;
-    getCardFromPlayerById(env.player, cardId);
+    getCardFromPlayerById(env.player, cardId, env);
     Card.byId(cardId).onDiscarded(env.table);
     env.room.dispatch('discardedCard', cardId);
     env.table.discard(cardId);

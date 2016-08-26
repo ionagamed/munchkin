@@ -14,15 +14,17 @@ class curse_change_class extends Curse {
     }
     onCast(source, dest, table) {
         var hasCl = false;
+        var buf = [];
         dest.wielded.map(x => {
             if (Card.byId(x).type == 'class') {
+                buf.push(x);
                 dest.unwield(x, table);
                 hasCl = true;
             } 
         });
         if (hasCl) {
             for (let i of [].concat(table.discardedDoors).reverse()) {
-                if (Card.byId(i).type == 'class') {
+                if (Card.byId(i).type == 'class' && buf.indexOf(i) < 0) {
                     dest.wield(i, table);
                     break;
                 }

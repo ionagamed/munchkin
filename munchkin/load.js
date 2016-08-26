@@ -19,6 +19,7 @@ export function load() {
     global.game.load.image('mainshadow', 'img/mainshadow.png');
     global.game.load.image('Cube','img/Cube.png');
     global.game.load.image('sell','img/sell.png');
+    global.game.load.image('buttonUse','img/buttonUse.png')
 }
 
 export function create_lower() {
@@ -70,6 +71,10 @@ export function create_info() {
     global.antipower.text = global.antipower.antipower;
     global.antipower.y = global.monster.y;
     global.antipower.x = global.power.x; 
+    
+    /*global.buttonUse = global.game.add.image(400,400,'buttonUse');
+    global.buttonUse.height *= 0.5;
+    global.buttonUse.width *= 0.5;*/
 }
 
 export function create_cards() {
@@ -105,14 +110,15 @@ export function create_buttons() {
     global.buttonCube.width = global.cobble.width/2;
     global.buttonCube.y = global.cobble.y*1.35;
     
-    global.buttonSell = global.game.add.button(global.game.width * 0.775, 400, 'sell', actionSell);
+    /*global.buttonSell = global.game.add.button(global.game.width * 0.775, 400, 'sell', actionSell);
     global.buttonSell.height = global.buttonCube.height; 
     global.buttonSell.width = global.buttonCube.width * 2;
-    global.buttonSell.y = global.buttonCube.y*1.35;
+    global.buttonSell.y = global.buttonCube.y*1.35;*/
 
     global.mainshadow = global.game.add.image(global.game.world.centerX, global.game.world.centerY,'mainshadow');
     global.mainshadow.anchor.setTo(0.5, 0.5);
     global.mainshadow.bringToTop();
+    
     global.buttonStartGame = global.game.add.button(global.game.world.centerX, global.game.world.centerY, 'startgame', startGame);
     global.buttonStartGame.anchor.setTo(0.5, 0.5);
     global.buttonStartGame.bringToTop();

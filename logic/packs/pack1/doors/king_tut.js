@@ -37,7 +37,7 @@ class king_tut extends Monster {
             }
         });
     }
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 16;
     }
 }

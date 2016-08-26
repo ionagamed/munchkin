@@ -21,6 +21,5 @@ class curse_change_sex extends Curse {
     getAttackFor(x) {
         return -5;
     }
-    //TODO:
 }
 Card.cards[id] = new curse_change_sex();

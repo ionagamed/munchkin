@@ -19,7 +19,7 @@ class lame_goblin extends Monster {
     badThing(player, table) {
         player.decreaseLevel(1);
     }
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 1;
     }
 }

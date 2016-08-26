@@ -23,7 +23,7 @@ class _ extends Item {
     
     canBeCast(source, dest, table) {
         return !(dest instanceof Player) &&
-            Card.byId(dest).getAttackFor(new Player()) <= 8;
+            Card.byId(dest).getAttackAgainst(new Player()) <= 8;
     }
     
     onCast(source, dest, table) {

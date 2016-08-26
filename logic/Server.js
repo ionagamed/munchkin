@@ -2,6 +2,8 @@
  * Created by ionagamed on 8/24/16.
  */
 import { Player } from './Player';
+import { create_cards } from '../munchkin/load.js'
+import { player } from '../munchkin/munchkin.js'
 
 class Server {
     constructor() {
@@ -51,7 +53,9 @@ class Server {
      */
      _onMessage(data) {
         const msg = JSON.parse(data.data);
-        console.log(msg);
+        if (msg.event != 'room') {
+            console.log(msg);
+        }
         // TODO: add handling
         switch (msg.event) {
             case 'gotCards':
@@ -93,6 +97,11 @@ class Server {
                         Object.assign(this.player, x);
                     }
                 });
+                break;
+            case 'gameStarted':
+                if (this.onGameStarted) {
+                    this.onGameStarted();
+                }
                 break;
         }
     }
@@ -314,6 +323,8 @@ class Server {
         });
     }
 }
-var x = new Server();
-export default x;
+if (!document.____SeRvEr____) {
+    document.____SeRvEr____ = new Server();
+}
+export default document.____SeRvEr____;
 

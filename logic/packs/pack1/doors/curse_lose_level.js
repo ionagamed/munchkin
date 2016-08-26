@@ -13,7 +13,7 @@ class curse_lose_level extends Curse {
         this.castable = true;
     }
     onCast(source, dest, table) {
-        dest.level--;
+        dest.decreaseLevel(1);
     }
 }
 Card.cards[id + '_1'] = new curse_lose_level();

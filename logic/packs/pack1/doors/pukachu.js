@@ -18,7 +18,7 @@ class pukachu extends Monster {
         player.hand = [];
     }
     
-    getAttackFor(players) {
+    getAttackAgainst(players) {
         return 6;
     }
     onFightEnded(fight, table) {
