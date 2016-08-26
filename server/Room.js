@@ -489,7 +489,7 @@ Room.playerCommands['resurrect'] = (data, env) => {
     // env.player.hand = []
     //     .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
     //     .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
-    env.player.hand = ['mr_bones'];
+    env.player.hand = ['3872_orcs'];
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
         if(card) card.onReceived(env.player, 'deck', env.table);
