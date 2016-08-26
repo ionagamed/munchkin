@@ -23,6 +23,7 @@ class _ extends Curse {
         // TODO: remake 
         if (!hasCl)
             dest.decreaseLevel(1);
+        return true;
     }
 }
 Card.cards[id] = new _();

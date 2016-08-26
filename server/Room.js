@@ -468,14 +468,16 @@ Room.playerCommands['spectate'] = (data, env) => {
 Room.playerCommands['resurrect'] = (data, env) => {
     if(!env.player.dead) return;
     if(!env.table.playing) return;
-    env.player.hand = []
-        .concat(env.room.doorDeck.splice(0, DOOR_BEGIN_COUNT))
-        .concat(env.room.treasureDeck.splice(0, TREASURE_BEGIN_COUNT));
+    // env.player.hand = []
+    //     .concat(env.room.doorDeck.splice(0, DOOR_BEGIN_COUNT))
+    //     .concat(env.room.treasureDeck.splice(0, TREASURE_BEGIN_COUNT));
+    env.player.hand = ['mr_bones'];
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
         if(card) card.onReceived(env.player, 'deck', env.table);
         env.player.onCardReceived(cardId, 'deck');
     });
+    env.player.wielded = ['huge_rock'];
     sendEvent(env.client, 'gotCards', {
         amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
         cards: env.player.hand,
@@ -598,10 +600,15 @@ Room.playerCommands['endTurn'] = (data, env) => {
 
 Room.playerCommands['winFight'] = (data, env) => {
     if (env.table.fight == null) return;
-    if (env.table.fight.players[0].name != env.player.name) return;
+    if (env.table.fight.players[0].player.name != env.player.name) return;
 
-    if (+(new Date()) - env.table.fight.beganAt > 5) {
+    if (+(new Date()) - env.table.fight.beganAt > 5 && env.table.fight.getWinningSide() == 'players') {
+        env.table.fight.players.map(x => {
+            x.state = 'success';
+        });
         env.room.dispatch('wonFight');
+        env.table.fight.onEnded(env.table);
+        env.table.fight = null;
     }
 };
 

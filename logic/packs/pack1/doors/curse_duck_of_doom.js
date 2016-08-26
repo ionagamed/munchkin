@@ -14,6 +14,7 @@ class curse_duck_of_doom extends Curse {
     }
     onCast(source, dest, table) {
         dest.decreaseLevel(2);
+        return true;
     }
 }
 Card.cards[id] = new curse_duck_of_doom();

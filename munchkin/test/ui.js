@@ -4,6 +4,7 @@
 
 import { Card } from '../../logic/Card';
 import packs from '../../logic/packs';
+import Server from '../../logic/Server';
 
 function idToInt(id) {
     if (Card.byId(id).kind == 'door') {
@@ -22,7 +23,7 @@ function __l(x) {
 }
 
 export function registerUIHooks() {
-    $('.itemId').unbind('hover').hover(
+    $('.itemId').unbind('mouseover').unbind('mouseout').hover(
         e => {
             $('.popup').removeClass('hidden');
             $('.popup-image').attr('src', `${__l($(e.target).data('id'))}`);
@@ -31,4 +32,8 @@ export function registerUIHooks() {
             $('.popup').addClass('hidden');
         }
     );
+    
+    $('.winFight').unbind('click').click(e => {
+        Server.winFight();
+    });
 }

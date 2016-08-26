@@ -1,9 +1,10 @@
 import { Card } from '../../../Card';
 import { Player } from '../../../Player';
+import { Curse } from '../helpers/Curse';
 
 const id = 'curse_chicken';
 
-class curse_chicken extends Card {
+class curse_chicken extends Curse {
     constructor() {
         super();
         this.id = id;
@@ -11,9 +12,6 @@ class curse_chicken extends Card {
         this.kind = 'door';
         this.type = 'curse';
         this.castable = true;
-    }
-    canBeCast(source, dest, table) {
-        return dest instanceof Player;
     }
 }
 Card.cards[id] = new curse_chicken();
