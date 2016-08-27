@@ -19,6 +19,9 @@ a {
 }
 
 
+.chat-message {
+    width: 15em !important;
+}
 .chat-messages {
     max-height: 30em;
     overflow-y: scroll;

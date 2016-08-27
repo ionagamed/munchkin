@@ -82,19 +82,16 @@
             <li>
               чятик:
               <ul class='chat-messages'></ul>
-              <form class='chat-form'>
-                <div class='input-group'>
-                  <input type='text' class='form-control chat-message' placeholder='сообщение'>
-                  <button class='input-group-btn btn btn-primary send-chat-message'>отправить</button>
-                </div>
-              </form>
+              <div class='input-group'>
+                <input type='text' class='form-control chat-message' placeholder='сообщение'>
+              </div>
             </li>
           </ul>
         </div>
       </div>
     </div>
   </div>
-  <div class='state-win'>
+  <div class='state-win' style='display: none;'>
     <p>Вы победили!!!</p>
     <form action="/win" method="post">
       <img src="img/Win.png" /> <br/>
