@@ -12,7 +12,7 @@ import item from './item';
 
 import _t from './translate';
 
-export function updateView(player, table) {
+export function updateView(player, table, currentlySelling) {
     let updatePlayer = (_player) => {
         let content = `<div class="list-group-item" data-player="${_player.name}">`;
         content += _player.name;
@@ -201,7 +201,19 @@ export function updateView(player, table) {
         }
     };
     
+    let updateSelling = () => {
+        let sum = 0;
+        const list = $('.sell-list');
+        list.html('');
+        currentlySelling.map(x => {
+            sum += Card.byId(x).price;
+            list.append(`<li><a class='itemId' data-id='${x}'>${_t(x)}</a></li>`);
+        });
+        $('.price').html(sum);
+    };
+    
     updatePlayers();
     updateTable();
     updateCastList();
+    updateSelling();
 }

@@ -607,8 +607,8 @@ Room.playerCommands['sellItems'] = (data, env) => {
         sum += Card.byId(x).price;
     });
     if (!ok) return;
-    env.player.increaseLevel(sum / 1000);
-    env.room.dipatch('currentLevel', {
+    env.player.increaseLevel(Math.floor(sum / 1000));
+    env.room.dispatch('currentLevel', {
         who: env.player.name,
         level: env.player.level
     });
