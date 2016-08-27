@@ -24,7 +24,7 @@ class _ extends Modifier {
             /**
              * HACK: warrior
              */
-            return arg.wielded
+            return arg.level + arg.wielded
                 .filter(x => x.type != 'class')
                 .filter(x => Card.byId(x).getAttackFor)
                 .map(x => Card.byId(x).getAttackFor(arg))
