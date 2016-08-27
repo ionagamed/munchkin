@@ -581,17 +581,27 @@ Room.playerCommands['winGame'] = (data, env) => {
 };
 
 /**
- * 'sellItem command:
+ * 'sellItems' command:
  * data:
- *  card {string} id of the card
+ *  cards {[string]} id of the card
  */
-Room.playerCommands['sellItem'] = (data, env) => {
+Room.playerCommands['sellItems'] = (data, env) => {
     if(env.table.players[env.table.turn].name != env.player.name) return;
-    const cardId = data.card;
-    if(getCardFromPlayerById(env.player, cardId, env.room, env.table)) {
-        env.table.soldCards.push(cardId);
-        env.room.dispatch('soldCard', cardId);
-    }
+    const cards = data.cards;
+    let ok = true;
+    let sum = 0;
+    cards.map(x => {
+        if (!getCardFromPlayerById(env.player, x, env.room, env.table)) {
+            ok = false;
+        }
+        sum += Card.byId(x).price;
+    });
+    if (!ok) return;
+    env.player.increaseLevel(sum / 1000);
+    env.room.dipatch('currentLevel', {
+        who: env.player.name,
+        level: env.player.level
+    });
 };
 
 /**
