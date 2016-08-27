@@ -78,8 +78,9 @@ function game(playerName) {
     __r();
 
     const chatMessageCallback = function (from, text) {
-        $('.chat-messages').prepend(`<li><b>${from}</b>: ${text}</li>`);
+        $('.chat-messages').append(`<li><b>${from}</b>: ${text}</li>`);
     };
+    Server.chatMessageCallback = chatMessageCallback;
 }
 
 function neverCalled() {

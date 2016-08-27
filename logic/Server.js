@@ -132,7 +132,7 @@ class Server {
                 break;
             case 'chatMessage':
                 if (this.chatMessageCallback) {
-                    this.chatMessageCallback(msg.from, msg.message.text);
+                    this.chatMessageCallback(msg.data.from, msg.data.message.text);
                 }
                 break;
         }

@@ -50,8 +50,10 @@ export function registerUIHooks() {
     
     let sendChatMessage = () => {
         const el = $('.chat-message');
-        Server.sendChatMessage(el.val());
-        el.val('');
+        if (el.val() != '') {
+            Server.sendChatMessage(el.val());
+            el.val('');
+        }
     };
     $('.chat-message').keypress(e => {
         if (e.which == 13) {
