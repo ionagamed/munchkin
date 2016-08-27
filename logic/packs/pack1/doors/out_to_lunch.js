@@ -10,6 +10,7 @@ class out_to_lunch extends Card {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'out_to_lunch';
+        this.castable = true;
     }
     
     onCast(source, destination, table) {
