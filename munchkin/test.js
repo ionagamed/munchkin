@@ -18,6 +18,8 @@ import { registerUIHooks } from './test/ui';
 
 const UPDATE_DELAY = 2000;
 
+var currentlySelling = [];
+
 $(function () {
     $('.state-game,.state-wait').hide();
     registerLoginHooks((name, room, ip) => {
@@ -55,8 +57,8 @@ function game(playerName) {
 
     const __f = function () {
         if (!document.stopViewUpdate) {
-            updateView(player, table);
-            registerPlayerHooks();
+            updateView(player, table, currentlySelling);
+            registerPlayerHooks(currentlySelling);
             registerUIHooks();
         }
     };

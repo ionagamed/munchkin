@@ -519,8 +519,8 @@ Room.playerCommands['resurrect'] = (data, env) => {
     if(!env.player.dead) return;
     if(!env.table.playing) return;
     // env.player.hand = []
-    //     .concat(env.room.getCards('door', DOOR_BEGIN_COUNT)[0])
-    //     .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT)[0]);
+    //     .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
+    //     .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
     env.player.hand = ['3872_orcs', '1000_gold', 'acid_potion'];
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
@@ -607,8 +607,8 @@ Room.playerCommands['sellItems'] = (data, env) => {
         sum += Card.byId(x).price;
     });
     if (!ok) return;
-    env.player.increaseLevel(sum / 1000);
-    env.room.dipatch('currentLevel', {
+    env.player.increaseLevel(Math.floor(sum / 1000));
+    env.room.dispatch('currentLevel', {
         who: env.player.name,
         level: env.player.level
     });
