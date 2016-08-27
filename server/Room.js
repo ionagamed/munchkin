@@ -698,7 +698,6 @@ Room.playerCommands['winFight'] = (data, env) => {
             x.state = 'success';
         });
         env.room.dispatch('wonFight');
-        env.room.giveCards('deck', env.table.fight.players[0].player, env.room.treasureDeck.splice(0,));
         env.table.fight.monsters.map(x => {
             const card = Card.byId(x.monster);
             env.room.giveCards(
