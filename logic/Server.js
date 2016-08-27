@@ -261,32 +261,20 @@ class Server {
      * Cast the card
      * 
      * @param {string} card
-     * @param {Player|string} dest
+     * @param {'player'|'monster'} type
+     * @param {string} dest
      */
-    castCard(card, dest) {
-        if (dest instanceof Player) {
-            this._send({
-                cmd: 'castCard',
-                data: {
-                    card: card,
-                    on: {
-                        type: 'player',
-                        name: dest.name
-                    }
+    castCard(card, type, dest) {
+        this._send({
+            cmd: 'castCard',
+            data: {
+                card: card,
+                on: {
+                    type: type,
+                    name: dest
                 }
-            })
-        } else {
-            this._send({
-                cmd: 'castCard',
-                data: {
-                    card: card,
-                    on: {
-                        type: 'monster',
-                        name: dest
-                    }
-                }
-            })
-        }
+            }
+        })
     }
 
     /**

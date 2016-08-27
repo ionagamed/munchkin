@@ -22,7 +22,7 @@ class _ extends Card {
     }
 
     onCast(source, dest, table) {
-        dest.level++;
+        dest.increaseLevel(1);
     }
 }
 /*
