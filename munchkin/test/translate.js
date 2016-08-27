@@ -127,7 +127,7 @@ const translationMapping = {
     'convenient_addition_error': 'Выголная ошибка при сложении',
     'invoke_obscure_rules': 'Используй непонятное правило',
     'wishing_ring': 'Хотельное кольцо',
-    'boots_of_running_really_fast': 'Башмаки реално быстрого бега',
+    'boots_of_running_really_fast': 'Башмаки реально быстрого бега',
     'hireling': 'Наёмничек',
     'hoard': 'Ура, Клад!',
     'kneepads_of_allure': 'Наколенники Развода',

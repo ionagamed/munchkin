@@ -19,11 +19,11 @@ class _ extends Item {
     }
 
     canBeHeld(player, table) {
-        return !player.hasClassDisadvantages('wizard') && super.canBeHeld(player, table);
+        return super.canBeHeld(player, table);
     }
 
     canBeWielded(player, table) {
-        return !player.hasClassDisadvantages('wizard') && super.canBeWielded(player, table);
+        return super.canBeWielded(player, table);
     }
 
     getAttackFor(player) {
