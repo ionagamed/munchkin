@@ -41,6 +41,11 @@ export default function (id, opts, player, _player) {
                     t.push(`<a class='sell'>продать</a>`);
                 }
                 break;
+            case 'toBelt':
+                if (_player.name == player.name && card.price) {
+                    t.push(`<a class='toBelt'>в пояс</a>`)
+                }
+                break;
             case 'type':
                 t.push(_t(card.type));
                 break;

@@ -29,6 +29,7 @@ export function updateView(player, table, currentlySelling) {
                 'sell',
                 'type',
                 'wield',
+                'toBelt',
                 'use',
                 'cast',
                 'discard'
