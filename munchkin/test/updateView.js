@@ -259,8 +259,6 @@ export function updateView(player, table, currentlySelling) {
         const wrapper = $('.offer-selector-wrapper');
         const id = $('.offer-item .itemId').data('id');
         list.html('');
-        console.log(table.players);
-        console.log(wrapper);
         if (!wrapper.hasClass('hidden')) {
             table.players.map(x => {
                 if (x.name != player.name) {

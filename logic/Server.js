@@ -118,7 +118,7 @@ class Server {
                 });
                 if (this.roomRequestCallback) {
                     this.sanitizeClasses();
-                    this.roomRequestCallback();
+                    this.roomRequestCallback(msg.data);
                 }
                 break;
             case 'gameStarted':
@@ -133,6 +133,11 @@ class Server {
             case 'chatMessage':
                 if (this.chatMessageCallback) {
                     this.chatMessageCallback(msg.data.from, msg.data.message.text);
+                }
+                break;
+            case 'newPlayer':
+                if (this.newPlayerCallback) {
+                    this.newPlayerCallback(msg.data);
                 }
                 break;
         }
