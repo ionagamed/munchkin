@@ -296,6 +296,8 @@ export class Room {
         console.log(`${client.userName} connected to room ${this.id}`);
         client.on('close', code => {
             console.log(`${client.userName} disconnected from room ${this.id}`);
+            if(client.playerId) this.table.players.splice(client.playerId, 1);
+            //this.clients.splice(pos, 1);
             if(client.userName == this.owner) {
                 this.destroy();
             }
@@ -606,6 +608,7 @@ Room.playerCommands['sellItems'] = (data, env) => {
             ok = false;
         }
         sum += Card.byId(x).price;
+        env.table.discard(x);
     });
     if (!ok) return;
     env.player.increaseLevel(Math.floor(sum / 1000));
@@ -704,7 +707,7 @@ Room.playerCommands['winFight'] = (data, env) => {
     if (env.table.fight == null) return;
     if (env.table.fight.players[0].player.name != env.player.name) return;
 
-    if (+(new Date()) - env.table.fight.beganAt > 5 && env.table.fight.getWinningSide() == 'players') {
+    if (+(new Date()) - env.table.fight.beganAt > 5000 && env.table.fight.getWinningSide() == 'players') {
         env.table.fight.players.map(x => {
             x.state = 'success';
         });
