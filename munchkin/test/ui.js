@@ -48,6 +48,14 @@ export function registerUIHooks() {
         Server.escape(p);
     });
     
+    $('.help').unbind('click').click(e => {
+        Server.tryHelping();
+    });
+    $('.acceptHelp').unbind('click').click(function (e) {
+        const from = $(this).data('from');
+        Server.acceptHelp(from);
+    });
+    
     let sendChatMessage = () => {
         const el = $('.chat-message');
         if (el.val() != '') {

@@ -117,7 +117,7 @@ export function updateView(player, table, currentlySelling) {
             });
             
             let content = '';
-            if (table.fight.players[0].state == 'fighting' && isFighting) {
+            if (table.fight.players[0].state == 'fighting' && isFighting && table.fight.players[0].player.name == player.name) {
                 if (table.fight.getWinningSide() == 'players') {
                     if (+(new Date()) - table.fight.beganAt < 5) {
                         content += ` | осталось ${+(new Date()) - table.fight.beganAt} секунд`;
@@ -126,6 +126,21 @@ export function updateView(player, table, currentlySelling) {
                     }
                 } else {
                     content += ` | <a href='#' class='escape'>смывка</a>`;
+                }
+                if (table.fight.players[0].player.name == player.name && table.currentlyHelping.length > 0) {
+                    content += ` | помощь от: `;
+                    let t = [];
+                    table.currentlyHelping.map(x => {
+                        t.push(`<a class='acceptHelp' data-from='${x}'>${x}</a>`);
+                    });
+                    content += t.join(', ');
+                }
+            }
+            if (table.fight.players[0].state == 'fighting' && !isFighting) {
+                if (table.currentlyHelping.indexOf(player.name) < 0) {
+                    content += ` | <a href='#' class='help'>помочь</a>`;
+                } else {
+                    content += ` | предложена помощь`;
                 }
             }
             content += `<ul><li>монстры: | атака: <b>${table.fight.getMonstersAttack()}</b>`;

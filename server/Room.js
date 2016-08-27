@@ -913,6 +913,31 @@ Room.playerCommands['getCardFromPlayer'] = (data, env) => {
 
 };
 
+Room.playerCommands['tryHelping'] = (data, env) => {
+    if (!env.table.fight || env.table.fight.players.length >= 2) return;
+    env.room.dispatch('triedHelping', {
+        who: env.player.name
+    });
+    if (!env.table.currentlyHelping) {
+        env.table.currentlyHelping = [];
+    }
+    env.table.currentlyHelping.push(env.player.name);
+};
+
+Room.playerCommands['acceptHelp'] = (data, env) => {
+    if (!env.table.fight || env.table.fight.players.length >= 2) return;
+    if (env.table.currentlyHelping.indexOf(data.from) < 0) return;
+    env.table.currentlyHelping = [];
+    env.table.fight.players.push({
+        player: env.table.players.find(x => x.name == data.from),
+        modifiers: [],
+        state: 'fighting'
+    });
+    env.room.dispatch('acceptedHelp', {
+        from: data.from
+    });
+};
+
 /**
  * 'dropPlayerCard' command:
  *  data:

@@ -392,6 +392,29 @@ class Server {
             }
         });
     }
+
+    /**
+     * Suggest your help in fight
+     */
+    tryHelping() {
+        this._send({
+            cmd: 'tryHelping'
+        });
+    }
+
+    /**
+     * Accept suggested help from specified player
+     * 
+     * @param {string} from
+     */
+    acceptHelp(from) {
+        this._send({
+            cmd: 'acceptHelp',
+            data: {
+                from: from
+            }
+        });
+    }
 }
 if (!document.____SeRvEr____) {
     document.____SeRvEr____ = new Server();

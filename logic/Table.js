@@ -70,13 +70,13 @@ export class Table {
          * @type {[number]}
          */
         this.diceRolls = [];
-        
+
         /**
-         * Array of sold cards
-         *
+         * Array of currently ready to help player nicknames
+         * 
          * @type {[string]}
          */
-        this.soldCards = []
+        this.currentlyHelping = [];
     }
 
     /**
