@@ -51,6 +51,6 @@ export function registerPlayerHooks(currentlySelling) {
     $('.sellAll').unbind('click').click(e => {
         Server.sellItems(currentlySelling);
         currentlySelling.splice(0, 10000);
-        $('.sell-list-wraper').addClass('hidden');
+        $('.sell-list-wrapper').addClass('hidden');
     });
 }
