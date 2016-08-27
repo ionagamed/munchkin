@@ -5,7 +5,7 @@
 import { Card } from '../../../Card';
 import { Modifier } from '../helpers/Modifier';
 
-const id = 'flaming_poison_potion';
+const id = 'freezing_explosive_potion';
 
 class _ extends Modifier {
     constructor() {
