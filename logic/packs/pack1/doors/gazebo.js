@@ -22,6 +22,7 @@ class _ extends Monster {
     }
     
     onFightEnded(fight, table) {
+        super.onFightEnded();
         if (fight.players.length != 1) {
             console.log('gazebo debug');
             throw new Exception();
