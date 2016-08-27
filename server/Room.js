@@ -604,6 +604,9 @@ Room.playerCommands['endSelling'] = (data, env) => {
     });
     env.player.increaseLevel(sum/1000, false);
     env.room.dispatch('endedSelling');
+    env.table.discardedTreasure = 
+        env.table.discardedTreasure.concat(env.table.soldCards);
+    env.table.soldCards = [];
     env.room.dispatch('currentLevel', {
         who: env.player.name,
         level: env.player.level
