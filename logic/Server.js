@@ -374,6 +374,20 @@ class Server {
             cmd: 'beginEscaping'
         });
     }
+
+    /**
+     * Sell the given items
+     * 
+     * @param {[string]} cards
+     */
+    sellItems(cards) {
+        this._send({
+            cmd: 'sellItems',
+            data: {
+                cards: cards
+            }
+        });
+    }
 }
 if (!document.____SeRvEr____) {
     document.____SeRvEr____ = new Server();

@@ -10,6 +10,7 @@ class shrieking_geek extends Monster {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'monster';
+        this.treasure = 2;
     }
     
     badThing(player, table) {
@@ -27,9 +28,6 @@ class shrieking_geek extends Monster {
         });
         if (isWarrior) return 12;
         return 6;
-    }
-    get treasureCount() {
-        return 2;
     }
 }
 Card.cards[id] = new shrieking_geek();
