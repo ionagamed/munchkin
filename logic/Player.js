@@ -265,4 +265,10 @@ export class Player {
     decreaseLevel(amount) {
         this.level = Math.max(this.level - amount, 1);
     }
+    increaseLevel(amount, boo) {
+        if (boo)
+            this.level += amount;
+        else
+            this.level = Math.min(this.level + amount, 9);
+    }
 }
