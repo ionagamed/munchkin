@@ -181,6 +181,27 @@ export function updateView(player, table) {
         updateDice();
     };
     
+    let updateCastList = () => {
+        const wrapper = $('.cast-list-wrapper');
+        const list = $('.cast-list');
+        list.html('');
+        if (wrapper.hasClass('hidden')) return;
+        const card = Card.byId(wrapper.data('card'));
+        table.players.map(x => {
+            if (card.canBeCast(player, x, table)) {
+                list.append(`<li><a class='doCast' data-type='player' data-target='${x.name}'>${x.name}</a></li>`);
+            }
+        });
+        if (table.fight) {
+            table.fight.monsters.map(x => {
+                if (card.canBeCast(player, x.monster, table)) {
+                    list.append(`<li><a class='doCast' data-type='monster' data-target='${x.monster}'>${_t(x.monster)}</a></li>`);
+                }
+            });
+        }
+    };
+    
     updatePlayers();
     updateTable();
+    updateCastList();
 }

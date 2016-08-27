@@ -30,4 +30,17 @@ export function registerPlayerHooks() {
     $('.endTurn').unbind('click').click(e => {
         Server.endTurn();
     });
+    $('.cast').unbind('click').click(e => {
+        const wrapper = $('.cast-list-wrapper');
+        wrapper.removeClass('hidden');
+        wrapper.data('card', $(e.target).closest('li').data('id'));
+    });
+    $('.doCast').unbind('click').click(e => {
+        const el = $(e.target);
+        const type = el.data('type');
+        const target = el.data('target');
+        
+        Server.castCard(el.closest('.cast-list-wrapper').data('card'), type, target);
+        $('.cast-list-wrapper').addClass('hidden');
+    });
 }
