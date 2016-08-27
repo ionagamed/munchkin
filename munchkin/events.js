@@ -32,6 +32,7 @@ export function out(obj){
 export function down(obj){
     global.create_cards_on = false;
     var cart = Card.byId(obj.key.slice(6));
+    global.curCard = cart;
     global.buttonExit.bringToTop();
     global.buttonExit.visible = true;
     if (wield != undefined) wield.destroy();
