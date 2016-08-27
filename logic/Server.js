@@ -368,6 +368,24 @@ class Server {
             cmd: 'winFight'
         });
     }
+
+    /**
+     * Try to win the game :)
+     */
+    winGame() {
+        this._send({
+            cmd: 'winGame'
+        });
+    }
+
+    /**
+     * Begin the escaping process
+     */
+    beginEscaping() {
+        this._send({
+            cmd: 'beginEscaping'
+        });
+    }
 }
 if (!document.____SeRvEr____) {
     document.____SeRvEr____ = new Server();

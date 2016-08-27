@@ -40,4 +40,11 @@ export function registerUIHooks() {
     $('.winFight').unbind('click').click(e => {
         Server.winFight();
     });
+    $('.escape').unbind('click').click(e => {
+        Server.beginEscaping();
+    });
+    $('.m_escape').unbind('click').click(function (e) {
+        const p = $(this).data('pos');
+        Server.escape(p);
+    });
 }
