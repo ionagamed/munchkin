@@ -120,6 +120,7 @@ export class Fight {
             x.modifiers.map(y => {
                 table.discard(y);
             });
+            table.discard(x.monster);
         });
     }
 
