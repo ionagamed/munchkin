@@ -84,6 +84,47 @@
       </div>
     </div>
   </div>
+  <div class='state-win'>
+    <style type="text/css">
+      p {
+        text-align: center;
+        font-size: 80px;
+      }
+      a{
+        font-size: 35px;
+        font-family: 'Lakki Reddy', cursive;
+      }
+      .radius{
+        border: 1px solid black;
+        padding: 15px;
+        border-radius: 20px 20px 20px 20px;
+      }
+      input[type="text"] {
+        position: relative;
+        width: 37%;
+        background: #fafad2;
+        text-align: center;
+        font-family: 'Lakki Reddy', cursive;
+        font-size: 40px;
+        margin: 3px;
+      }
+      body{
+        background-image: url(/img/580979_staraya_koja.jpg);
+        font-family: 'Lakki Reddy', cursive;
+      }
+      form{
+        margin-left: 30%;
+      }
+      img {
+        width: 50%;
+        margin-right: 40px;
+      }
+    </style>
+    <p>Вы победили!!!</p>
+    <form action="/win" method="post">
+      <img src="img/Win.png" /> <br/>
+    </form>
+  </div>
 </div>
 <div class='hidden popup'>
   <img class='popup-image' src='' width='330' height='514'>

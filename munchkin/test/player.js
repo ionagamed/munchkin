@@ -3,7 +3,6 @@
  */
 
 import Server from '../../logic/Server';
-import { Card } from '../../logic/Card';
 
 export function registerPlayerHooks(currentlySelling) {
     $('.wield').unbind('click').click(e => {
@@ -34,7 +33,7 @@ export function registerPlayerHooks(currentlySelling) {
     });
     $('.endTurn').unbind('click').click(e => {
         Server.endTurn();
-	$('body,html').animate({scrollTop:0},800);
+        $('body,html').animate({scrollTop:0},800);
     });
     $('.cast').unbind('click').click(e => {
         const wrapper = $('.cast-list-wrapper');
