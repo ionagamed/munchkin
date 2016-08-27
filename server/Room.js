@@ -4,6 +4,7 @@ import { Table } from '../logic/Table';
 import dice from '../logic/dice.js';
 import packs from '../logic/packs';
 import Random from 'random-js';
+import { AllHtmlEntities as entities} from 'html-entities';
 
 const MAX_PLAYERS = 6;
 const TREASURE_BEGIN_COUNT = 4;
@@ -131,9 +132,9 @@ function sendEvent(client, event, data) {
  */
 function setCommandSet(ws, set, env) {
     ws.onmessage = data => {
-        if (DEBUG) console.log(data.data);
         try {
             var msg = JSON.parse(data.data);
+            if (DEBUG && msg.cmd != 'roomRequest') console.log(`${ws.userName}: ${JSON.stringify(msg)}`);
             env.room = Room.byId(env.roomId);
             env.table = env.room.table;
             env.player = env.table.players[ws.playerId];
@@ -466,6 +467,7 @@ Room.clientCommands = {};
  *  starts game
  */
 Room.clientCommands['start'] = (data, env) => {
+    console.log(env.room.owner);
     if(env.client.userName === env.room.owner) {
         env.room.start();
     }
@@ -521,7 +523,7 @@ Room.playerCommands['resurrect'] = (data, env) => {
     env.player.hand = []
          .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
          .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
-    //env.player.hand = ['3872_orcs', '1000_gold', 'acid_potion'];
+         //.concat(['1000_gold', 'curse_change_sex']);
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
         if(card) card.onReceived(env.player, 'deck', env.table);
@@ -872,6 +874,8 @@ Room.playerCommands['moveToBelt'] = (data, env) => {
  *
  */
 Room.playerCommands['sendChatMessage'] = (data, env) => {
+    data.to = entities.encode(data.to);
+    data.text = entities.encode(data.text);
     if(data.to === 'broadcast') {
         env.room.dispatch('chatMessage', {
             from: env.player.name,
