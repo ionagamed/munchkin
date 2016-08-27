@@ -130,6 +130,11 @@ class Server {
             case 'kickedDoor':
                 this.table.recentDoor = msg.data.card.id;
                 break;
+            case 'chatMessage':
+                if (this.chatMessageCallback) {
+                    this.chatMessageCallback(msg.from, msg.message.text);
+                }
+                break;
         }
         this.sanitizeClasses();
     }
@@ -294,14 +299,13 @@ class Server {
     /**
      * Send chat message
      * 
-     * @param {string|'broadcast'} to
      * @param {string} text
      */
-    sendChatMessage(to, text) {
+    sendChatMessage(text) {
         this._send({
             cmd: 'sendChatMessage',
             data: {
-                to: to,
+                to: 'broadcast',
                 text: text
             }
         });
