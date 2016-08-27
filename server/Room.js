@@ -551,6 +551,7 @@ Room.playerCommands['escape'] = (data, env) => {
         }
     });
     Card.byId(env.table.fight.monsters[data.from]).onEscape(env.player, d, env.table);
+    env.table.fight.monsters.splice(data.from, 1);
 };
 
 Room.playerCommands['beginEscaping'] = (data, env) => {
@@ -697,6 +698,21 @@ Room.playerCommands['winFight'] = (data, env) => {
             x.state = 'success';
         });
         env.room.dispatch('wonFight');
+        env.room.giveCards('deck', env.table.fight.players[0].player, env.room.treasureDeck.splice(0,));
+        env.table.fight.monsters.map(x => {
+            const card = Card.byId(x.monster);
+            env.room.giveCards(
+                'deck', 
+                env.table.fight.players[0].player, 
+                env.room.treasureDeck.splice(0, 
+                    x.getTreasureFor(
+                        env.table.fight.players[0].player
+                    )
+                ),
+                env.room,
+                env.table.fight.players.length < 2 ? 'close' : 'open'
+            );
+        });
         env.table.fight.onEnded(env.table);
         env.table.fight = null;
     }
