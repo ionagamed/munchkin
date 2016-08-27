@@ -710,7 +710,7 @@ Room.playerCommands['winFight'] = (data, env) => {
                 'deck', 
                 env.table.fight.players[0].player, 
                 env.room.treasureDeck.splice(0, 
-                    x.getTreasureFor(
+                    card.getTreasureFor(
                         env.table.fight.players[0].player
                     )
                 ),
