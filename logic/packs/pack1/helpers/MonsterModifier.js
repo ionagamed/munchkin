@@ -7,7 +7,7 @@ import { Card } from '../../../Card';
 
 export class MonsterModifier extends Card {
     canBeCast(source, dest, table) {
-        return (dest instanceof String) && table.fight != null;
+        return (typeof dest == 'string') && table.fight != null;
     }
 
     onCast(source, dest, table) {

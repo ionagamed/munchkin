@@ -54,9 +54,4 @@ export function registerPlayerHooks(currentlySelling) {
         currentlySelling.splice(0, 10000);
         $('.sell-list-wrapper').addClass('hidden');
     });
-<<<<<<< HEAD
-    $('.sellAll')
 }
-=======
-}
->>>>>>> fee63b3fa845d629be46a377322dcb680f14274c

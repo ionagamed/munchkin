@@ -11,7 +11,7 @@ class undead_horse extends Monster {
         this.kind = 'door';
         this.type = 'monster';
         this.undead = true;
-        this.treasure = 4;
+        this.treasure = 2;
     }
     
     badThing(player, table) {
