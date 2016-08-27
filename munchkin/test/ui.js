@@ -29,9 +29,9 @@ export function registerUIHooks() {
         .mouseenter(function (e) {
             const p = $('.popup');
             p.removeClass('hidden');
-            p.css('top', $(this).offset().top + $(this).outerHeight());
-            p.css('left', $(this).offset().left);
-            $('.popup-image').attr('src', `${__l($(this).data('id'))}`);
+            p.css('bottom', 0);           
+	    p.css('right', 0); 
+	    $('.popup-image').attr('src', `${__l($(this).data('id'))}`);
         })
         .mouseleave(function (e) {
             $('.popup').addClass('hidden');
