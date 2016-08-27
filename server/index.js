@@ -6,7 +6,7 @@ var app = express();
 
 app.use('/lib', express.static('bower_components'));
 app.get('/', function (req, res) {
-    return res.redirect('/test/test.html');
+    return res.redirect('/test.html');
 });
 app.use(express.static('client'));
 

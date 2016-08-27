@@ -206,10 +206,10 @@ export class Player {
      */
     hasRaceAdvantages(r) {
         if (r == 'human') {
-            if (this.hasCardWielded('super_munchkin')) {
-                return this.cardsOfTypeWielded('class') <= 1;
+            if (this.hasCardWielded('half-breed')) {
+                return this.cardsOfTypeWielded('race') <= 1;
             } else {
-                return this.cardsOfTypeWielded('class') <= 0;
+                return this.cardsOfTypeWielded('race') <= 0;
             }
         } else {
             return this.hasCardWielded(r);
