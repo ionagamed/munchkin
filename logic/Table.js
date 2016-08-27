@@ -63,6 +63,13 @@ export class Table {
          * @type {string}
          */
         this.recentDoor = '';
+        
+        /**
+         * Array of sold cards
+         *
+         * @type {[string]}
+         */
+        this.soldCards = []
     }
 
     /**
