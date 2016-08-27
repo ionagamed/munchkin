@@ -1,5 +1,6 @@
 import { Server as WebSocketServer } from 'ws';
 import { Room } from './Room';
+import { AllHtmlEntities as entities } from 'html-entities';
 import url from 'url';
 
 export var wss = new WebSocketServer({
@@ -18,5 +19,6 @@ export var wss = new WebSocketServer({
 wss.on('connection', ws => {
     var location = url.parse(ws.upgradeReq.url, true, true);
     ws.userName = location.query.userName;
+    ws.userName = entities.encode(ws.userName);
     Room.byId(location.query.room, location.query.userName, ['pack1']).connect(ws);
 });
