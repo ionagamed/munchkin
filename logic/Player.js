@@ -183,6 +183,7 @@ export class Player {
         /**
          * The player for now has class advantages if and only if he has that class
          */
+        
         return this.hasCardWielded(c);
     }
 

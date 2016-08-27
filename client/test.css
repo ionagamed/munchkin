@@ -14,6 +14,11 @@ a {
     display: none;
 }
 
+.table {
+    position: fixed;
+}
+
+
 .chat-messages {
     max-height: 30em;
     overflow-y: scroll;
