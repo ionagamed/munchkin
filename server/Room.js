@@ -200,10 +200,11 @@ function getCardFromPlayer(room, player, cardPos) {
  *
  * @param player {Player} player from who we get card
  * @param id {string} card id
- * @param {Object} env
+ * @param {Room} room
+ * @param {Table} table
  * @returns {boolean} success status
  */
-function getCardFromPlayerById(player, id, room) {
+function getCardFromPlayerById(player, id, room, table) {
     if(remove_first(id, player.belt) || remove_first(id, player.hand)) {
         room.dispatch('lostCard', {
             who: player.name,
@@ -212,7 +213,7 @@ function getCardFromPlayerById(player, id, room) {
         return true;
     }
     if (remove_first(id, player.wielded)) {
-        Card.byId(id).onUnwielded(player, env.table);
+        Card.byId(id).onUnwielded(player, table);
         room.dispatch('unwieldedCard', {
             who: player.name,
             card: id
@@ -582,7 +583,7 @@ Room.playerCommands['winGame'] = (data, env) => {
 Room.playerCommands['sellItem'] = (data, env) => {
     if(env.table.players[env.table.turn].name != env.player.name) return;
     const cardId = data.card;
-    if(getCardFromPlayerById(env.player, cardId, env.room)) {
+    if(getCardFromPlayerById(env.player, cardId, env.room, env.table)) {
         env.table.soldCards.push(cardId);
         env.room.dispatch('soldCard', cardId);
     }
@@ -730,7 +731,7 @@ Room.playerCommands['wieldCard'] = (data, env) => {
     if(phase(env.player, env.table, 'hand') ||
        phase(env.player, env.table, 'drop')) return;
 
-    if(card.canBeWielded(env.player, env.table) && getCardFromPlayerById(env.player, cardId, env.room)) {
+    if(card.canBeWielded(env.player, env.table) && getCardFromPlayerById(env.player, cardId, env.room, env.table)) {
         env.room.dispatch('wieldedCard', {
             who: env.player.name,
             card: cardId
@@ -786,7 +787,7 @@ Room.playerCommands['useCard'] = (data, env) => {
         card: cardId
     });
     env.table.phase = (card.type == 'monster' ? 'hand' : 'closed');
-    if(getCardFromPlayerById(env.player, cardId, env.room) && card.onUsed(env.player, env.table)) {
+    if(getCardFromPlayerById(env.player, cardId, env.room, env.table) && card.onUsed(env.player, env.table)) {
         card.onDiscarded(env.table);
         env.table.discard(cardId);
         env.room.dispatch('discardedCard', cardId);
@@ -818,7 +819,7 @@ Room.playerCommands['castCard'] = (data, env) => {
         on: on.name,
         card: cardId
     });
-    if(getCardFromPlayerById(env.player, cardId, env.room) && card.onCast(env.player, on, env.table)) {
+    if(getCardFromPlayerById(env.player, cardId, env.room, env.table) && card.onCast(env.player, on, env.table)) {
         env.room.dispatch('discardedCard', cardId);
         card.onDiscarded(env.table);
         env.table.discard(cardId);
@@ -845,7 +846,7 @@ Room.playerCommands['callSpecialAbility'] = (data, env) => {
  */
 Room.playerCommands['moveToBelt'] = (data, env) => {
     const cardId = data.card;
-    if(getCardFromPlayerById(env.player, cardId, env.room)) {
+    if(getCardFromPlayerById(env.player, cardId, env.room, env.table)) {
         env.player.belt.push(cardId);
         env.room.dispatch('addedToBelt', {
             who: env.player.name,
@@ -924,7 +925,7 @@ Room.playerCommands['dropPlayerCard'] = (data, env) => {
  */
 Room.playerCommands['discard'] = (data, env) => {
     const cardId = data.card;
-    getCardFromPlayerById(env.player, cardId, env.room);
+    getCardFromPlayerById(env.player, cardId, env.room, env.table);
     Card.byId(cardId).onDiscarded(env.table);
     env.room.dispatch('discardedCard', cardId);
     env.table.discard(cardId);
