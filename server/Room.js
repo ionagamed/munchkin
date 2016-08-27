@@ -752,7 +752,6 @@ Room.playerCommands['wieldCard'] = (data, env) => {
             card: cardId
         });
         env.player.wield(cardId, env.table);
-        card.onWielded(env.player, env.table);
     }
 };
 
@@ -766,13 +765,12 @@ Room.playerCommands['unwieldCard'] = (data, env) => {
     const cardId = data.card;
     if(phase(env.player, env.table, 'hand') ||
        phase(env.player, env.table, 'drop')) return;
-    if(env.player.hand.indexOf(cardId)) {
+    if(env.player.wielded.indexOf(cardId)) {
         env.room.dispatch('unwieldedCard', {
             who: env.player.name,
             card: cardId
         });
         env.player.unwield(cardId);
-        Card.byId(cardId).onUnwielded(env.player, env.table);
         if(Card.byId(cardId).kind === 'door') {
             env.table.discard(cardId);
             env.room.dispatch('discardedCard', cardId);
