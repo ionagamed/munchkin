@@ -709,7 +709,7 @@ Room.playerCommands['winFight'] = (data, env) => {
         env.room.dispatch('wonFight');
         env.table.fight.monsters.map(x => {
             const card = Card.byId(x.monster);
-            env.room.giveCards(
+            Room.giveCards(
                 'deck', 
                 env.table.fight.players[0].player, 
                 env.room.treasureDeck.splice(0, 
