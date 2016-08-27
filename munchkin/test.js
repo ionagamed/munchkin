@@ -64,6 +64,7 @@ function game(playerName) {
                 Server.winGame();
                 $('.state-game').hide();
                 $('.state-win').show();
+                $('body').addClass('body-win');
             }
         }
     };
