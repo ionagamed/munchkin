@@ -27,7 +27,7 @@ class _ extends Item {
     }
 
     getAttackFor(player) {
-        return 3;
+        return 2;
     }
 }
 Card.cards[id] = new _();
