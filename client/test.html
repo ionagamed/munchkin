@@ -52,7 +52,7 @@
         <div class='table'>
           <ul>
             <li class='hidden sell-list-wrapper'>
-              на продажу: (<b><span class='price'></span></b>) <a class='sellAll' href='#'>продать</a>
+              на продажу: (<b><span class='price'></span></b>) <a class='sellAll' href='#'>продать</a> | <a class='stopSelling'>отменить</a>
               <ul class='sell-list'>
 
               </ul>
@@ -62,6 +62,14 @@
               <ul class='cast-list'>
 
               </ul>
+            </li>
+            <li class='hidden offer-selector-wrapper'>
+              отдать <span class='offer-item'></span> в руки:
+              <ul class='offer-selector'></ul>
+            </li>
+            <li class='hidden offers-wrapper'>
+              предложения:
+              <ul class='offer-list'></ul>
             </li>
             <li>
               бой: <span class='fight'></span>
@@ -94,7 +102,7 @@
   <div class='state-win' style='display: none;'>
     <p>Вы победили!!!</p>
     <form action="/win" method="post">
-      <img src="img/Win.png" /> <br/>
+      <img src="Win.png" /> <br/>
     </form>
   </div>
 </div>

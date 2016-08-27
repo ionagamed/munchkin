@@ -33,12 +33,7 @@ export default function (id, opts, player, _player) {
                 break;
             case 'price':
                 if (card.price) {
-                    t.push(`${card.price} голдов`);
-                }
-                break;
-            case 'sell':
-                if (_player.name == player.name && card.price) {
-                    t.push(`<a class='sell'>продать</a>`);
+                    t.push(`<a class='sell'>${card.price} голдов</a>`);
                 }
                 break;
             case 'toBelt':
@@ -72,6 +67,11 @@ export default function (id, opts, player, _player) {
             case 'discard':
                 if (_player.name == player.name) {
                     t.push(`<a class='discard'>в сброс</a>`);
+                }
+                break;
+            case 'offer':
+                if (_player.name == player.name && card.price) {
+                    t.push(`<a class='makeOffer'>отдать</a>`)
                 }
                 break;
         }

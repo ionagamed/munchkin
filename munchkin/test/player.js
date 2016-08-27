@@ -3,6 +3,7 @@
  */
 
 import Server from '../../logic/Server';
+import _t from './translate.js';
 
 export function registerPlayerHooks(currentlySelling) {
     $('.wield').unbind('click').click(e => {
@@ -56,5 +57,38 @@ export function registerPlayerHooks(currentlySelling) {
         Server.sellItems(currentlySelling);
         currentlySelling.splice(0, 10000);
         $('.sell-list-wrapper').addClass('hidden');
+    });
+    $('.stopSelling').unbind('click').click(e => {
+        currentlySelling.splice(0, 10000);
+        $('.sell-list-wrapper').addClass('hidden');
+    });
+    
+    $('.makeOffer').unbind('click').click(e => {
+        const id = $(e.target).closest('li').data('id');
+        $('.offer-selector-wrapper').removeClass('hidden');
+        $('.offer-item').html(`<a class='itemId' data-id='${id}'>${_t(id)}</a>`);
+    });
+    $('.makeOfferFinal').unbind('click').click(e => {
+        const el = $(e.target).closest('li');
+        const id = el.data('id');
+        const to = el.data('to');
+        Server.makeOffer(to, id);
+        $('.offer-selector-wrapper').addClass('hidden');
+    });
+    $('.acceptOffer').unbind('click').click(e => {
+        const el = $(e.target).closest('li');
+        const from = el.data('from');
+        const to = el.data('to');
+        const item = el.data('item');
+        Server.acceptOffer(from, item);
+        $('.offer-selector-wrapper').addClass('hidden');
+    });
+    $('.declineOffer').unbind('click').click(e => {
+        const el = $(e.target).closest('li');
+        const from = el.data('from');
+        const to = el.data('to');
+        const item = el.data('item');
+        Server.declineOffer(from, to, item);
+        $('.offer-selector-wrapper').addClass('hidden');
     });
 }

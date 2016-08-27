@@ -392,6 +392,79 @@ class Server {
             }
         });
     }
+
+    /**
+     * Suggest your help in fight
+     */
+    tryHelping() {
+        this._send({
+            cmd: 'tryHelping'
+        });
+    }
+
+    /**
+     * Accept suggested help from specified player
+     * 
+     * @param {string} from
+     */
+    acceptHelp(from) {
+        this._send({
+            cmd: 'acceptHelp',
+            data: {
+                from: from
+            }
+        });
+    }
+
+    /**
+     * Make offer to give the item
+     * 
+     * @param {string} to
+     * @param {string} item
+     */
+    makeOffer(to, item) {
+        this._send({
+            cmd: 'makeOffer',
+            data: {
+                to: to,
+                item: item
+            }
+        });
+    }
+
+    /**
+     * Accept the offer
+     * 
+     * @param {string} from
+     * @param {string} item
+     */
+    acceptOffer(from, item) {
+        this._send({
+            cmd: 'acceptOffer',
+            data: {
+                from: from,
+                item: item
+            }
+        });
+    }
+
+    /**
+     * Discard the offer
+     * 
+     * @param {string} from
+     * @param {string} to
+     * @param {string} item
+     */
+    declineOffer(from, to, item) {
+        this._send({
+            cmd: 'declineOffer',
+            data: {
+                from: from,
+                to: to,
+                item: item
+            }
+        });
+    }
 }
 if (!document.____SeRvEr____) {
     document.____SeRvEr____ = new Server();
