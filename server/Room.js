@@ -145,6 +145,16 @@ function setCommandSet(ws, set, env) {
 }
 
 /**
+ * Checks for turn
+ *
+ * @param {Player} player
+ * @param {Table} table
+ * @return {bool}
+ */
+function turn(player, table) {
+    return table.players[table.turn].name === player.name;
+}
+/**
  * Helper for validating phase
  *
  * @param player Player
@@ -153,7 +163,7 @@ function setCommandSet(ws, set, env) {
  * @returns bool is in phase
  */
 function phase(player, table, phase) {
-    return table.players[table.turn].name == player.name && table.phase == phase;
+    return turn(player, table) && table.phase == phase;
 }
 
 /**
@@ -581,33 +591,24 @@ Room.playerCommands['winGame'] = (data, env) => {
 };
 
 /**
- * 'sellItem command:
+ * 'sellItems' command:
  * data:
- *  card {string} id of the card
+ *  cards {[string]} ids of the card
  */
-Room.playerCommands['sellItem'] = (data, env) => {
-    if(env.table.players[env.table.turn].name != env.player.name) return;
-    const cardId = data.card;
-    if(getCardFromPlayerById(env.player, cardId, env.room, env.table)) {
-        env.table.soldCards.push(cardId);
-        env.room.dispatch('soldCard', cardId);
-    }
-};
-
-/**
- * 'endSelling' command:
- */
-Room.playerCommands['endSelling'] = (data, env) => {
-    if(env.table.players[env.table.turn].name != env.player.name) return;
-    const sum = env.table.soldCards.reduce((s, c) => {
-        return s + Card.byId(c).price;
+Room.playerCommands['sellItems'] = (data, env) => {
+    if(!turn(env.player, env.table)) return;
+    const cards = data.cards;
+    let ok = true;
+    let sum = 0;
+    cards.map(x => {
+        if (!getCardFromPlayerById(env.player, x, env.room, env.table)) {
+            ok = false;
+        }
+        sum += Card.byId(x).price;
     });
-    env.player.increaseLevel(sum/1000, false);
-    env.room.dispatch('endedSelling');
-    env.table.discardedTreasure = 
-        env.table.discardedTreasure.concat(env.table.soldCards);
-    env.table.soldCards = [];
-    env.room.dispatch('currentLevel', {
+    if (!ok) return;
+    env.player.increaseLevel(sum / 1000);
+    env.room.dipatch('currentLevel', {
         who: env.player.name,
         level: env.player.level
     });
@@ -691,7 +692,7 @@ Room.playerCommands['lootTheRoom'] = (data, env) => {
 
 Room.playerCommands['endTurn'] = (data, env) => {
     if(env.table.fight != null || phase(env.player, env.table, 'begin')) return;
-    if(env.table.players[env.table.turn].name != env.player.name) return;
+    if(!turn(env.player, env.table)) return;
     if(env.player.hand.length > (env.player.hasClassAdvantages('dwarf') ? 6 : 5)) return;
 
     env.table.nextTurn();
@@ -737,8 +738,7 @@ Room.playerCommands['winFight'] = (data, env) => {
 Room.playerCommands['wieldCard'] = (data, env) => {
     const cardId = data.card;
     const card = Card.byId(cardId);
-    if(phase(env.player, env.table, 'hand') ||
-       phase(env.player, env.table, 'drop')) return;
+    if(!turn(env.player, env.table) || env.table.fight != null) return;
 
     if(card.canBeWielded(env.player, env.table) && getCardFromPlayerById(env.player, cardId, env.room, env.table)) {
         env.room.dispatch('wieldedCard', {

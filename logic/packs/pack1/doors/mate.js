@@ -9,6 +9,7 @@ class out_to_lunch extends Card {
         this.pack = 'pack1';
         this.kind = 'door';
         this.type = 'mate';
+        this.custable = true;
     }
     onCast(source, destination, table) {
         for(let i of table.fight.monsters) {

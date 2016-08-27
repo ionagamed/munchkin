@@ -15,6 +15,7 @@ export function buttonWield() {
     if (wield != undefined) wield.destroy();
     if (use != undefined) use.destroy();
     if (cast != undefined) cast.destroy();
+    console.log(global.curCard);
     global.create_cards_on = true;
 }
 
