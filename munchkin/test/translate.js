@@ -161,6 +161,7 @@ const translationMapping = {
     'potion_of_general_studliness': 'Зелье Крутизны',
     'whine_at_the_gm': 'Разжалоби мастера',
     'yuppie_water': 'Яппиток',
+    'yuppie_water_helper': 'Яппиток',
     'go_up_a_level': 'Получи уровень',
     'steal_a_level': 'Укради уровень',
     'tuba_of_charm': 'Чарующая дуда',
