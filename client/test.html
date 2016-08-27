@@ -1,87 +1,157 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>__test page__</title>
-  <link href='/lib/bootstrap/dist/css/bootstrap.min.css' rel='stylesheet'>
+  <meta charset="UTF-8">
+  <title>Манчкин</title>
+
+  <link rel='stylesheet' href='/lib/bootstrap/dist/css/bootstrap.min.css'>
+  <script src='/lib/jquery/dist/jquery.min.js'></script>
+
+  <script src='/munchkin.js'></script>
+  <link rel='stylesheet' href='test.css'>
 </head>
-<script src='/lib/phaser/build/phaser.min.js'></script>
+<body>
+<br>
 <div class='container'>
-  <br>
-  <input class='form-control' type='text' id='username' value='ionagamed'>
-  <input class='form-control' type='text' id='ip' value='localhost:3031'>
-  <button class='btn btn-primary connectButton'>connect</button>
-  <br>
-  <br>
-  <div class='btn-group'>
-    <button class='btn btn-default playButton'>play</button>
-    <button class='btn btn-default startButton'>start game</button>
-    <button class='btn btn-default roomRequestButton'>roomRequest</button>
-    <button class='btn btn-default resurrectButton'>resurrect</button>
+  <div class='state-login'>
+    <form id='loginForm'>
+      <div class='form-group'>
+        <label>Имя:</label>
+        <input type='text' class='form-control' id='username' placeholder='xXx_Swag420_xXx'>
+      </div>
+      <div class='form-group'>
+        <label>Комната:</label>
+        <input type='text' class='form-control' id='room' placeholder='room_1337'>
+      </div>
+      <div class='form-group'>
+        <label>Пол:</label>
+        <select id='sex' class='form-control'>
+          <option value='male'>Мужской</option>
+          <option value='female'>Женский</option>
+        </select>
+      </div>
+      <div class='form-group'>
+        <label>Сервер:</label>
+        <input type='text' class='form-control' id='server' placeholder='localhost:3031' value='localhost:3031'>
+      </div>
+      <button type='button' class='btn btn-primary loginButton'>Войти</button>
+    </form>
   </div>
-  <br><br>
-  <ul>
-    <li class='player'>
-      <div class='player-info'>player:</div>
-      <ul>
-        <li>
-          wielded:
-          <ul class='wielded'></ul>
-        </li>
-        <li>
-          belt:
-          <ul class='belt'></ul>
-        </li>
-        <li>
-          hand:
-          <ul class='hand'></ul>
-        </li>
-        <!--<li></li>-->
-        <!--<li>-->
-          <!--<div class='input-group'>-->
-            <!--<input class='form-control' type='text' class='add'>-->
-            <!--<span class='input-group-btn'>-->
-              <!--<button class='btn btn-primary addButton'>add to hand</button>-->
-            <!--</span>-->
-          <!--</div>-->
-        <!--</li>-->
-      </ul>
-    </li>
-    <li class='table'>
-      table:
-      <ul>
-        <li class='fight'>
-          fight: <span class='result'></span>
+  <div class='state-wait'>
+    <div class='players-wait'>
+
+    </div>
+    <button class='btn btn-primary' id='startGame'>Начать игру</button>
+  </div>
+  <div class='state-game'>
+    <div class='row'>
+      <div class='col-md-6'>
+        <div id='players'></div>
+      </div>
+      <div class='col-md-6'>
+        <div class='table'>
           <ul>
-            <li>
-              players: (<b><span class='p-attack'></span></b>)
-              <ul class='players-list'></ul>
+            <li class='hidden sell-list-wrapper'>
+              на продажу: (<b><span class='price'></span></b>) <a class='sellAll' href='#'>продать</a>
+              <ul class='sell-list'>
+
+              </ul>
+            </li>
+            <li class='hidden cast-list-wrapper'>
+              кастануть на:
+              <ul class='cast-list'>
+
+              </ul>
             </li>
             <li>
-              monsters: (<b><span class='m-attack'></span></b>)
-              <ul class='monsters-list'></ul>
+              бой: <span class='fight'></span>
+            </li>
+            <li>
+              броски кубика: <span class='dice'></span>
+            </li>
+            <li>
+              пнутая дверь: <span class='recentDoor'></span>
+            </li>
+            <li>
+              сброс:
+              <ul>
+                <li>двери: <span class='discardedDoors'></span></li>
+                <li>сокровища: <span class='discardedTreasure'></span></li>
+              </ul>
+            </li>
+            <li>
+              чятик:
+              <ul class='chat-messages'></ul>
+              <form class='chat-form'>
+                <div class='input-group'>
+                  <input type='text' class='form-control chat-message' placeholder='сообщение'>
+                  <button class='input-group-btn btn btn-primary send-chat-message'>отправить</button>
+                </div>
+              </form>
             </li>
           </ul>
-        </li>
-        <li>
-          discard doors:
-          <ul class='discardedDoors'></ul>
-        </li>
-        <li>
-          discard treasure:
-          <ul class='discardedTreasure'></ul>
-        </li>
-      </ul>
-    </li>
-  </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='state-win'>
+    <style type="text/css">
+      .chat-messages {
+        height: 30em;
+        overflow-y: scroll;
+      }
+      .state-win p {
+        text-align: center;
+        font-size: 80px;
+      }
+      .state-win a {
+        font-size: 35px;
+        font-family: 'Lakki Reddy', cursive;
+      }
+      .state-win .radius {
+        border: 1px solid black;
+        padding: 15px;
+        border-radius: 20px 20px 20px 20px;
+      }
+      .state-win input[type="text"] {
+        position: relative;
+        width: 37%;
+        background: #fafad2;
+        text-align: center;
+        font-family: 'Lakki Reddy', cursive;
+        font-size: 40px;
+        margin: 3px;
+      }
+      .body-win {
+        background-image: url(/img/580979_staraya_koja.jpg);
+        font-family: 'Lakki Reddy', cursive;
+      }
+      .body-win form {
+        margin-left: 30%;
+      }
+      .body-win img {
+        width: 50%;
+        margin-right: 40px;
+      }
+    </style>
+    <p>Вы победили!!!</p>
+    <form action="/win" method="post">
+      <img src="img/Win.png" /> <br/>
+    </form>
+  </div>
 </div>
-<input type='text' id='id'>
-<div id='img'></div>
-<style>
-  a,a:visited {
-    text-decoration: none;
-    color: blue;
-  }
-  a:hover {
-    color: #00a;
-  }
-</style>
+<div class='hidden popup'>
+  <img class='popup-image' src='' width='330' height='514'>
+</div>
+<div>
+  <div class='doors'></div>
+  <div class='treasure'></div>
+</div>
+<script>
+  $(function () {
+    $('#username').val((Math.random().toString(36)+'00000000000000000').slice(2, 7));
+    $('#room').val((+(new Date())).toString().substring(0, 9));
+  })
+</script>
+</body>
 </html>

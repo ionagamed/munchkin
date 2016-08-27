@@ -9,10 +9,6 @@ export function registerPlayerHooks(currentlySelling) {
         const id = $(e.target).closest('li').data('id');
         Server.wieldCard(id);
     });
-    $('.toBelt').unbind('click').click(e => {
-        const id = $(e.target).closest('li').data('id');
-        Server.moveToBelt(id);
-    });
     $('.unwield').unbind('click').click(e => {
         const id = $(e.target).closest('li').data('id');
         Server.unwieldCard(id);
@@ -33,7 +29,7 @@ export function registerPlayerHooks(currentlySelling) {
     });
     $('.endTurn').unbind('click').click(e => {
         Server.endTurn();
-        $('body,html').animate({scrollTop:0},800);
+	$('body,html').animate({scrollTop:0},800);
     });
     $('.cast').unbind('click').click(e => {
         const wrapper = $('.cast-list-wrapper');
@@ -50,11 +46,6 @@ export function registerPlayerHooks(currentlySelling) {
     });
     $('.sell').unbind('click').click(e => {
         currentlySelling.push($(e.target).closest('li').data('id'));
-        $('.sell-list-wrapper').removeClass('hidden');
     });
-    $('.sellAll').unbind('click').click(e => {
-        Server.sellItems(currentlySelling);
-        currentlySelling.splice(0, 10000);
-        $('.sell-list-wrapper').addClass('hidden');
-    });
+    $('.sellAll')
 }

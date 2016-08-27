@@ -72,11 +72,20 @@ export function create_info() {
     global.antipower.text = global.antipower.antipower;
     global.antipower.y = global.monster.y;
     global.antipower.x = global.power.x; 
+    
+    /*global.buttonUse = global.game.add.image(400,400,'buttonUse');
+    global.buttonUse.height *= 0.5;
+    global.buttonUse.width *= 0.5;*/
 }
 
 export function create_cards() {
     if(global.create_cards_on == true)
 	for (var i = 0; i < global.player.hand.length; i++) {
+        global.cards[i] = global.game.add.image(0, 0, 'pack1_' +global.player.hand[i]);//'doors'+i);
+        global.cards[i].anchor.setTo(0.5, 0.5);
+        global.cards[i].height = global.game.height * 0.25;
+        global.cards[i].width =global.cards[i].height /1028*661;
+        global.cards[i].y = global.game.height - global.cards[i].height/2;
         if(global.cards[i] != undefined) global.cards[i].destroy();
         global.cards[i] = global.game.add.image(0, 0, 'pack1_'+ global.player.hand[i]);
         global.cards[i].anchor.setTo(0.5, 0);
@@ -89,6 +98,10 @@ export function create_cards() {
         global.cards[i].events.onInputOver.add(over);
         global.cards[i].events.onInputDown.add(down);
         global.cards[i].events.onInputOut.add(out);
+        if(global.ccount * global.cards[i].width < global.game.width)
+            global.cards[i].x = global.cards[i].width/2 + i * global.cglobal.ards[i].width;
+        if(global.ccount * global.cards[i].width > global.game.width)
+            global.cards[i].x = global.cards[i].width/2 +  i * global.cards[i].width * global.game.width / (global.ccount*global.cards[i].width);
     }
 }
 
@@ -100,10 +113,21 @@ export function create_buttons() {
     global.buttonSmivka = global.game.add.button(0, 0, 'nosok', actionSmivka);
     global.buttonSmivka.visible = false;
     global.buttonSmivka.anchor.setTo(0.5, 0.5);
+    
+    global.buttonCube = global.game.add.button(global.game.width * 0.775,400, 'Cube', actionCube);
+    global.buttonCube.height = global.cobble.height/1.5;
+    global.buttonCube.width = global.cobble.width/2;
+    global.buttonCube.y = global.cobble.y*1.35;
+    
+    /*global.buttonSell = global.game.add.button(global.game.width * 0.775, 400, 'sell', actionSell);
+    global.buttonSell.height = global.buttonCube.height; 
+    global.buttonSell.width = global.buttonCube.width * 2;
+    global.buttonSell.y = global.buttonCube.y*1.35;*/
 
     global.mainshadow = global.game.add.image(global.game.world.centerX, global.game.world.centerY,'mainshadow');
     global.mainshadow.anchor.setTo(0.5, 0.5);
     global.mainshadow.bringToTop();
+    
     global.buttonStartGame = global.game.add.button(global.game.world.centerX, global.game.world.centerY, 'startgame', startGame);
     global.buttonStartGame.anchor.setTo(0.5, 0.5);
     global.buttonStartGame.bringToTop();

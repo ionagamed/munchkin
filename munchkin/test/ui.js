@@ -47,4 +47,19 @@ export function registerUIHooks() {
         const p = $(this).data('pos');
         Server.escape(p);
     });
+    
+    let sendChatMessage = () => {
+        const el = $('.chat-message');
+        Server.sendChatMessage(el.val());
+        el.val('');
+    };
+    $('.chat-message').keypress(e => {
+        if (e.which == 13) {
+            sendChatMessage();
+            return false;
+        }
+    });
+    $('.send-chat-message').unbind('click').click(e => {
+        sendChatMessage();
+    });
 }

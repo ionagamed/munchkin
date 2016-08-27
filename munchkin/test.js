@@ -18,8 +18,10 @@ import { registerUIHooks } from './test/ui';
 
 const UPDATE_DELAY = 2000;
 
+var currentlySelling = [];
+
 $(function () {
-    $('.state-game,.state-wait').hide();
+    $('.state-game,.state-wait,.state-win').hide();
     registerLoginHooks((name, room, ip) => {
         Server.onGameStarted = gameBegan(name);
         Server.connect(name, room, ip, () => {
@@ -55,9 +57,15 @@ function game(playerName) {
 
     const __f = function () {
         if (!document.stopViewUpdate) {
-            updateView(player, table);
-            registerPlayerHooks();
+            updateView(player, table, currentlySelling);
+            registerPlayerHooks(currentlySelling);
             registerUIHooks();
+            if (player.level >= 10) {
+                Server.winGame();
+                $('.state-game').hide();
+                $('.state-win').show();
+                $('body').addClass('body-win');
+            }
         }
     };
     const __r = function () {
@@ -68,6 +76,10 @@ function game(playerName) {
         setTimeout(__r, UPDATE_DELAY);
     };
     __r();
+
+    const chatMessageCallback = function (from, text) {
+        $('.chat-messages').prepend(`<li><b>${from}</b>: ${text}</li>`);
+    };
 }
 
 function neverCalled() {

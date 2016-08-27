@@ -518,16 +518,15 @@ Room.playerCommands['spectate'] = (data, env) => {
 Room.playerCommands['resurrect'] = (data, env) => {
     if(!env.player.dead) return;
     if(!env.table.playing) return;
-    // env.player.hand = []
-    //     .concat(env.room.getCards('door', DOOR_BEGIN_COUNT)[0])
-    //     .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT)[0]);
-    env.player.hand = ['3872_orcs', '1000_gold', 'acid_potion'];
+    env.player.hand = []
+         .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
+         .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
+    //env.player.hand = ['3872_orcs', '1000_gold', 'acid_potion'];
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
         if(card) card.onReceived(env.player, 'deck', env.table);
         env.player.onCardReceived(cardId, 'deck');
     });
-    env.player.wielded = ['huge_rock'];
     sendEvent(env.client, 'gotCards', {
         amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
         cards: env.player.hand,
@@ -607,8 +606,8 @@ Room.playerCommands['sellItems'] = (data, env) => {
         sum += Card.byId(x).price;
     });
     if (!ok) return;
-    env.player.increaseLevel(sum / 1000);
-    env.room.dipatch('currentLevel', {
+    env.player.increaseLevel(Math.floor(sum / 1000));
+    env.room.dispatch('currentLevel', {
         who: env.player.name,
         level: env.player.level
     });
@@ -726,6 +725,8 @@ Room.playerCommands['winFight'] = (data, env) => {
         env.table.fight.onEnded(env.table);
         env.table.fight = null;
     }
+    env.table.phase = 'closed';
+    env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
 };
 
 /**
@@ -866,12 +867,12 @@ Room.playerCommands['moveToBelt'] = (data, env) => {
 /**
  * 'sendChatMessage' command:
  *  data:
- *      to [string]|'__broadcast__' recipients of the message
+ *      to [string]|'broadcast' recipients of the message
  *      text string text of the message
  *
  */
 Room.playerCommands['sendChatMessage'] = (data, env) => {
-    if(data.to === '__broadcast__') {
+    if(data.to === 'broadcast') {
         env.room.dispatch('chatMessage', {
             from: env.player.name,
             message: {

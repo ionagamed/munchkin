@@ -13,3 +13,7 @@ a {
 .hidden {
     display: none;
 }
+
+.table {
+    position: fixed;
+}

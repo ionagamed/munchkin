@@ -15,7 +15,7 @@ class _ extends Curse {
     onCast(source, dest, table) {
         var hasCl = false;
         dest.wielded.map (x => {
-            if (Card.byId(x).type == 'race') {
+            if (Card.byId(x).type == 'class') {
                 dest.unwield(x, table);
                 hasCl = true;
             } 
