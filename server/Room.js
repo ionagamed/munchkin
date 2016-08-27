@@ -595,9 +595,7 @@ Room.playerCommands['endSelling'] = (data, env) => {
     const sum = env.table.soldCards.reduce((s, c) => {
         return s + Card.byId(c).price;
     });
-    env.player.level += (sum/1000);
-    if(env.player.level >= 10)
-        env.player.level = 9;
+    env.player.increaseLevel(sum/1000, false);
     env.room.dispatch('endedSelling');
     env.room.dispatch('currentLevel', {
         who: env.player.name,
