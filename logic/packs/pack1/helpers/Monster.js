@@ -78,7 +78,7 @@ export class Monster extends Card {
     onFightEnded(fight, table) {
         fight.players.map(x => {
             if (x.state == 'success') {
-                x.player.level += this.getLevels(fight, table);
+                x.player.increaseLevel(this.getLevels(fight, table), true);
             }
         });
     }
