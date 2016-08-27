@@ -274,4 +274,6 @@ export function updateView(player, table, currentlySelling) {
     updateSelling();
     updateOffers();
     updateOffer();
+    
+    $('.current-turn').html(table.players[table.turn].name);
 }
