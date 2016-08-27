@@ -52,31 +52,43 @@ export class Table {
 
         /**
          * begin -> open -> hand -> closed -> drop
-         * 
+         *
          * @type {string}
          */
         this.phase = 'begin';
 
         /**
          * Id of the recently kicked door
-         * 
+         *
          * @type {string}
          */
         this.recentDoor = '';
 
         /**
          * Dice rolled on the table in chronological order
-         * 
+         *
          * @type {[number]}
          */
         this.diceRolls = [];
 
         /**
          * Array of currently ready to help player nicknames
-         * 
+         *
          * @type {[string]}
          */
         this.currentlyHelping = [];
+
+        /**
+         * Current offer
+         * Schema: {
+         *   from: {string}
+         *   to: {string}
+         *   item: {string}
+         * }
+         *
+         * @type {Object}
+         */
+        this.offers = null;
     }
 
     /**

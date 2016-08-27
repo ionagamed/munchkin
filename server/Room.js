@@ -938,6 +938,63 @@ Room.playerCommands['acceptHelp'] = (data, env) => {
     });
 };
 
+function sanitizeOffers(table) {
+    table.offers.map((x, i) => {
+        const from = table.players.find(y => y.name == x.from);
+        const to = table.players.find(y => y.name == x.to);
+        if (!from || !to ||
+            !(from.hand.find(y => y == x.item) || from.belt.find(y => y == x.item) || from.wielded.find(y => y == x.item))) {
+            table.offers.splice(i, 1);
+        }
+    });
+    if (table.offers.length == 0) {
+        table.offers = null;
+    }
+}
+
+Room.playerCommands['makeOffer'] = (data, env) => {
+    if (env.table.fight || env.table.players[env.table.turn].name != env.player.name) return;
+    if (!Card.byId(data.item).price) return;
+    if (!env.table.offers) {
+        env.table.offers = [];
+    }
+    env.table.offers.push({
+        from: env.player.name,
+        to: data.to,
+        item: data.item
+    });
+    sanitizeOffers(env.table);
+};
+
+Room.playerCommands['acceptOffer'] = (data, env) => {
+    env.table.offers.map((x, i) => {
+        if (x.from == data.from && x.to == env.player.name && x.item == data.item) {
+            env.table.players.find(y => y.name == x.to);
+            if (getCardFromPlayerById(
+                    env.table.players.find(y => y.name == x.from),
+                    x.item,
+                    env.room,
+                    env.table
+                )) {
+                env.player.hand.push(x.item);
+                env.table.offers.splice(i, 1);
+            }
+        }
+    });
+    sanitizeOffers(env.table);
+};
+
+Room.playerCommands['declineOffer'] = (data, env) => {
+    env.table.offers.map((x, i) => {
+        if (x.from == data.from && x.to == data.to && x.item == data.item) {
+            if (env.player.name == x.from || env.player.name == x.to) {
+                env.table.offers.splice(i, 1);
+            }
+        }
+    });
+    sanitizeOffers(env.table);
+};
+
 /**
  * 'dropPlayerCard' command:
  *  data:
