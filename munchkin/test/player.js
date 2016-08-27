@@ -3,6 +3,7 @@
  */
 
 import Server from '../../logic/Server';
+import { Card } from '../../logic/Card';
 
 export function registerPlayerHooks(currentlySelling) {
     $('.wield').unbind('click').click(e => {
@@ -45,6 +46,11 @@ export function registerPlayerHooks(currentlySelling) {
     });
     $('.sell').unbind('click').click(e => {
         currentlySelling.push($(e.target).closest('li').data('id'));
+        $('.sell-list-wrapper').removeClass('hidden');
     });
-    $('.sellAll')
+    $('.sellAll').unbind('click').click(e => {
+        Server.sellItems(currentlySelling);
+        currentlySelling.splice(0, 10000);
+        $('.sell-list-wraper').addClass('hidden');
+    });
 }
