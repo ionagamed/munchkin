@@ -110,19 +110,30 @@ export function updateView(player, table) {
         if (!table.fight) {
             fightEl.html('на данный момент все спокойно');
         } else {
+            let isFighting = false;
+            table.fight.players.map(x => {
+                if (x.player.name == player.name) isFighting = true;
+            });
+            
             let content = '';
-            if (table.fight.getWinningSide() == 'players') {
-                if (+(new Date()) - table.fight.beganAt < 5) {
-                    content += ` | осталось ${+(new Date()) - table.fight.beganAt} секунд`;
+            if (table.fight.players[0].state == 'fighting' && isFighting) {
+                if (table.fight.getWinningSide() == 'players') {
+                    if (+(new Date()) - table.fight.beganAt < 5) {
+                        content += ` | осталось ${+(new Date()) - table.fight.beganAt} секунд`;
+                    } else {
+                        content += ` | <a href='#' class='winFight'>выиграть</a>`;
+                    }
                 } else {
-                    content += ` | <a href='#' class='winFight'>выиграть</a>`;
+                    content += ` | <a href='#' class='escape'>смывка</a>`;
                 }
-            } else {
-                content += ` | <a href='#' class='escape'>смывка</a>`;
             }
-            content += `<ul><li>монстры: | атака: <b>${table.fight.getMonstersAttack()}</b><ul>`;
-            table.fight.monsters.map(x => {
+            content += `<ul><li>монстры: | атака: <b>${table.fight.getMonstersAttack()}</b>`;
+            content += `<ul>`;
+            table.fight.monsters.map((x, i) => {
                 content += `<li><a class='itemId' data-id='${x.monster}'>${_t(x.monster)}</a> | атака: <b>${Card.byId(x.monster).getAttackAgainst(table.fight.players.map(y => y.player))}</b>`;
+                if (table.fight.players[0].state == 'escaping' && isFighting) {
+                    content += ` | <button class='m_escape' data-pos='${i}'>смыться</button>`;
+                }
                 content += `<ul>`;
                 x.modifiers.map(y => {
                     content += `<li><a class='itemId' data-id='${y}'>${_t(y)}</a></li>`;
@@ -156,10 +167,18 @@ export function updateView(player, table) {
             $('.discardedTreasure').html(`<a class='itemId' data-id='${id}'>${_t(id)}</a>, ...`)
         }
     };
+    let updateDice = () => {
+        const el = $('.dice');
+        el.html('');
+        for (let i of [].concat(table.diceRolls).reverse().splice(0, 10)) {
+            el.append(`<img width='25' height='25' src='/img/dice-${i}.png'>`);
+        }
+    };
     let updateTable = () => {
         updateDiscard();
         updateKickedDoor();
         updateFight();
+        updateDice();
     };
     
     updatePlayers();

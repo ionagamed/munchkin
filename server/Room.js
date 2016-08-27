@@ -530,7 +530,27 @@ Room.playerCommands['resurrect'] = (data, env) => {
  */
 Room.playerCommands['escape'] = (data, env) => {
     if(env.table.fight.getWinningSide() != 'monsters') return;
-    env.table.fight.monsters[data.from].onEscape(env.player, dice(), env.table);
+    let d = dice();
+    env.room.dispatch('diceRolled', {
+        result: d
+    });
+    env.table.diceRolls.push(d);
+    env.player.wielded.map(x => {
+        const card = Card.byId(x);
+        if (card.onEscape) {
+            d = card.onEscape(env.player, d, env.table);
+        }
+    });
+    Card.byId(env.table.fight.monsters[data.from]).onEscape(env.player, d, env.table);
+};
+
+Room.playerCommands['beginEscaping'] = (data, env) => {
+    if (env.table.fight.getWinningSide() != 'monsters') return;
+    if (env.table.fight.players[0].player.name != env.player.name) return;
+    env.table.fight.players.map(x => {
+        x.state = 'escaping';
+    });
+    env.room.dispatch('beganEscaping');
 };
 
 /**
