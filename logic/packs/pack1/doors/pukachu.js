@@ -26,11 +26,11 @@ class pukachu extends Monster {
             const player = fight.players[0].player;
             if (player.hasClassAdvantages('warrior')) {
                 if (player.level >= 6) {
-                    player.level++;
+                    player.increaseLevel(1, true);
                 }
             } else {
                 if (player.level > 6) {
-                    player.level++;
+                    player.increaseLevel(1, true);
                 }
             }
         }        
