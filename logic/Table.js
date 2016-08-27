@@ -63,6 +63,20 @@ export class Table {
          * @type {string}
          */
         this.recentDoor = '';
+
+        /**
+         * Dice rolled on the table in chronological order
+         * 
+         * @type {[number]}
+         */
+        this.diceRolls = [];
+        
+        /**
+         * Array of sold cards
+         *
+         * @type {[string]}
+         */
+        this.soldCards = []
     }
 
     /**
