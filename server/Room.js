@@ -551,8 +551,13 @@ Room.playerCommands['escape'] = (data, env) => {
             d = card.onEscape(env.player, d, env.table);
         }
     });
-    Card.byId(env.table.fight.monsters[data.from]).onEscape(env.player, d, env.table);
+    Card.byId(env.table.fight.monsters[data.from].monster).onEscape(env.player, d, env.table);
     env.table.fight.monsters.splice(data.from, 1);
+    
+    if (env.table.fight.monsters.length == 0) {
+        env.table.fight.onEnded(env.table);
+        env.table.fight = null;
+    }
 };
 
 Room.playerCommands['beginEscaping'] = (data, env) => {
