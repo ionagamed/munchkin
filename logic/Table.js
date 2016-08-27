@@ -70,6 +70,13 @@ export class Table {
          * @type {[number]}
          */
         this.diceRolls = [];
+        
+        /**
+         * Array of sold cards
+         *
+         * @type {[string]}
+         */
+        this.soldCards = []
     }
 
     /**
