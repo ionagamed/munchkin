@@ -527,7 +527,6 @@ Room.playerCommands['resurrect'] = (data, env) => {
         if(card) card.onReceived(env.player, 'deck', env.table);
         env.player.onCardReceived(cardId, 'deck');
     });
-    env.player.wielded = ['huge_rock'];
     sendEvent(env.client, 'gotCards', {
         amount: DOOR_BEGIN_COUNT + TREASURE_BEGIN_COUNT,
         cards: env.player.hand,
@@ -868,12 +867,12 @@ Room.playerCommands['moveToBelt'] = (data, env) => {
 /**
  * 'sendChatMessage' command:
  *  data:
- *      to [string]|'__broadcast__' recipients of the message
+ *      to [string]|'broadcast' recipients of the message
  *      text string text of the message
  *
  */
 Room.playerCommands['sendChatMessage'] = (data, env) => {
-    if(data.to === '__broadcast__') {
+    if(data.to === 'broadcast') {
         env.room.dispatch('chatMessage', {
             from: env.player.name,
             message: {

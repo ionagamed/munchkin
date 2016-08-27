@@ -76,6 +76,10 @@ function game(playerName) {
         setTimeout(__r, UPDATE_DELAY);
     };
     __r();
+
+    const chatMessageCallback = function (from, text) {
+        $('.chat-messages').prepend(`<li><b>${from}</b>: ${text}</li>`);
+    };
 }
 
 function neverCalled() {
