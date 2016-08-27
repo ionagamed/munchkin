@@ -12,6 +12,12 @@ import item from './item';
 
 import _t from './translate';
 
+/**
+ * 
+ * @param {Player} player
+ * @param {Table} table
+ * @param {[string]} currentlySelling
+ */
 export function updateView(player, table, currentlySelling) {
     let updatePlayer = (_player) => {
         let content = `<div class="list-group-item" data-player="${_player.name}">`;
@@ -26,7 +32,7 @@ export function updateView(player, table, currentlySelling) {
                 'attack',
                 'big',
                 'price',
-                'sell',
+                'offer',
                 'type',
                 'wield',
                 'toBelt',
@@ -42,7 +48,7 @@ export function updateView(player, table, currentlySelling) {
                 'attack',
                 'big',
                 'price',
-                'sell',
+                'offer',
                 'type',
                 'wield',
                 'use',
@@ -57,7 +63,7 @@ export function updateView(player, table, currentlySelling) {
                 'attack',
                 'big',
                 'price',
-                'sell',
+                'offer',
                 'type',
                 'unwield',
                 'use',
@@ -117,7 +123,7 @@ export function updateView(player, table, currentlySelling) {
             });
             
             let content = '';
-            if (table.fight.players[0].state == 'fighting' && isFighting) {
+            if (table.fight.players[0].state == 'fighting' && isFighting && table.fight.players[0].player.name == player.name) {
                 if (table.fight.getWinningSide() == 'players') {
                     if (+(new Date()) - table.fight.beganAt < 5) {
                         content += ` | осталось ${+(new Date()) - table.fight.beganAt} секунд`;
@@ -126,6 +132,21 @@ export function updateView(player, table, currentlySelling) {
                     }
                 } else {
                     content += ` | <a href='#' class='escape'>смывка</a>`;
+                }
+                if (table.fight.players[0].player.name == player.name && table.currentlyHelping.length > 0) {
+                    content += ` | помощь от: `;
+                    let t = [];
+                    table.currentlyHelping.map(x => {
+                        t.push(`<a class='acceptHelp' data-from='${x}'>${x}</a>`);
+                    });
+                    content += t.join(', ');
+                }
+            }
+            if (table.fight.players[0].state == 'fighting' && !isFighting) {
+                if (table.currentlyHelping.indexOf(player.name) < 0) {
+                    content += ` | <a href='#' class='help'>помочь</a>`;
+                } else {
+                    content += ` | предложена помощь`;
                 }
             }
             content += `<ul><li>монстры: | атака: <b>${table.fight.getMonstersAttack()}</b>`;
@@ -213,8 +234,46 @@ export function updateView(player, table, currentlySelling) {
         $('.price').html(sum);
     };
     
+    let updateOffers = () => {
+        const list = $('.offer-list');
+        const wrapper = $('.offers-wrapper');
+        list.html('');
+        if (table.offers) {
+            wrapper.removeClass('hidden');
+            table.offers.map(x => {
+                let content = `${x.from} отдает <a class='itemId' data-id='${x.item}'>${_t(x.item)}</a> в руки ${x.to}`;
+                if (x.to == player.name) {
+                    content += ` | <a class='acceptOffer'>согласиться</a> | <a class='declineOffer'>отказаться</a>`;
+                }
+                if (x.from == player.name) {
+                    content += ` | <a class='declineOffer'>отменить</a>`;
+                }
+                list.append(`<li data-from='${x.from}' data-item='${x.item}' data-to='${x.to}'>${content}</li>`);
+            });
+        } else {
+            wrapper.addClass('hidden');
+        }
+    };
+    let updateOffer = () => {
+        const list = $('.offer-selector');
+        const wrapper = $('.offer-selector-wrapper');
+        const id = $('.offer-item .itemId').data('id');
+        list.html('');
+        console.log(table.players);
+        console.log(wrapper);
+        if (!wrapper.hasClass('hidden')) {
+            table.players.map(x => {
+                if (x.name != player.name) {
+                    list.append(`<li data-to='${x.name}' data-id='${id}'><a class='makeOfferFinal'>${x.name}</a></li>`);
+                }
+            });
+        }
+    };
+    
     updatePlayers();
     updateTable();
     updateCastList();
     updateSelling();
+    updateOffers();
+    updateOffer();
 }

@@ -4,6 +4,7 @@ import { Table } from '../logic/Table';
 import dice from '../logic/dice.js';
 import packs from '../logic/packs';
 import Random from 'random-js';
+import { AllHtmlEntities as entities} from 'html-entities';
 
 const MAX_PLAYERS = 6;
 const TREASURE_BEGIN_COUNT = 4;
@@ -131,9 +132,9 @@ function sendEvent(client, event, data) {
  */
 function setCommandSet(ws, set, env) {
     ws.onmessage = data => {
-        if (DEBUG) console.log(data.data);
         try {
             var msg = JSON.parse(data.data);
+            if (DEBUG && msg.cmd != 'roomRequest') console.log(`${ws.userName}: ${JSON.stringify(msg)}`);
             env.room = Room.byId(env.roomId);
             env.table = env.room.table;
             env.player = env.table.players[ws.playerId];
@@ -466,6 +467,7 @@ Room.clientCommands = {};
  *  starts game
  */
 Room.clientCommands['start'] = (data, env) => {
+    console.log(env.room.owner);
     if(env.client.userName === env.room.owner) {
         env.room.start();
     }
@@ -521,7 +523,7 @@ Room.playerCommands['resurrect'] = (data, env) => {
     env.player.hand = []
          .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
          .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
-    //env.player.hand = ['3872_orcs', '1000_gold', 'acid_potion'];
+         //.concat(['1000_gold', 'curse_change_sex']);
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
         if(card) card.onReceived(env.player, 'deck', env.table);
@@ -872,6 +874,8 @@ Room.playerCommands['moveToBelt'] = (data, env) => {
  *
  */
 Room.playerCommands['sendChatMessage'] = (data, env) => {
+    data.to = entities.encode(data.to);
+    data.text = entities.encode(data.text);
     if(data.to === 'broadcast') {
         env.room.dispatch('chatMessage', {
             from: env.player.name,
@@ -911,6 +915,88 @@ Room.playerCommands['getCardFromPlayer'] = (data, env) => {
     Card.byId(cardId).onReceived(env.player, fromPlayer, env.table);
     env.player.onCardReceived(cardId, env.player);
 
+};
+
+Room.playerCommands['tryHelping'] = (data, env) => {
+    if (!env.table.fight || env.table.fight.players.length >= 2) return;
+    env.room.dispatch('triedHelping', {
+        who: env.player.name
+    });
+    if (!env.table.currentlyHelping) {
+        env.table.currentlyHelping = [];
+    }
+    env.table.currentlyHelping.push(env.player.name);
+};
+
+Room.playerCommands['acceptHelp'] = (data, env) => {
+    if (!env.table.fight || env.table.fight.players.length >= 2) return;
+    if (env.table.currentlyHelping.indexOf(data.from) < 0) return;
+    env.table.currentlyHelping = [];
+    env.table.fight.players.push({
+        player: env.table.players.find(x => x.name == data.from),
+        modifiers: [],
+        state: 'fighting'
+    });
+    env.room.dispatch('acceptedHelp', {
+        from: data.from
+    });
+};
+
+function sanitizeOffers(table) {
+    table.offers.map((x, i) => {
+        const from = table.players.find(y => y.name == x.from);
+        const to = table.players.find(y => y.name == x.to);
+        if (!from || !to ||
+            !(from.hand.find(y => y == x.item) || from.belt.find(y => y == x.item) || from.wielded.find(y => y == x.item))) {
+            table.offers.splice(i, 1);
+        }
+    });
+    if (table.offers.length == 0) {
+        table.offers = null;
+    }
+}
+
+Room.playerCommands['makeOffer'] = (data, env) => {
+    if (env.table.fight || env.table.players[env.table.turn].name != env.player.name) return;
+    if (!Card.byId(data.item).price) return;
+    if (!env.table.offers) {
+        env.table.offers = [];
+    }
+    env.table.offers.push({
+        from: env.player.name,
+        to: data.to,
+        item: data.item
+    });
+    sanitizeOffers(env.table);
+};
+
+Room.playerCommands['acceptOffer'] = (data, env) => {
+    env.table.offers.map((x, i) => {
+        if (x.from == data.from && x.to == env.player.name && x.item == data.item) {
+            env.table.players.find(y => y.name == x.to);
+            if (getCardFromPlayerById(
+                    env.table.players.find(y => y.name == x.from),
+                    x.item,
+                    env.room,
+                    env.table
+                )) {
+                env.player.hand.push(x.item);
+                env.table.offers.splice(i, 1);
+            }
+        }
+    });
+    sanitizeOffers(env.table);
+};
+
+Room.playerCommands['declineOffer'] = (data, env) => {
+    env.table.offers.map((x, i) => {
+        if (x.from == data.from && x.to == data.to && x.item == data.item) {
+            if (env.player.name == x.from || env.player.name == x.to) {
+                env.table.offers.splice(i, 1);
+            }
+        }
+    });
+    sanitizeOffers(env.table);
 };
 
 /**
