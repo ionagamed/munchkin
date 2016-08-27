@@ -26,7 +26,7 @@ class _ extends Monster {
             if (x.state == 'success') {
                 if (x.player.name == fight.mainPlayer || x.player.hasRaceAdvantages('elf')) {
                     if (x.player.hasCardWielded('staff_of_napalm') || x.player.hasCardWielded('flaming_armor') || x.modifiers.indexOf('flaming_poison_potion') >= 0) {
-                        x.player.level++;
+                        x.player.increaseLevel(1, true);
                     }
                 }
             }
