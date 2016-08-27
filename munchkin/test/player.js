@@ -10,6 +10,10 @@ export function registerPlayerHooks(currentlySelling) {
         const id = $(e.target).closest('li').data('id');
         Server.wieldCard(id);
     });
+    $('.toBelt').unbind('click').click(e => {
+        const id = $(e.target).closest('li').data('id');
+        Server.moveToBelt(id);
+    });
     $('.unwield').unbind('click').click(e => {
         const id = $(e.target).closest('li').data('id');
         Server.unwieldCard(id);
