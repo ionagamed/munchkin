@@ -518,7 +518,7 @@ Room.playerCommands['spectate'] = (data, env) => {
 Room.playerCommands['resurrect'] = (data, env) => {
     if(!env.player.dead) return;
     if(!env.table.playing) return;
-     env.player.hand = []
+    env.player.hand = []
          .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
          .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
     //env.player.hand = ['3872_orcs', '1000_gold', 'acid_potion'];
@@ -725,6 +725,8 @@ Room.playerCommands['winFight'] = (data, env) => {
         env.table.fight.onEnded(env.table);
         env.table.fight = null;
     }
+    env.table.phase = 'closed';
+    env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
 };
 
 /**
