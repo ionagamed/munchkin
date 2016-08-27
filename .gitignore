@@ -4,4 +4,5 @@ bower_components
 client/munchkin.js
 client/munchkin.min.js
 dist
+npm-debug.log
 .eslintrc.*
