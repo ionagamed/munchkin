@@ -147,7 +147,7 @@ const translationMapping = {
     'dagger_of_treachery': 'Кинжал измены',
     'eleven-foot_pole': 'Одиннадцатифутовый кий',
     'nasty-tasting_sports_drink': 'Питьё противно-спортивное',
-    'potion_of_halitosis': 'Зелье ротовой воин',
+    'potion_of_halitosis': 'Зелье ротовой воен',
     'potion_of_idiotic_bravery': 'Зелье идиотской храбрости',
     'pretty_balloons': 'Клёвые шарики',
     'sleep_potion': 'Снотворное зелье',
