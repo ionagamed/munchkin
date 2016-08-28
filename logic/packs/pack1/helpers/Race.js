@@ -20,4 +20,12 @@ export class Race extends Card {
             return player.cardsOfTypeWielded('race') <= 1;
         }
     }
+    
+    onUnwielded(player, table) {
+        player.wielded.map(x => {
+            if (Card.byId(x).type == 'half-breed') {
+                player.unwield(x, table);
+            }
+        });
+    }
 }

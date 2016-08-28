@@ -20,4 +20,12 @@ export class Class extends Card {
             return player.cardsOfTypeWielded('class') <= 1;
         }
     }
+    
+    onUnwielded(player, table) {
+        player.wielded.map(x => {
+            if (Card.byId(x).type == 'super_munckin') {
+                player.unwield(x, table);
+            }
+        });
+    }
 }
