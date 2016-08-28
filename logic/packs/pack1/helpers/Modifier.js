@@ -24,5 +24,6 @@ export class Modifier extends Card {
                 }
             });
         }
+        return true;
     }
 }
