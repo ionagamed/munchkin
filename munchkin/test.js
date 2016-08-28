@@ -23,7 +23,6 @@ import message from './test/message';
 const UPDATE_DELAY = 2000;
 
 var currentlySelling = [];
-var error = {};
 
 var player = new Player();
 var table = new Table();
