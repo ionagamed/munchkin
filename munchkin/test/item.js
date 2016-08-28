@@ -60,7 +60,7 @@ export default function (id, opts, player, _player) {
                 }
                 break;
             case 'cast':
-                if (_player.name == player.name && card.castable && card.id != 'curse_change_sex') {
+                if (_player.name == player.name && card.castable) {
                     t.push(`<a class='cast'>кастануть</a>`);
                 }
                 break;
