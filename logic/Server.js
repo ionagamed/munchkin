@@ -140,6 +140,11 @@ class Server {
                     this.newPlayerCallback(msg.data);
                 }
                 break;
+            case 'error':
+                if (this.errorCallback) {
+                    this.errorCallback(msg.data.code);
+                }
+                break;
         }
         this.sanitizeClasses();
     }

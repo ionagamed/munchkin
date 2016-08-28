@@ -16,6 +16,10 @@ import { registerPlayerHooks } from './test/player';
 import { updateView } from './test/updateView';
 import { registerUIHooks } from './test/ui';
 
+import _t from './test/translate';
+
+import message from './test/message';
+
 const UPDATE_DELAY = 2000;
 
 var currentlySelling = [];
@@ -106,6 +110,10 @@ function game(playerName) {
     
     Server.websocket.onclose = function () {
         $('body').html('<div class="container"><h1>Ой</h1><h4>Соединение разорвано. Быть может, проблема в вас. Может быть и в нас. В любом случае перезагрузка страницы должна помочь.</h4></div>');
+    };
+
+    Server.errorCallback = (msg) => {
+        message('danger', _t(msg));
     };
 }
 
