@@ -25,9 +25,9 @@ var table = new Table();
 
 $(function () {
     $('.state-game,.state-wait,.state-win').hide();
-    registerLoginHooks((name, room, ip) => {
+    registerLoginHooks((name, room, sex, ip) => {
         Server.onGameStarted = gameBegan(name);
-        Server.connect(name, room, ip, () => {
+        Server.connect(name, room, sex, ip, () => {
             $('.state-login').hide();
             $('.state-wait').show();
             Server.play();

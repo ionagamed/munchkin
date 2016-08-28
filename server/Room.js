@@ -317,6 +317,7 @@ export class Room {
         if(this.table.playing) return 'Room playing';
         if(this.table.players.length < MAX_PLAYERS) {
             var player = new Player(client.userName);
+            player.sex = client.sex;
             client.playerId = this.table.players.push(player) - 1;
             this.dispatch('newPlayer', player.name);
             setCommandSet(client, Room.playerCommands, {roomId: this.id, client: client});
