@@ -16,6 +16,8 @@ import { registerPlayerHooks } from './test/player';
 import { updateView } from './test/updateView';
 import { registerUIHooks } from './test/ui';
 
+import _t from './test/translate';
+
 import message from './test/message';
 
 const UPDATE_DELAY = 2000;

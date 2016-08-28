@@ -847,12 +847,18 @@ Room.playerCommands['wieldCard'] = (data, env) => {
         return;
     }
 
-    if(card.canBeWielded(env.player, env.table) && getCardFromPlayerById(env.player, cardId, env.room, env.table)) {
-        env.room.dispatch('wieldedCard', {
-            who: env.player.name,
-            card: cardId
-        });
-        env.player.wield(cardId, env.table);
+    if (card.canBeWielded(env.player, env.table)) {
+        if (getCardFromPlayerById(env.player, cardId, env.room, env.table)) {
+            env.room.dispatch('wieldedCard', {
+                who: env.player.name,
+                card: cardId
+            });
+            env.player.wield(cardId, env.table);
+        } else {
+            error(env.client, 'No such card | wield');
+        }
+    } else {
+        error(env.client, 'Cannot be wielded right now');
     }
 };
 

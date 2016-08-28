@@ -190,6 +190,7 @@ const translationMapping = {
     'Fight | offer': 'Нельзя отдавать во время боя',
     'Not your turn | offer': 'Нельзя отдавать не в свой ход',
     'Not treasure | offer': 'Нельзя отдавать не сокровища',
+    'Cannot be wielded right now': 'Не может быть одето прямо сейчас'
 };
 
 export default function (x) {
