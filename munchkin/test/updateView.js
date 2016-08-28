@@ -294,4 +294,7 @@ export function updateView(player, table, currentlySelling) {
     }
     
     $('.current-turn').html(table.players[table.turn].name);
+    if (table.players[table.turn].name == player.name && player.dead) {
+        Server.resurrect();
+    }
 }
