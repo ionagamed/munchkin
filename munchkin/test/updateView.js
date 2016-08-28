@@ -12,6 +12,8 @@ import item from './item';
 
 import _t from './translate';
 
+var playerCache, tableCache, sellingCache;
+
 /**
  * 
  * @param {Player} player
@@ -149,7 +151,7 @@ export function updateView(player, table, currentlySelling) {
                     content += ` | предложена помощь`;
                 }
             }
-            content += `<ul><li>монстры: | атака: <b>${table.fight.getMonstersAttack()}</b>`;
+            content += `<ul><li>монстры: | атака: <b>${table.fight.getMonstersAttack(table)}</b>`;
             content += `<ul>`;
             table.fight.monsters.map((x, i) => {
                 content += `<li><a class='itemId' data-id='${x.monster}'>${_t(x.monster)}</a> | атака: <b>${Card.byId(x.monster).getAttackAgainst(table.fight.players.map(y => y.player))}</b>`;
@@ -268,12 +270,28 @@ export function updateView(player, table, currentlySelling) {
         }
     };
     
-    updatePlayers();
-    updateTable();
+    const playerString = JSON.stringify(player);
+    const tableString = JSON.stringify(table);
+    const sellingString = JSON.stringify(currentlySelling);
+    
+    if (playerString != playerCache) {
+        playerCache = playerString;
+        updatePlayers();
+    }
+    if (tableString != tableCache) {
+        tableCache = tableString;
+        updateTable();
+        updateOffers();
+        updateOffer();
+        if (playerString == playerCache) {
+            updatePlayers();
+        }
+    }
     updateCastList();
-    updateSelling();
-    updateOffers();
-    updateOffer();
+    if (sellingString != sellingCache) {
+        sellingCache = sellingString;
+        updateSelling();
+    }
     
     $('.current-turn').html(table.players[table.turn].name);
 }

@@ -1,23 +1,25 @@
 import { Card } from '../../../Card';
+import { MonsterModifier } from '../helpers/MonsterModifier';
 
 const id = 'mate';
 
-class out_to_lunch extends Card {
+class _ extends MonsterModifier {
     constructor() {
         super();
         this.id = id;
         this.pack = 'pack1';
         this.kind = 'door';
-        this.type = 'mate';
+        this.type = 'monster_modifier';
         this.castable = true;
     }
-    onCast(source, destination, table) {
-        for(let i of table.fight.monsters) {
-            if (i.monster == destination) {
-                table.fight.monsters.push(i);
-                break;
-            }
-        }
+    
+    getModFor(x, table) {
+        return Card.byId(x.monster).getAttackAgainst(table.fight.players.map(x => x.player)) +
+            x.modifiers.map(x => Card.byId(x).getModFor(x.monster)).reduce((acc, v) => acc + v);
+    }
+    
+    getTreasureFor(x, table) {
+        return Card.byId(x.monster).getTreasure(table.fight, table);
     }
 }
-Card.cards[id] = new out_to_lunch();
+Card.cards[id] = new _();

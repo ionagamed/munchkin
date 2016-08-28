@@ -18,17 +18,24 @@ class _ extends Modifier {
         this.castable = true;
         this.price = 300;
     }
+    
+    canBeCast(source, dest, table) {
+        return dest instanceof Player && table.fight && table.fight.players.length <= 1 && source instanceof Player && source.name == dest.name;
+    }
 
     getModFor(arg) {
         if (arg instanceof Player) {
             /**
              * HACK: warrior
              */
-            return arg.level + arg.wielded
+            return arg.player.level + arg.player.wielded
                 .filter(x => x.type != 'class')
                 .filter(x => Card.byId(x).getAttackFor)
                 .map(x => Card.byId(x).getAttackFor(arg))
-                .reduce((acc, v) => acc + v);
+                .reduce((acc, v) => acc + v) +
+                arg.modifiers
+                    .map(x => Card.byId(x).getModFor(x.player))
+                    .reduce((acc, v) => acc + v);
         } else {
             return Card.byId(arg).getAttack();
         }

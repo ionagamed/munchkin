@@ -14,7 +14,9 @@ class pukachu extends Monster {
     }
     
     badThing(player, table) {
-        player.hand.map(table.discard);
+        player.hand.map(x => {
+            table.discard(x);
+        });
         player.hand = [];
     }
     

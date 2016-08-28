@@ -525,7 +525,7 @@ Room.playerCommands['resurrect'] = (data, env) => {
     env.player.hand = []
          .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
          .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
-         //.concat(['1000_gold', 'curse_change_sex']);
+    // env.player.hand = env.player.hand.concat(['pukachu', 'mate', 'baby']);
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
         if(card) card.onReceived(env.player, 'deck', env.table);
@@ -565,7 +565,10 @@ Room.playerCommands['escape'] = (data, env) => {
         }
     });
     Card.byId(env.table.fight.monsters[data.from].monster).onEscape(env.player, d, env.table);
-    env.table.fight.monsters.splice(data.from, 1);
+    env.table.fight.monsters[data.from].modifiers.map(x => {
+        env.table.discard(x);
+    });
+    env.table.discard(env.table.fight.monsters.splice(data.from, 1)[0].monster);
     
     if (env.table.fight.monsters.length == 0) {
         env.table.fight.onEnded(env.table);
@@ -729,9 +732,9 @@ Room.playerCommands['winFight'] = (data, env) => {
         });
         env.table.fight.onEnded(env.table);
         env.table.fight = null;
+        env.table.phase = 'closed';
+        env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
     }
-    env.table.phase = 'closed';
-    env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
 };
 
 /**
@@ -763,14 +766,13 @@ Room.playerCommands['wieldCard'] = (data, env) => {
  */
 Room.playerCommands['unwieldCard'] = (data, env) => {
     const cardId = data.card;
-    if(phase(env.player, env.table, 'hand') ||
-       phase(env.player, env.table, 'drop')) return;
-    if(env.player.wielded.indexOf(cardId)) {
+    if(phase(env.player, env.table, 'hand')) return;
+    if(env.player.wielded.indexOf(cardId) >= 0) {
         env.room.dispatch('unwieldedCard', {
             who: env.player.name,
             card: cardId
         });
-        env.player.unwield(cardId);
+        env.player.unwield(cardId, env.table);
         if(Card.byId(cardId).kind === 'door') {
             env.table.discard(cardId);
             env.room.dispatch('discardedCard', cardId);

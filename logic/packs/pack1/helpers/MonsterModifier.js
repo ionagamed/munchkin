@@ -19,12 +19,24 @@ export class MonsterModifier extends Card {
     }
 
     /**
+     * Return the modifier
+     *
+     * @param {object} x
+     * @param {Table} table
+     * @return {number}
+     */
+    getModFor(x, table) {
+        
+    }
+
+    /**
      * Returns the additional treasure
      * 
-     * @param x
+     * @param {object} x
+     * @param {Table} table
      * @returns {number}
      */
-    getTreasureFor(x) {
+    getTreasureFor(x, table) {
         
     }
 }

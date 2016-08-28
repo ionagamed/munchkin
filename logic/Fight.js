@@ -50,14 +50,15 @@ export class Fight {
     /**
      * Get overall attack of all players
      * 
+     * @param {Table} table
      * @returns {number}
      */
-    getPlayersAttack() {
+    getPlayersAttack(table) {
         var ret = 0;
         this.players.map(x => {
             ret += x.player.getAttack();
             x.modifiers.map(y => {
-                ret += Card.byId(y).getModFor(x.player);
+                ret += Card.byId(y).getModFor(x);
             });
         });
         return ret;
@@ -66,16 +67,17 @@ export class Fight {
     /**
      * Get overall attack of all monsters
      * 
+     * @param {Table} table
      * @returns {number}
      */
-    getMonstersAttack() {
+    getMonstersAttack(table) {
         var ret = 0;
         this.monsters.map(x => {
             ret += Card.byId(x.monster).getAttackAgainst(this.players.map(x => {
                 return x.player;
             }));
             x.modifiers.map(y => {
-                ret += Card.byId(y).getModFor(x.monster);
+                ret += Card.byId(y).getModFor(x, table);
             });
         });
         return ret;
@@ -121,15 +123,17 @@ export class Fight {
                 table.discard(y);
             });
             table.discard(x.monster);
+            console.log('should\'ve discarded ' + x.monster);
         });
     }
 
     /**
      * Get the side, which will win in current conditions
      * 
+     * @param {Table} table
      * @returns 'players'|'monsters'
      */
-    getWinningSide() {
-        return (this.getPlayersAttack() > this.getMonstersAttack() ? 'players' : 'monsters');
+    getWinningSide(table) {
+        return (this.getPlayersAttack(table) > this.getMonstersAttack(table) ? 'players' : 'monsters');
     }
 }

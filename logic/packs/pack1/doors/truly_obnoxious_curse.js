@@ -25,7 +25,9 @@ class _ extends Curse {
                 }
             }
         });
-        dest.unwield(m, table);
+        if (m != '')
+            dest.unwield(m, table);
+        return true;
     }
 }
 Card.cards[id] = new _();
