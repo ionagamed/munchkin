@@ -18,6 +18,15 @@ class curse_change_sex extends Curse {
         else
             dest.sex = 'male';
     }
+    onFightEnded(fight, table) {
+        super.onFightEnded(fight, table);
+        fight.players.map(player => {
+            player.wielded.map((card, pos) => {
+                if(card.id == this.id)
+                    player.wielded.splice(pos, 1);
+            });
+        });
+    }
     getAttackFor(x) {
         return -5;
     }
