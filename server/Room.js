@@ -570,10 +570,10 @@ Room.playerCommands['resurrect'] = (data, env) => {
         error(env.client, 'Not playing');
         return;
     }
-    // env.player.hand = []
-    //      .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
-    //      .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
-    env.player.hand = ['mithril_armor', 'huge_rock', 'elf_1', 'elf_2', 'elf_3', 'wizard_1', 'wizard_2', 'wizard_3'];
+    env.player.hand = []
+         .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
+         .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
+    // env.player.hand = ['mithril_armor', 'huge_rock', 'elf_1', 'elf_2', 'elf_3', 'wizard_1', 'wizard_2', 'wizard_3'];
 
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
