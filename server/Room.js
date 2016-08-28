@@ -522,10 +522,10 @@ Room.playerCommands['spectate'] = (data, env) => {
 Room.playerCommands['resurrect'] = (data, env) => {
     if(!env.player.dead) return;
     if(!env.table.playing) return;
-    env.player.hand = []
-         .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
-         .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
-    // env.player.hand = env.player.hand.concat(['shrieking_geek', 'half-breed_1', 'elf_1', 'huge_rock', 'slimy_armor']);
+    // env.player.hand = []
+    //      .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
+    //      .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
+    env.player.hand = env.player.hand.concat(['curse_change_sex', 'half-breed_1', 'elf_1', 'huge_rock', 'slimy_armor']);
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
         if(card) card.onReceived(env.player, 'deck', env.table);

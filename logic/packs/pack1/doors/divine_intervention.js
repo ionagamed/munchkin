@@ -18,7 +18,7 @@ class _ extends Card {
     onReceived(player, source, table) {
         table.players.map(x => {
             if (x.hasClassAdvantages('cleric')) {
-                increaseLevel(1, true);
+                player.increaseLevel(1, true);
             }
         });
         player.hand = player.hand.filter(x => x != 'divine_intervention');
