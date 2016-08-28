@@ -103,6 +103,10 @@ function game(playerName) {
         $('.chat-messages').append(`<li><b>${from}</b>: ${text}</li>`);
     };
     Server.chatMessageCallback = chatMessageCallback;
+    
+    Server.websocket.onclose = function () {
+        $('body').html('<div class="container"><h1>Ой</h1><h4>Соединение разорвано. Быть может, проблема в вас. Может быть и в нас. В любом случае перезагрузка страницы должна помочь.</h5></div>');
+    };
 }
 
 function neverCalled() {
