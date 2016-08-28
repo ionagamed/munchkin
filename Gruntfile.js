@@ -32,10 +32,6 @@ module.exports = function (grunt) {
             }
 		},
         uglify: {
-            options: {
-                mangleProperties: true,
-                reserveDOMCache: true
-            },
             munchkin: {
                 files: {
                     'client/munchkin.min.js': ['client/munchkin.js']
