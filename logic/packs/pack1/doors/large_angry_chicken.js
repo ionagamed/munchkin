@@ -22,6 +22,7 @@ class _ extends Monster {
     }
     
     onFightEnded(fight, table) {
+        super.onFightEnded(fight, table);
         fight.players.map(x => {
             if (x.state == 'success') {
                 if (x.player.name == fight.mainPlayer || x.player.hasRaceAdvantages('elf')) {
