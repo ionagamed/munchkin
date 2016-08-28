@@ -126,7 +126,7 @@ export class Player {
             if (c.getAttackFor && !(c instanceof Monster))
                 ret += c.getAttackFor(this);
         });
-        return ret;
+        return (ret < 1 ? 1 : ret);
     }
 
     /**

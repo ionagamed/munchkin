@@ -625,6 +625,8 @@ Room.playerCommands['escape'] = (data, env) => {
     
     if (env.table.fight.monsters.length == 0) {
         env.table.fight.onEnded(env.table);
+        env.table.phase = 'closed';
+        env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
         env.table.fight = null;
     }
 };
@@ -872,7 +874,7 @@ Room.playerCommands['wieldCard'] = (data, env) => {
  */
 Room.playerCommands['unwieldCard'] = (data, env) => {
     const cardId = data.card;
-    if(this.table.fight != null) {
+    if(env.room.table.fight != null) {
         error(env.player, 'Fight | unwield');
         return;
     }
