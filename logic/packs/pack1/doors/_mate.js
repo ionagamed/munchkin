@@ -15,7 +15,7 @@ class _ extends MonsterModifier {
     
     getModFor(x, table) {
         return Card.byId(x.monster).getAttackAgainst(table.fight.players.map(x => x.player)) +
-            x.modifiers.map(x => Card.byId(x).getModFor(x.monster)).reduce((acc, v) => acc + v);
+            x.modifiers.map(x => Card.byId(x).getModFor(x)).reduce((acc, v) => acc + v);
     }
     
     getTreasureFor(x, table) {
