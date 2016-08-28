@@ -17,7 +17,7 @@ class _ extends Card {
     }
 
     canBeWielded(player, table) {
-        return true;
+        return player.cardsOfTypeWielded('half-breed') == 0;
     }
 
     canBeHeld(player, table) {

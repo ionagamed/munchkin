@@ -17,7 +17,7 @@ class Supermunchkin extends Card {
     }
 
     canBeWielded(player, table) {
-        return true;
+        return player.cardsOfTypeWielded('super_munchkin') == 0;
     }
 
     canBeHeld(player, table) {
