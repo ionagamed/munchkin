@@ -52,8 +52,8 @@ class Server {
      * @param {string} room room name
      * @param {function} [callback] called when the server is ready to receive
      */
-     connect(name, addr, room, callback) {
-        this.websocket = new WebSocket(`ws://${addr}/?userName=${name}&room=${room}`);
+     connect(name, addr, sex, room, callback) {
+        this.websocket = new WebSocket(`ws://${addr}/?userName=${name}&room=${room}&sex=${sex}`);
         this.websocket.onopen = callback;
         var self = this;
         this.websocket.onmessage = (d) => {
@@ -138,6 +138,11 @@ class Server {
             case 'newPlayer':
                 if (this.newPlayerCallback) {
                     this.newPlayerCallback(msg.data);
+                }
+                break;
+            case 'error':
+                if (this.errorCallback) {
+                    this.errorCallback(msg.data.code);
                 }
                 break;
         }

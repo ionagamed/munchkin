@@ -7,6 +7,7 @@ export function registerLoginHooks(callback) {
         const username = $('#username').val();
         const room = $('#room').val();
         const addr = $('#server').val();
-        callback(username, addr, room);
+        const sex = $('#sex').val();
+        callback(username, addr, sex, room);
     });
 }

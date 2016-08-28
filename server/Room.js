@@ -120,8 +120,48 @@ function sendEvent(client, event, data) {
  *          who {string} player
  *          level {int} current level
  *
+ *
+ *   'error'
+ *      data:
+ *          code {string}
  */
 
+/**
+ * Helper to send client errors
+ *
+ * @param {WebSocket} client
+ * @param {string} reason
+ */
+function error(client, code) {
+    sendEvent(client, 'error', {
+        code: code
+    });
+}
+
+/**
+ * Error codes
+ *
+ *
+ * Not treasure
+ * Already kicked
+ * Can't be cast
+ * Can't be used
+ * Can't escape: winning
+ * Can't accept help from yourself
+ * Fight
+ * Fight is not yours
+ * Kicking required
+ * Nice try
+ * Not dead
+ * Not fighting
+ * Not helping
+ * Not owner
+ * Not playing
+ * Not your turn
+ * Too many cards
+ * Too many helpers
+ * Fight
+ */
 
 /**
  * Helper to set command set for client to use
@@ -140,7 +180,7 @@ function setCommandSet(ws, set, env) {
             env.player = env.table.players[ws.playerId];
             set[msg.cmd](msg.data, env);
         } catch (err) {
-            console.log(`Command error: ${err}\n`);
+            console.log(`Command error: ${err.stack}\n`);
         }
     };
 }
@@ -317,6 +357,7 @@ export class Room {
         if(this.table.playing) return 'Room playing';
         if(this.table.players.length < MAX_PLAYERS) {
             var player = new Player(client.userName);
+            player.sex = client.sex;
             client.playerId = this.table.players.push(player) - 1;
             this.dispatch('newPlayer', player.name);
             setCommandSet(client, Room.playerCommands, {roomId: this.id, client: client});
@@ -457,7 +498,7 @@ Room.giveCards = function(source, to, cardIds, room, method) {
         Card.byId(cardId).onReceived(to, source, room.table);
     });
 };
-/**
+/** 
  * Commands that could be send by client
  *
  * @type {function(object, object)}
@@ -472,6 +513,8 @@ Room.clientCommands['start'] = (data, env) => {
     console.log(env.room.owner);
     if(env.client.userName === env.room.owner) {
         env.room.start();
+    } else {
+        error(env.client, 'Not owner');
     }
 };
 
@@ -520,12 +563,19 @@ Room.playerCommands['spectate'] = (data, env) => {
  * can be used only if the player is dead and game is started
  */
 Room.playerCommands['resurrect'] = (data, env) => {
-    if(!env.player.dead) return;
-    if(!env.table.playing) return;
-    // env.player.hand = []
-    //      .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
-    //      .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
-    env.player.hand = env.player.hand.concat(['shrieking_geek', 'doppleganger', 'huge_rock', 'slimy_armor']);
+    if(!env.player.dead) {
+        error(env.client, 'Not dead');
+        return;
+    }
+    if(!env.table.playing) {
+        error(env.client, 'Not playing');
+        return;
+    }
+    env.player.hand = []
+         .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
+         .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
+    // env.player.hand = ['mithril_armor', 'huge_rock', 'elf_1', 'elf_2', 'elf_3', 'wizard_1', 'wizard_2', 'wizard_3'];
+
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
         if(card) card.onReceived(env.player, 'deck', env.table);
@@ -552,7 +602,10 @@ Room.playerCommands['resurrect'] = (data, env) => {
  *      from integer id of monster from who player is escaping
  */
 Room.playerCommands['escape'] = (data, env) => {
-    if(env.table.fight.getWinningSide() != 'monsters') return;
+    if(env.table.fight.getWinningSide() != 'monsters') {
+        error(env.client, 'Can\'t escape: winning');
+        return;
+    }
     let d = dice();
     env.room.dispatch('diceRolled', {
         result: d
@@ -577,8 +630,14 @@ Room.playerCommands['escape'] = (data, env) => {
 };
 
 Room.playerCommands['beginEscaping'] = (data, env) => {
-    if (env.table.fight.getWinningSide() != 'monsters') return;
-    if (env.table.fight.players[0].player.name != env.player.name) return;
+    if (env.table.fight.getWinningSide() != 'monsters') {
+        error(env.client, 'Can\'t escape: winning');
+        return;
+    }
+    if (env.table.fight.players[0].player.name != env.player.name) {
+        error(env.client, 'Fight is not yours | escape');
+        return;
+    }
     env.table.fight.players.map(x => {
         x.state = 'escaping';
     });
@@ -590,7 +649,10 @@ Room.playerCommands['beginEscaping'] = (data, env) => {
  */
 
 Room.playerCommands['winGame'] = (data, env) => {
-    if (env.player.level < 10) return;
+    if (env.player.level < 10) {
+        error(env.client, 'Nice try');
+        return; 
+    }
     env.room.dispatch('wonGame', {
         who: env.player
     });
@@ -602,7 +664,10 @@ Room.playerCommands['winGame'] = (data, env) => {
  *  cards {[string]} ids of the card
  */
 Room.playerCommands['sellItems'] = (data, env) => {
-    if(!turn(env.player, env.table)) return;
+    if(!turn(env.player, env.table)) {
+        error(env.client, 'Not your turn');
+        return;
+    }
     const cards = data.cards;
     let ok = true;
     let sum = 0;
@@ -626,7 +691,10 @@ Room.playerCommands['sellItems'] = (data, env) => {
  *  kicks door
  */
 Room.playerCommands['kickDoor'] = (data, env) => {
-    if(!phase(env.player, env.table, 'begin')) return;
+    if(!phase(env.player, env.table, 'begin')) {
+        error(env.client, 'Already kicked');
+        return;
+    }
     var doorCardId = env.room.getCards('door', 1)[0];
     var doorCard = Card.byId(doorCardId);
     env.room.dispatch('kickedDoor', {
@@ -680,7 +748,10 @@ Room.playerCommands['kickDoor'] = (data, env) => {
 };
 
 Room.playerCommands['lootTheRoom'] = (data, env) => {
-    if(!phase(env.player, env.table, 'open')) return;
+    if(!phase(env.player, env.table, 'open')) {
+        error(env.client, 'Kicking required');
+        return;
+    }
     var doorCardId = env.room.getCards('door', 1)[0];
     var doorCard = Card.byId(doorCardId);
     env.player.hand.push(doorCardId);
@@ -700,17 +771,36 @@ Room.playerCommands['lootTheRoom'] = (data, env) => {
 };
 
 Room.playerCommands['endTurn'] = (data, env) => {
-    if(env.table.fight != null || phase(env.player, env.table, 'begin')) return;
-    if(!turn(env.player, env.table)) return;
-    if(env.player.hand.length > (env.player.hasClassAdvantages('dwarf') ? 6 : 5)) return;
+    if(env.table.fight != null) {
+        error(env.client, 'Fight | turn');
+        return;
+    }
+    if(phase(env.player, env.table, 'begin')) {
+        error(env.client, 'Kicking required');
+        return;
+    }
+    if(!turn(env.player, env.table)) {
+        error(env.client, 'Not your turn | turn');
+        return;
+    }
+    if(env.player.hand.length > (env.player.hasClassAdvantages('dwarf') ? 6 : 5)) {
+        error(env.client, 'Too many cards');
+        return;
+    }
 
     env.table.nextTurn();
     env.room.dispatch('turn', {turn: env.table.turn, phase: env.table.phase});
 };
 
 Room.playerCommands['winFight'] = (data, env) => {
-    if (env.table.fight == null) return;
-    if (env.table.fight.players[0].player.name != env.player.name) return;
+    if (env.table.fight == null) {
+        error(env.client, 'Not fighting');
+        return;
+    }
+    if (env.table.fight.players[0].player.name != env.player.name) {
+        error(env.client, 'Fight is not yours | win');
+        return;
+    }
 
     if (+(new Date()) - env.table.fight.beganAt > 5000 && env.table.fight.getWinningSide() == 'players') {
         env.table.fight.players.map(x => {
@@ -732,6 +822,7 @@ Room.playerCommands['winFight'] = (data, env) => {
                 env.table.fight.players.length < 2 ? 'close' : 'open'
             );
         });
+        env.table.currentlyHelping = [];
         env.table.fight.onEnded(env.table);
         env.table.fight = null;
         env.table.phase = 'closed';
@@ -749,14 +840,27 @@ Room.playerCommands['winFight'] = (data, env) => {
 Room.playerCommands['wieldCard'] = (data, env) => {
     const cardId = data.card;
     const card = Card.byId(cardId);
-    if(!turn(env.player, env.table) || env.table.fight != null) return;
+    if(!turn(env.player, env.table)) {
+        error(env.client, 'Not your turn | wield');
+        return;
+    }
+    if(env.table.fight != null) {
+        error(env.client, 'Fight | wield');
+        return;
+    }
 
-    if(card.canBeWielded(env.player, env.table) && getCardFromPlayerById(env.player, cardId, env.room, env.table)) {
-        env.room.dispatch('wieldedCard', {
-            who: env.player.name,
-            card: cardId
-        });
-        env.player.wield(cardId, env.table);
+    if (card.canBeWielded(env.player, env.table)) {
+        if (getCardFromPlayerById(env.player, cardId, env.room, env.table)) {
+            env.room.dispatch('wieldedCard', {
+                who: env.player.name,
+                card: cardId
+            });
+            env.player.wield(cardId, env.table);
+        } else {
+            error(env.client, 'No such card | wield');
+        }
+    } else {
+        error(env.client, 'Cannot be wielded right now');
     }
 };
 
@@ -768,7 +872,10 @@ Room.playerCommands['wieldCard'] = (data, env) => {
  */
 Room.playerCommands['unwieldCard'] = (data, env) => {
     const cardId = data.card;
-    if(phase(env.player, env.table, 'hand')) return;
+    if(this.table.fight != null) {
+        error(env.player, 'Fight | unwield');
+        return;
+    }
     if(env.player.wielded.indexOf(cardId) >= 0) {
         env.room.dispatch('unwieldedCard', {
             who: env.player.name,
@@ -797,8 +904,10 @@ Room.playerCommands['unwieldCard'] = (data, env) => {
 Room.playerCommands['useCard'] = (data, env) => {
     const cardId = data.card;
     const card = Card.byId(cardId);
-    if(!phase(env.player, env.table, 'open')) return;
-    if(!card.canBeUsed(env.player, env.table)) return;
+    if(!card.canBeUsed(env.player, env.table)) {
+        error(env.client, 'Can\'t be used');
+        return;
+    }
     env.room.dispatch('usedCard', {
         who: env.player.name,
         card: cardId
@@ -829,7 +938,10 @@ Room.playerCommands['castCard'] = (data, env) => {
         on = env.table.players.find(player => player.name == data.on.name);
     else
         on = data.on.name;
-    if(!card.canBeCast(env.player, on, env.table)) return;
+    if(!card.canBeCast(env.player, on, env.table)) {
+        error(env.client, 'Can\'t be cast');
+        return;
+    }
     env.room.dispatch('castedCard', {
         who: env.player.name,
         on: data.on,
@@ -927,7 +1039,14 @@ Room.playerCommands['getCardFromPlayer'] = (data, env) => {
 };
 
 Room.playerCommands['tryHelping'] = (data, env) => {
-    if (!env.table.fight || env.table.fight.players.length >= 2) return;
+    if (!env.table.fight) {
+        error(env.client, 'Not fighting');
+        return;
+    }
+    if(env.table.fight.players.length >= 2) {
+        error(env.client, 'Too many helpers');
+        return;
+    }
     env.room.dispatch('triedHelping', {
         who: env.player.name
     });
@@ -938,8 +1057,22 @@ Room.playerCommands['tryHelping'] = (data, env) => {
 };
 
 Room.playerCommands['acceptHelp'] = (data, env) => {
-    if (!env.table.fight || env.table.fight.players.length >= 2) return;
-    if (env.table.currentlyHelping.indexOf(data.from) < 0) return;
+    if (env.table.currentlyHelping.indexOf(data.from) < 0) {
+        error(env.client, 'Not helping');
+        return;
+    }
+    if (!env.table.fight) {
+        error(env.client, 'Not fighting');
+        return;
+    }
+    if(env.table.fight.players.length >= 2) {
+        error(env.client, 'Too many helpers');
+        return;
+    }
+    if(data.from === env.player.name) {
+        error(env.client, 'Can\'t accept help from yourself');
+        return;
+    }
     env.table.currentlyHelping = [];
     env.table.fight.players.push({
         player: env.table.players.find(x => x.name == data.from),
@@ -966,8 +1099,18 @@ function sanitizeOffers(table) {
 }
 
 Room.playerCommands['makeOffer'] = (data, env) => {
-    if (env.table.fight || env.table.players[env.table.turn].name != env.player.name) return;
-    if (!Card.byId(data.item).price) return;
+    if (env.table.fight) {
+        error(env.client, 'Fight | offer');
+        return;
+    }
+    if(!turn(env.player, env.table)) {
+        error(env.client, 'Not your turn | offer');
+        return;
+    }
+    if (!Card.byId(data.item).price) {
+        error(env.client, 'Not treasure | offer');
+        return;
+    }
     if (!env.table.offers) {
         env.table.offers = [];
     }
