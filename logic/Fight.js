@@ -58,7 +58,7 @@ export class Fight {
         this.players.map(x => {
             ret += x.player.getAttack();
             x.modifiers.map(y => {
-                ret += Card.byId(y).getModFor(x);
+                ret += Card.byId(y).getModFor(x, table);
             });
         });
         return ret;

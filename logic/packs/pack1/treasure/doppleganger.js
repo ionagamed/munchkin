@@ -24,21 +24,18 @@ class _ extends Modifier {
     }
 
     getModFor(arg) {
-        if (arg instanceof Player) {
-            /**
-             * HACK: warrior
-             */
-            return arg.player.level + arg.player.wielded
-                .filter(x => x.type != 'class')
-                .filter(x => Card.byId(x).getAttackFor)
-                .map(x => Card.byId(x).getAttackFor(arg))
-                .reduce((acc, v) => acc + v) +
-                arg.modifiers
-                    .map(x => Card.byId(x).getModFor(x.player))
-                    .reduce((acc, v) => acc + v);
-        } else {
-            return Card.byId(arg).getAttack();
-        }
+        /**
+         * HACK: warrior
+         */
+        return arg.player.level + arg.player.wielded
+            .filter(x => x.type != 'class')
+            .filter(x => Card.byId(x).getAttackFor)
+            .map(x => Card.byId(x).getAttackFor(arg.player))
+            .reduce((acc, v) => acc + v, 0) +
+            arg.modifiers
+                .filter(x => x != 'doppleganger')
+                .map(x => Card.byId(x).getModFor(arg))
+                .reduce((acc, v) => acc + v, 0);
     }
 }
 Card.cards[id] = new _();

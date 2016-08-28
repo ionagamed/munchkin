@@ -525,7 +525,7 @@ Room.playerCommands['resurrect'] = (data, env) => {
     // env.player.hand = []
     //      .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
     //      .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
-    env.player.hand = env.player.hand.concat(['curse_change_sex', 'half-breed_1', 'elf_1', 'huge_rock', 'slimy_armor']);
+    env.player.hand = env.player.hand.concat(['shrieking_geek', 'doppleganger', 'huge_rock', 'slimy_armor']);
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
         if(card) card.onReceived(env.player, 'deck', env.table);
@@ -656,6 +656,8 @@ Room.playerCommands['kickDoor'] = (data, env) => {
                 env.table.discard(doorCardId);
                 env.room.dispatch('discardedCard', doorCardId);
                 doorCard.onDiscarded(env.table);
+            } else {
+                env.player.wielded.push(doorCardId);
             }
             env.table.phase = 'open';
             break;
