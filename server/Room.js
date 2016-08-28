@@ -872,7 +872,7 @@ Room.playerCommands['wieldCard'] = (data, env) => {
  */
 Room.playerCommands['unwieldCard'] = (data, env) => {
     const cardId = data.card;
-    if(this.table.fight != null) {
+    if(env.room.table.fight != null) {
         error(env.player, 'Fight | unwield');
         return;
     }
