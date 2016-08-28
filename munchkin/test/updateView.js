@@ -280,13 +280,13 @@ export function updateView(player, table, currentlySelling) {
     if (tableString != tableCache) {
         tableCache = tableString;
         updateTable();
-        updateOffers();
-        updateOffer();
         if (playerString == playerCache) {
             updatePlayers();
         }
     }
     updateCastList();
+    updateOffers();
+    updateOffer();
     if (sellingString != sellingCache) {
         sellingCache = sellingString;
         updateSelling();
