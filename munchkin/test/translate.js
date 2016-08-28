@@ -114,7 +114,7 @@ const translationMapping = {
     'cotion_of_ponfusion': 'Пелье Зутаницы',
     'acid_potion': 'Радиоактивно-Электрокислотное Зелье',
     'flaming_poison_potion': 'Зелье Пламенной Отравы',
-    'freezing_explosive_potion': 'Заморажтвающие Взрывное Зелье',
+    'freezing_explosive_potion': 'Замораживающее Взрывное Зелье',
     'magic_missile': 'Магичиская Ракета',
     'pantyhose_of_giant_strength': 'Колготки Великанской Силы',
     'pointy_hat_of_power': 'Остроконечная Шляпа Могущества',
