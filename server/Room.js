@@ -144,9 +144,10 @@ function error(client, code) {
  *
  * Not treasure
  * Already kicked
- * Can\'t be cast
- * Can\'t be used
- * Can\'t escape: winning
+ * Can't be cast
+ * Can't be used
+ * Can't escape: winning
+ * Can't accept help from yourself
  * Fight
  * Fight is not yours
  * Kicking required
@@ -179,7 +180,7 @@ function setCommandSet(ws, set, env) {
             env.player = env.table.players[ws.playerId];
             set[msg.cmd](msg.data, env);
         } catch (err) {
-            console.log(`Command error: ${err}\n`);
+            console.log(`Command error: ${err.stack}\n`);
         }
     };
 }
@@ -820,6 +821,7 @@ Room.playerCommands['winFight'] = (data, env) => {
                 env.table.fight.players.length < 2 ? 'close' : 'open'
             );
         });
+        env.table.currentlyHelping = [];
         env.table.fight.onEnded(env.table);
         env.table.fight = null;
         env.table.phase = 'closed';
@@ -1062,6 +1064,10 @@ Room.playerCommands['acceptHelp'] = (data, env) => {
     }
     if(env.table.fight.players.length >= 2) {
         error(env.client, 'Too many helpers');
+        return;
+    }
+    if(data.from === env.player.name) {
+        error(env.client, 'Can\'t accept help from yourself');
         return;
     }
     env.table.currentlyHelping = [];
