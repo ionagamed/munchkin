@@ -20,10 +20,10 @@ class curse_change_sex extends Curse {
     }
     onFightEnded(fight, table) {
         super.onFightEnded(fight, table);
-        fight.players.map(player => {
-            player.wielded.map((card, pos) => {
-                if(card.id == this.id)
-                    player.wielded.splice(pos, 1);
+        fight.players.map(x => {
+            x.player.wielded.map((card, pos) => {
+                if(card == this.id)
+                    x.player.wielded.splice(pos, 1);
             });
         });
     }
