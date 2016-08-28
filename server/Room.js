@@ -144,9 +144,9 @@ function error(client, code) {
  *
  * Not treasure
  * Already kicked
- * Can\'t be cast
- * Can\'t be used
- * Can\'t escape: winning
+ * Can't be cast
+ * Can't be used
+ * Can't escape: winning
  * Fight
  * Fight is not yours
  * Kicking required
@@ -570,9 +570,10 @@ Room.playerCommands['resurrect'] = (data, env) => {
         error(env.client, 'Not playing');
         return;
     }
-    env.player.hand = []
-         .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
-         .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
+    // env.player.hand = []
+    //      .concat(env.room.getCards('door', DOOR_BEGIN_COUNT))
+    //      .concat(env.room.getCards('treasure', TREASURE_BEGIN_COUNT));
+    env.player.hand = ['mithril_armor', 'huge_rock', 'elf_1', 'elf_2', 'elf_3', 'wizard_1', 'wizard_2', 'wizard_3'];
 
     env.player.hand.map(cardId => {
         const card = Card.byId(cardId);
@@ -633,7 +634,7 @@ Room.playerCommands['beginEscaping'] = (data, env) => {
         return;
     }
     if (env.table.fight.players[0].player.name != env.player.name) {
-        error(env.client, 'Fight is not yours');
+        error(env.client, 'Fight is not yours | escape');
         return;
     }
     env.table.fight.players.map(x => {
@@ -770,7 +771,7 @@ Room.playerCommands['lootTheRoom'] = (data, env) => {
 
 Room.playerCommands['endTurn'] = (data, env) => {
     if(env.table.fight != null) {
-        error(env.client, 'Fight');
+        error(env.client, 'Fight | turn');
         return;
     }
     if(phase(env.player, env.table, 'begin')) {
@@ -778,7 +779,7 @@ Room.playerCommands['endTurn'] = (data, env) => {
         return;
     }
     if(!turn(env.player, env.table)) {
-        error(env.client, 'Not your turn');
+        error(env.client, 'Not your turn | turn');
         return;
     }
     if(env.player.hand.length > (env.player.hasClassAdvantages('dwarf') ? 6 : 5)) {
@@ -796,7 +797,7 @@ Room.playerCommands['winFight'] = (data, env) => {
         return;
     }
     if (env.table.fight.players[0].player.name != env.player.name) {
-        error(env.client, 'Fight is not yours');
+        error(env.client, 'Fight is not yours | win');
         return;
     }
 
@@ -838,11 +839,11 @@ Room.playerCommands['wieldCard'] = (data, env) => {
     const cardId = data.card;
     const card = Card.byId(cardId);
     if(!turn(env.player, env.table)) {
-        error(env.client, 'Not your turn');
+        error(env.client, 'Not your turn | wield');
         return;
     }
     if(env.table.fight != null) {
-        error(env.client, 'Fight');
+        error(env.client, 'Fight | wield');
         return;
     }
 
@@ -864,7 +865,7 @@ Room.playerCommands['wieldCard'] = (data, env) => {
 Room.playerCommands['unwieldCard'] = (data, env) => {
     const cardId = data.card;
     if(this.table.fight != null) {
-        error(env.player, 'Fight');
+        error(env.player, 'Fight | unwield');
         return;
     }
     if(env.player.wielded.indexOf(cardId) >= 0) {
@@ -895,10 +896,6 @@ Room.playerCommands['unwieldCard'] = (data, env) => {
 Room.playerCommands['useCard'] = (data, env) => {
     const cardId = data.card;
     const card = Card.byId(cardId);
-    if(!phase(env.player, env.table, 'open')) {
-        error(env.client, 'Kicking required');
-        return;
-    }
     if(!card.canBeUsed(env.player, env.table)) {
         error(env.client, 'Can\'t be used');
         return;
@@ -1091,15 +1088,15 @@ function sanitizeOffers(table) {
 
 Room.playerCommands['makeOffer'] = (data, env) => {
     if (env.table.fight) {
-        error(env.client, 'Fight');
+        error(env.client, 'Fight | offer');
         return;
     }
     if(!turn(env.player, env.table)) {
-        error(env.client, 'Not your turn');
+        error(env.client, 'Not your turn | offer');
         return;
     }
     if (!Card.byId(data.item).price) {
-        error(env.client, 'Not treasure');
+        error(env.client, 'Not treasure | offer');
         return;
     }
     if (!env.table.offers) {
