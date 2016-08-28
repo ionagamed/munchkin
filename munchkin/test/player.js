@@ -49,6 +49,11 @@ export function registerPlayerHooks(currentlySelling) {
         Server.castCard(el.closest('.cast-list-wrapper').data('card'), type, target);
         $('.cast-list-wrapper').addClass('hidden');
     });
+    $('.stopCast').unbind('click').click(e => {
+        $('.cast-list').html('');
+        $('.cast-list-wrapper').addClass('hidden');
+    });
+    
     $('.sell').unbind('click').click(e => {
         currentlySelling.push($(e.target).closest('li').data('id'));
         $('.sell-list-wrapper').removeClass('hidden');

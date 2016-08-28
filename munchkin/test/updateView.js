@@ -69,7 +69,6 @@ export function updateView(player, table, currentlySelling) {
                 'type',
                 'unwield',
                 'use',
-                'cast',
                 'discard'
             ], player, _player);
         });
